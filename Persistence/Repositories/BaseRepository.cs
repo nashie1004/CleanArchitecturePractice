@@ -36,5 +36,12 @@ namespace Persistence.Repositories
 
             return retVal;
         }
+
+        public async Task<List<T>> GetAllRecordAsync()
+        {
+            var retVal = new List<T>();
+
+            return retVal;
+        }
     }
 }

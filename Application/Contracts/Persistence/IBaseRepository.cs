@@ -12,5 +12,6 @@ namespace Application.Contracts.Persistence
         Task<bool> UpdateRecordAsync(T record);
         Task<bool> DeleteRecordAsync(long id);
         Task<T> GetRecordAsync(long id);
+        Task<List<T>> GetAllRecordAsync();
     }
 }
