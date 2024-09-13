@@ -10,7 +10,8 @@ public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<MainContex
     public MainContext CreateDbContext(string[] args)
     {
         var optionsBuilder = new DbContextOptionsBuilder<MainContext>();
-        optionsBuilder.UseSqlServer(@"Server=.\OCENARSQL;Database=CleanArchitecturePractice;User Id=dev;Password=P@ssw0rd;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True;"); // Use the appropriate connection string
+        optionsBuilder.UseSqlServer(
+            @"Server=.\OCENARSQL;Database=CleanArchitecturePractice;User Id=dev;Password=P@ssw0rd;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True;"); // Use the appropriate connection string
 
         return new MainContext(optionsBuilder.Options);
     }
