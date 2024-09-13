@@ -17,7 +17,7 @@ namespace Persistence
         {
 
             services.AddDbContext<MainContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString(@"Server=.\\OCENARSQL;Database=CleanArchitecturePractice;User Id=dev;Password=P@ssw0rd;Trusted_Connection=True;"))
+                options.UseSqlServer(configuration.GetConnectionString(@"Server=.\OCENARSQL;Database=CleanArchitecturePractice;User Id=dev;Password=P@ssw0rd;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True;"))
                 ) ;
 
             return services;
