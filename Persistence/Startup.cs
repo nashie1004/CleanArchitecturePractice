@@ -9,16 +9,19 @@ using System.Threading.Tasks;
 
 namespace Persistence
 {
-    public class Startup
+    public static class Startup
     {
-        public static void Start(IServiceCollection services)
+        public static IServiceCollection AddPersistence(this IServiceCollection services)
         {
-            string connectionString = 
-                "Data Source=.\\OCENARSQL;Database=CleanArchitecturePractice;Uid=dev;Pwd=P@ssw0rd;Encrypt=False;TrustServerCertificate=False";
+            string connectionString =
+                //"Data Source=.\\OCENARSQL;Database=CleanArchitecturePractice;Uid=dev;Pwd=P@ssw0rd;Encrypt=False;TrustServerCertificate=False";
+                "Server=.\\OCENARSQL;Database=CleanArchitecturePractice;User Id=dev;Password=P@ssw0rd;Trusted_Connection=True;";
 
             services.AddDbContext<MainContext>(options =>
                 options.UseSqlServer(connectionString)
                 ) ;
+
+            return services;
         }
     }
 }

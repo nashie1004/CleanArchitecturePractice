@@ -4,9 +4,9 @@ using System.Reflection;
 
 namespace Application
 {
-    public class Startup
+    public static class Startup
     {
-        public static void Start(IServiceCollection services)
+        public static IServiceCollection AddApplication(this IServiceCollection services)
         {
             var assembly = typeof(Startup).Assembly;
 
@@ -14,6 +14,8 @@ namespace Application
                 configuration.RegisterServicesFromAssembly(assembly)
             );
             services.AddValidatorsFromAssembly(assembly);
+
+            return services;
         }
     }
 }
