@@ -17,12 +17,10 @@ namespace Persistence
         {
 
             services.AddDbContext<MainContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("MainConnection"))
+                options.UseSqlite(configuration.GetConnectionString("MainConnection"))
                 ) ;
 
             return services;
         }
     }
-
-
 }
