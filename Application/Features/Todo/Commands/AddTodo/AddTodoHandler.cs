@@ -1,4 +1,6 @@
-﻿using MediatR;
+﻿using Application.Contracts.Infra.Todo;
+using Domain.Entities;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,26 +11,35 @@ namespace Application.Features.Todo.Commands.AddTodo
 {
     public class AddTodoHandler : IRequestHandler<AddTodoRequest, AddTodoResponse>
     {
-        public AddTodoHandler()
+        private readonly ITodoRepository _todoRepository;
+
+        public AddTodoHandler(ITodoRepository todoRepository)
         {
-            
+            _todoRepository = todoRepository;
         }
 
         public async Task<AddTodoResponse> Handle(AddTodoRequest request, CancellationToken cancellationToken)
         {
-            var retVal = new AddTodoResponse()
-            {
-                IsSuccess = true
-                ,TodoItem = new() { Description = request.Description }
-            };
+            var retVal = new AddTodoResponse();
 
             try
             {
+                var newRecord = new TodoItem()
+                {
+                    IsDone = request.IsDone
+                    , Description = request.Description
+                };
 
+                await _todoRepository.AddRecordAsync(newRecord);
+                
+                retVal.RowsAffected = await _todoRepository.SaveRecordAsync(cancellationToken);
+                retVal.IsSuccess = true;
+                retVal.TodoItem = newRecord;
             } 
             catch (Exception ex)
             {
-
+                retVal.ValidationErrors.Add(ex.Message);
+                retVal.IsSuccess = false;
             }
 
             return retVal;

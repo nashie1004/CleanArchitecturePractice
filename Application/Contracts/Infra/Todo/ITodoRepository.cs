@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Contracts.Persistence.Todo
+namespace Application.Contracts.Infra.Todo
 {
     public interface ITodoRepository : IBaseRepository<TodoItem>
     {

@@ -7,10 +7,8 @@ using System.Threading.Tasks;
 
 namespace Application.Features.Todo.Commands.AddTodo
 {
-    public class AddTodoResponse
+    public class AddTodoResponse : BaseResponse
     {
-        public bool IsSuccess { get; set; }
-        public string Message { get; set; }
         public TodoItem TodoItem { get; set; }
     }
 }
