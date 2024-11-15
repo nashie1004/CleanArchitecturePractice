@@ -31,7 +31,7 @@ namespace API.Controllers
             return Ok(await mediator_.Send(req));
         }
 
-        [Route("/getMany")]
+        [Route("/getManyTodo")]
         [HttpGet]
         public async Task<IActionResult> GetManyTodo([FromQuery] GetAllTodoRequest req)
         {

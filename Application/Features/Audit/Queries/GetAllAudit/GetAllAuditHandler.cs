@@ -15,7 +15,6 @@ namespace Application.Features.Audit.Queries.GetAllAudit
         public GetAllAuditHandler(IAuditRepository auditRepository)
         {
             _auditRepository = auditRepository;
-
         }
 
         public async Task<GetAllAuditResponse> Handle(GetAllAuditRequest req, CancellationToken cancellationToken)

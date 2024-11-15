@@ -22,17 +22,18 @@ namespace Application
         public List<string> ValidationErrors { get; set; }
     }
 
-    public class BaseResponseList<T> : BaseResponse
+    public class BaseResponseList<T> : BaseResponse where T:new()
     {
         public BaseResponseList()
         {
             Items = new List<T>();
         }
 
-        public List<T> Items {
-            get { return Items; }
-            set { RowsAffected = Items.Count(); }
-        }
+        public List<T> Items { get; set; }
+        //public List<T> Items {
+        //    get { return Items; }
+        //    set { RowsAffected = Items.Count(); }
+        //}
     }
 
     public class BaseRequestList
@@ -41,6 +42,8 @@ namespace Application
         {
             PageSize = 15;
             PageNumber = 1;
+            SortBy = string.Empty;
+            Filters = new List<string>();
         }
 
         public int PageSize { get; set; }

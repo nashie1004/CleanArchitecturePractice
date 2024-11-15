@@ -1,12 +1,11 @@
-﻿using Application.Features.Todo.Commands.AddTodo;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Application.Features.Audit.Queries.GetAllAudit;
 using MediatR;
+using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("/api/[controller]")]
     public class AuditController : ControllerBase
     {
         private readonly IMediator mediator_;
@@ -16,10 +15,12 @@ namespace API.Controllers
             mediator_ = mediator;
         }
 
-        [HttpGet("/getMany")]
-        public async Task<IActionResult> GetAllAudit([FromBody] AddTodoRequest req)
+        [Route("/getManyAudit")]
+        [HttpGet]
+        public async Task<IActionResult> GetMany([FromQuery] GetAllAuditRequest req)
         {
             return Ok(await mediator_.Send(req));
         }
+
     }
 }
