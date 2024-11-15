@@ -32,6 +32,7 @@ namespace Application.Features.Todo.Queries.GetTodo
                 else
                 {
                     retVal.IsSuccess = true;
+                    retVal.RowsAffected = 1;
                     retVal.Record = record;
                 }
 

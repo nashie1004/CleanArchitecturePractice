@@ -361,7 +361,5 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
-/Infra/app.db
-/Infra/app.db
-/Infra/app.db-shm
-/Infra/app.db-wal
+
+/Infra/SQLiteDB

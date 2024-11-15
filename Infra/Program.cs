@@ -11,11 +11,27 @@ namespace Infra
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration) 
         {
             services.AddDbContext<MainContext>(opt =>
-                opt.UseSqlite("Data Source=../Infra/app.db"));
+                opt.UseSqlite($"Data Source={SQLite.Set()}"));
 
             services.AddScoped(typeof(ITodoRepository), typeof(TodoRepository));
 
             return services;
+        }
+    }
+
+    public static class SQLite
+    {
+        public static string Set()
+        {
+            var folder = "SQLiteDB";
+            var path = Path.Combine(Directory.GetCurrentDirectory(), folder);
+
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+
+            return $"../Infra/{folder}/app.db";
         }
     }
 }
