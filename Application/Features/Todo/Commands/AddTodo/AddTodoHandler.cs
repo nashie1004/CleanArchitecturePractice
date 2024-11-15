@@ -38,7 +38,6 @@ namespace Application.Features.Todo.Commands.AddTodo
             catch (Exception ex)
             {
                 retVal.ValidationErrors.Add(ex.Message);
-                retVal.IsSuccess = false;
             }
 
             return retVal;

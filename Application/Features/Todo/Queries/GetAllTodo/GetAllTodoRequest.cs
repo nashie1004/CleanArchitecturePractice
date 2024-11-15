@@ -9,6 +9,10 @@ namespace Application.Features.Todo.Queries.GetAllTodo
 {
     public class GetAllTodoRequest : IRequest<GetAllTodoResponse>
     {
+        public GetAllTodoRequest()
+        {
+            Ids = new long[0];
+        }
         public long[] Ids { get; set; }
     }
 }

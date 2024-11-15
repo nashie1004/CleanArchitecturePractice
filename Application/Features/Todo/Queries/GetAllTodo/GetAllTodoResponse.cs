@@ -9,6 +9,6 @@ namespace Application.Features.Todo.Queries.GetAllTodo
 {
     public class GetAllTodoResponse : BaseResponse
     {
-        public List<TodoItem> TodoItems { get; set; }
+        public List<TodoItem> TodoItems { get; set; } = new List<TodoItem>();
     }
 }

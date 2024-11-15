@@ -8,7 +8,15 @@ namespace Application
 {
     public class BaseResponse
     {
-        public bool IsSuccess { get; set; }
+        public BaseResponse()
+        {
+            IsSuccess = true;
+            RowsAffected = 0;
+            Message = string.Empty;
+            ValidationErrors = new List<string>();
+        }
+
+        public bool IsSuccess { get; set; } 
         public int RowsAffected { get; set; }
         public string Message { get; set; }
         public List<string> ValidationErrors { get; set; }

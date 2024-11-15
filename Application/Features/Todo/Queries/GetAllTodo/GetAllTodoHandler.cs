@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Application.Contracts.Infra.Todo;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,11 @@ namespace Application.Features.Todo.Queries.GetAllTodo
 {
     public class GetAllTodoHandler : IRequestHandler<GetAllTodoRequest, GetAllTodoResponse>
     {
-        public GetAllTodoHandler()
+        private readonly ITodoRepository _todoRepository;
+
+        public GetAllTodoHandler(ITodoRepository todoRepository)
         {
-            
+            _todoRepository = todoRepository;
         }
 
         public async Task<GetAllTodoResponse> Handle(GetAllTodoRequest req, CancellationToken cancellationToken)
@@ -20,11 +23,23 @@ namespace Application.Features.Todo.Queries.GetAllTodo
 
             try
             {
+                if (req.Ids.Length > 0 && req.Ids != null)
+                {
+                    foreach(var id in req.Ids)
+                    {
+                        var item = await _todoRepository.GetRecordAsync(id);
+                        retVal.TodoItems.Add(item);
+                    }
+                }
+                else
+                {
+                    retVal.TodoItems = await _todoRepository.GetAllRecordAsync();
+                }
 
             } 
             catch (Exception ex)
             {
-
+                retVal.ValidationErrors.Add(ex.Message);
             }
 
             return retVal;

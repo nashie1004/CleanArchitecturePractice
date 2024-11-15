@@ -31,7 +31,6 @@ namespace Application.Features.Todo.Queries.GetTodo
                 }
                 else
                 {
-                    retVal.IsSuccess = true;
                     retVal.RowsAffected = 1;
                     retVal.TodoItem = record;
                 }
@@ -40,7 +39,7 @@ namespace Application.Features.Todo.Queries.GetTodo
             } 
             catch (Exception ex)
             {
-
+                retVal.ValidationErrors.Add(ex.Message);
             }
 
             return retVal;
