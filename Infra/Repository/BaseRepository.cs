@@ -26,11 +26,6 @@ namespace Infra.Repository
 
         public async Task AddRecordAsync(T record)
         {
-            if (record is AuditableEntity auditable) { 
-                auditable.CreatedDate = DateTime.Now;
-                //auditable.CreatedBy = 0;
-            }
-
             await _context.Set<T>().AddAsync(record);
         }
 
@@ -56,21 +51,20 @@ namespace Infra.Repository
         {
             return await _context.Set<T>().AsNoTracking().ToListAsync();
         }
-        public async Task<List<T>> GetAllRecordAsync(int pageSize, int pageNo)
+        public async Task<List<T>> GetAllRecordAsync(int pageSize = 15, int pageNo = 1)
         {
-            return await _context
+            var list = await _context
                 .Set<T>()
                 .AsNoTracking()
                 .Skip((pageNo - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
+            return list;
         }
 
         public async Task<int> SaveRecordAsync(CancellationToken ct)
         {
-            var entries = _context.ChangeTracker.Entries<AuditableEntity>();
-
-            int rowsAffected = await _context.SaveChangesAsync(ct);
+            var entries = _context.ChangeTracker.Entries<AuditableEntity>().ToList();
 
             foreach (var entry in entries)
             {
@@ -90,7 +84,9 @@ namespace Infra.Repository
                 i.State == EntityState.Added ||
                 i.State == EntityState.Modified ||
                 i.State == EntityState.Deleted
-            ).ToList();
+            );
+
+            var audits = new List<Domain.Entities.Audit>();
 
             foreach (var entry in toAudit)
             {
@@ -126,11 +122,13 @@ namespace Infra.Repository
                     default:
                         break;
                 }
+
+                audits.Add(audit);
             }
 
-            await _context.SaveChangesAsync(ct);
+            _context.Audits.AddRange(audits);
 
-            return rowsAffected;
+            return await _context.SaveChangesAsync(ct);
         }
 
         private long GetPrimaryKey(EntityEntry entry)

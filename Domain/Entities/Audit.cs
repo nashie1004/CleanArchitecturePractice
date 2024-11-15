@@ -10,10 +10,10 @@ namespace Domain.Entities
     public class Audit : AuditableEntity
     {
         public long AuditId { get; set; }
-        public string OldData { get; set; }
-        public string NewData { get; set; }
+        public string OldData { get; set; } = string.Empty;
+        public string NewData { get; set; } = string.Empty;
         public long TablePrimaryKey { get; set; }
-        public string TableName { get; set; }
+        public string TableName { get; set; } = string.Empty;
         public short Action { get; set; }
     }
 }
