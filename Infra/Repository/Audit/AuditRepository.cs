@@ -9,7 +9,7 @@ namespace Infra.Repository.Audit
 {
     public class AuditRepository : BaseRepository<Domain.Entities.Audit>, IAuditRepository
     {
-        public AuditRepository(MainContext ctx) : base(ctx)
+        public AuditRepository(MainContext ctx1, AuditContext ctx2) : base(ctx1, ctx2)
         {
             
         }

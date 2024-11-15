@@ -12,9 +12,9 @@ namespace Infra.Repository.Todo
 {
     public class TodoRepository : BaseRepository<TodoItem>, ITodoRepository
     {
-        public TodoRepository(MainContext ctx) : base(ctx)
+        public TodoRepository(MainContext ctx1, AuditContext ctx2) : base(ctx1, ctx2)
         {
-            
+
         }
     }
 }
