@@ -13,7 +13,7 @@ namespace Domain.Entities
         public string OldData { get; set; }
         public string NewData { get; set; }
         public long TablePrimaryKey { get; set; }
-        public long TableName { get; set; }
-        public int Action { get; set; }
+        public string TableName { get; set; }
+        public short Action { get; set; }
     }
 }

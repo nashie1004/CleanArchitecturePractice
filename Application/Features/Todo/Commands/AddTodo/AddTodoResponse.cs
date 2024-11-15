@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Application.Features.Todo.Commands.AddTodo
 {
-    public class AddTodoResponse : BaseResponse<TodoItem>
+    public class AddTodoResponse : BaseResponse
     {
     }
 }

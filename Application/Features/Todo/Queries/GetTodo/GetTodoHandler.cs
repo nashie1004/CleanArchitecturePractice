@@ -33,7 +33,7 @@ namespace Application.Features.Todo.Queries.GetTodo
                 {
                     retVal.IsSuccess = true;
                     retVal.RowsAffected = 1;
-                    retVal.Record = record;
+                    retVal.TodoItem = record;
                 }
 
                 return retVal;

@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 
 namespace Application.Features.Todo.Queries.GetTodo
 {
-    public class GetTodoResponse : BaseResponse<TodoItem>
+    public class GetTodoResponse : BaseResponse
     {
+        public TodoItem TodoItem { get; set; }
     }
 }

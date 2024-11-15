@@ -6,6 +6,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.Json;
+using Domain.Entities;
+using Newtonsoft.Json;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Infra.Repository
 {
@@ -56,6 +60,8 @@ namespace Infra.Repository
         {
             var entries = _context.ChangeTracker.Entries<AuditableEntity>();
 
+            int rowsAffected = await _context.SaveChangesAsync(ct);
+
             foreach (var entry in entries)
             {
                 if (entry.State == EntityState.Added)
@@ -70,7 +76,66 @@ namespace Infra.Repository
                 }
             }
 
-            return await _context.SaveChangesAsync(ct);
+            var toAudit = _context.ChangeTracker.Entries().Where(i => 
+                i.State == EntityState.Added ||
+                i.State == EntityState.Modified ||
+                i.State == EntityState.Deleted
+            ).ToList();
+
+            foreach (var entry in toAudit)
+            {
+                var audit = new Audit()
+                {
+                    CreatedDate = DateTime.UtcNow
+                    //,CreatedBy = 0
+                    ,TableName = entry.Metadata.GetTableName() ?? string.Empty
+                    ,TablePrimaryKey = GetPrimaryKey(entry)
+                };
+
+                switch(entry.State)
+                {
+                    case EntityState.Added:
+                        audit.Action = (short)EntityState.Added;
+                        audit.NewData = JsonConvert.SerializeObject(entry.Entity);
+
+                        break;
+                    case EntityState.Modified:
+                        audit.Action = (short)EntityState.Modified;
+                        audit.OldData = JsonConvert.SerializeObject(entry.OriginalValues.ToObject());
+                        audit.NewData = JsonConvert.SerializeObject(entry.Entity);
+                        audit.LastUpdatedDate = DateTime.UtcNow;
+                        //audit.LastUpdatedBy = 0;
+
+                        break;
+                    case EntityState.Deleted:
+                        audit.Action = (short)EntityState.Deleted;
+                        audit.OldData = JsonConvert.SerializeObject(entry.Entity);
+                        audit.LastUpdatedDate = DateTime.UtcNow;
+
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            await _context.SaveChangesAsync(ct);
+
+            return rowsAffected;
+        }
+
+        private long GetPrimaryKey(EntityEntry entry)
+        {
+            try
+            {
+                var primaryKeyProperty = entry.Metadata.FindPrimaryKey()?.Properties.First();
+                var key = entry.Property(primaryKeyProperty.Name).CurrentValue;
+                if (key == null) { return 0; }
+                return Convert.ToInt64(key);
+            } 
+            catch(Exception ex)
+            {
+                return 0;
+            }
         }
     }
 
