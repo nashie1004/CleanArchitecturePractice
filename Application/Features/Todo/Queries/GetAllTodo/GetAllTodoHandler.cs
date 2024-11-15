@@ -28,12 +28,12 @@ namespace Application.Features.Todo.Queries.GetAllTodo
                     foreach(var id in req.Ids)
                     {
                         var item = await _todoRepository.GetRecordAsync(id);
-                        retVal.TodoItems.Add(item);
+                        retVal.Items.Add(item);
                     }
                 }
                 else
                 {
-                    retVal.TodoItems = await _todoRepository.GetAllRecordAsync();
+                    retVal.Items = await _todoRepository.GetAllRecordAsync();
                 }
 
             } 

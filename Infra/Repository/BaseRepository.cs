@@ -10,6 +10,7 @@ using System.Text.Json;
 using Domain.Entities;
 using Newtonsoft.Json;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Audit = Domain.Entities.Audit;
 
 namespace Infra.Repository
 {
@@ -53,7 +54,16 @@ namespace Infra.Repository
 
         public async Task<List<T>> GetAllRecordAsync()
         {
-            return await _context.Set<T>().ToListAsync();
+            return await _context.Set<T>().AsNoTracking().ToListAsync();
+        }
+        public async Task<List<T>> GetAllRecordAsync(int pageSize, int pageNo)
+        {
+            return await _context
+                .Set<T>()
+                .AsNoTracking()
+                .Skip((pageNo - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
         }
 
         public async Task<int> SaveRecordAsync(CancellationToken ct)
@@ -84,7 +94,7 @@ namespace Infra.Repository
 
             foreach (var entry in toAudit)
             {
-                var audit = new Audit()
+                var audit = new Domain.Entities.Audit()
                 {
                     CreatedDate = DateTime.UtcNow
                     //,CreatedBy = 0

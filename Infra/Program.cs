@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Application.Contracts.Infra.Todo;
 using Infra.Repository.Todo;
+using Infra.Repository.Audit;
 
 namespace Infra
 {
@@ -14,6 +15,7 @@ namespace Infra
                 opt.UseSqlite($"Data Source={SQLite.Set()}"));
 
             services.AddScoped(typeof(ITodoRepository), typeof(TodoRepository));
+            services.AddScoped(typeof(IAuditRepository), typeof(AuditRepository));
 
             return services;
         }

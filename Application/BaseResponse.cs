@@ -21,4 +21,31 @@ namespace Application
         public string Message { get; set; }
         public List<string> ValidationErrors { get; set; }
     }
+
+    public class BaseResponseList<T> : BaseResponse
+    {
+        public BaseResponseList()
+        {
+            Items = new List<T>();
+        }
+
+        public List<T> Items {
+            get { return Items; }
+            set { RowsAffected = Items.Count(); }
+        }
+    }
+
+    public class BaseRequestList
+    {
+        public BaseRequestList() 
+        {
+            PageSize = 15;
+            PageNumber = 1;
+        }
+
+        public int PageSize { get; set; }
+        public int PageNumber { get; set; }
+        public string SortBy { get; set; }
+        public object Filters { get; set; }
+    }
 }
