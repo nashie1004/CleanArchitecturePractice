@@ -64,6 +64,7 @@ namespace Infra.Repository
 
         public async Task<int> SaveRecordAsync(CancellationToken ct)
         {
+            int rowsAffected = 0;
             var entries = _context.ChangeTracker.Entries<AuditableEntity>().ToList();
 
             foreach (var entry in entries)
@@ -80,55 +81,55 @@ namespace Infra.Repository
                 }
             }
 
-            var toAudit = _context.ChangeTracker.Entries().Where(i => 
-                i.State == EntityState.Added ||
-                i.State == EntityState.Modified ||
-                i.State == EntityState.Deleted
-            );
+            var addedEntities = _context.ChangeTracker.Entries().Where(i => i.State == EntityState.Added).ToList();
+            var modifiedEntities = _context.ChangeTracker.Entries().Where(i => i.State == EntityState.Modified).ToList();
+            var deletedEntities = _context.ChangeTracker.Entries().Where(i => i.State == EntityState.Deleted).ToList();
 
-            var audits = new List<Domain.Entities.Audit>();
+            rowsAffected = await _context.SaveChangesAsync(ct);
 
-            foreach (var entry in toAudit)
+            foreach(var entry in addedEntities)
             {
-                var audit = new Domain.Entities.Audit()
+                _context.Audits.Add(new Domain.Entities.Audit()
                 {
                     CreatedDate = DateTime.UtcNow
                     //,CreatedBy = 0
                     ,TableName = entry.Metadata.GetTableName() ?? string.Empty
                     ,TablePrimaryKey = GetPrimaryKey(entry)
-                };
-
-                switch(entry.State)
-                {
-                    case EntityState.Added:
-                        audit.Action = (short)EntityState.Added;
-                        audit.NewData = JsonConvert.SerializeObject(entry.Entity);
-
-                        break;
-                    case EntityState.Modified:
-                        audit.Action = (short)EntityState.Modified;
-                        audit.OldData = JsonConvert.SerializeObject(entry.OriginalValues.ToObject());
-                        audit.NewData = JsonConvert.SerializeObject(entry.Entity);
-                        audit.LastUpdatedDate = DateTime.UtcNow;
-                        //audit.LastUpdatedBy = 0;
-
-                        break;
-                    case EntityState.Deleted:
-                        audit.Action = (short)EntityState.Deleted;
-                        audit.OldData = JsonConvert.SerializeObject(entry.Entity);
-                        audit.LastUpdatedDate = DateTime.UtcNow;
-
-                        break;
-                    default:
-                        break;
-                }
-
-                audits.Add(audit);
+                    ,Action = (short)EntityState.Added
+                    ,NewData = JsonConvert.SerializeObject(entry.Entity)
+                });
             }
 
-            _context.Audits.AddRange(audits);
+            foreach (var entry in modifiedEntities)
+            {
+                _context.Audits.Add(new Domain.Entities.Audit()
+                {
+                    TableName = entry.Metadata.GetTableName() ?? string.Empty
+                    ,TablePrimaryKey = GetPrimaryKey(entry)
+                    ,Action = (short)EntityState.Modified
+                    ,OldData = JsonConvert.SerializeObject(entry.OriginalValues.ToObject())
+                    ,NewData = JsonConvert.SerializeObject(entry.Entity)
+                    ,LastUpdatedDate = DateTime.UtcNow
+                    //,LastUpdatedBy = 0
+                });
+            }
 
-            return await _context.SaveChangesAsync(ct);
+            foreach (var entry in deletedEntities)
+            {
+                _context.Audits.Add(new Domain.Entities.Audit()
+                {
+                    TableName = entry.Metadata.GetTableName() ?? string.Empty
+                    ,TablePrimaryKey = GetPrimaryKey(entry)
+                    ,Action = (short)EntityState.Deleted
+                    ,OldData = JsonConvert.SerializeObject(entry.Entity)
+                    ,LastUpdatedDate = DateTime.UtcNow
+                    //,LastUpdatedBy = 0
+                });
+            }
+
+            await _context.SaveChangesAsync(ct);
+
+            return rowsAffected;
         }
 
         private long GetPrimaryKey(EntityEntry entry)
