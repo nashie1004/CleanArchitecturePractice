@@ -34,7 +34,7 @@ namespace Application.Features.Todo.Commands.AddTodo
                 
                 retVal.RowsAffected = await _todoRepository.SaveRecordAsync(cancellationToken);
                 retVal.IsSuccess = true;
-                retVal.TodoItem = newRecord;
+                retVal.Record = newRecord;
             } 
             catch (Exception ex)
             {

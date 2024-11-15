@@ -363,3 +363,5 @@ MigrationBackup/
 FodyWeavers.xsd
 /Infra/app.db
 /Infra/app.db
+/Infra/app.db-shm
+/Infra/app.db-wal

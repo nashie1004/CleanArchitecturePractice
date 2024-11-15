@@ -1,4 +1,5 @@
 ﻿using Application.Features.Todo.Commands.AddTodo;
+using Application.Features.Todo.Queries.GetTodo;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,6 +19,13 @@ namespace API.Controllers
         [Route("/addTodo")]
         [HttpPost]
         public async Task<IActionResult> AddTodo([FromBody] AddTodoRequest req)
+        {
+            return Ok(await mediator_.Send(req));
+        }
+
+        [Route("/getTodo")]
+        [HttpGet]
+        public async Task<IActionResult> GetTodo([FromQuery] GetTodoRequest req)
         {
             return Ok(await mediator_.Send(req));
         }

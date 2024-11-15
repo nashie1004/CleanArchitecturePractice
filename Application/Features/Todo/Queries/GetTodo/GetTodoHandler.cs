@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Application.Contracts.Infra.Todo;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,11 @@ namespace Application.Features.Todo.Queries.GetTodo
 {
     public class GetTodoHandler : IRequestHandler<GetTodoRequest, GetTodoResponse>
     {
-        public GetTodoHandler()
+        private readonly ITodoRepository _todoRepository;
+
+        public GetTodoHandler(ITodoRepository todoRepository)
         {
-            
+            _todoRepository = todoRepository;
         }
 
         public async Task<GetTodoResponse> Handle(GetTodoRequest request, CancellationToken cancellationToken)
@@ -20,7 +23,19 @@ namespace Application.Features.Todo.Queries.GetTodo
             
             try
             {
+                var record = await _todoRepository.GetRecordAsync(request.Id);
+                
+                if (record is null)
+                {
+                    retVal.IsSuccess = false;
+                }
+                else
+                {
+                    retVal.IsSuccess = true;
+                    retVal.Record = record;
+                }
 
+                return retVal;
             } 
             catch (Exception ex)
             {

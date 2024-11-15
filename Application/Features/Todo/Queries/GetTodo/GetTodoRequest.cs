@@ -9,6 +9,6 @@ namespace Application.Features.Todo.Queries.GetTodo
 {
     public class GetTodoRequest : IRequest<GetTodoResponse>
     {
-        public long TodoItemId { get; set; }
+        public long Id { get; set; }
     }
 }
