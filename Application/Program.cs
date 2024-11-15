@@ -4,11 +4,11 @@ using System.Reflection;
 
 namespace Application
 {
-    public static class Startup
+    public static class Program
     {
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
-            var assembly = typeof(Startup).Assembly;
+            var assembly = typeof(Program).Assembly;
 
             services.AddMediatR(configuration => 
                 configuration.RegisterServicesFromAssembly(assembly)

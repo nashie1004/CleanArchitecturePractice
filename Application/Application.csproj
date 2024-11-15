@@ -11,9 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Todo\Commands\AddTodo\" />
     <Folder Include="Features\Todo\Commands\DeleteTodo\" />
-    <Folder Include="Features\Todo\Commands\UpdateTodo\" />
   </ItemGroup>
 
   <ItemGroup>

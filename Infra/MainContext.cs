@@ -6,17 +6,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Persistence.Contexts
+namespace Infra
 {
     public class MainContext : DbContext
     {
+        public DbSet<TodoItem> TodoItems { get; set; }
 
-        public MainContext(DbContextOptions<MainContext> options) : base(options)
+        public MainContext(DbContextOptions opt) : base(opt)
         {
             
         }
-
-        public DbSet<TodoItem> TodoItems { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
