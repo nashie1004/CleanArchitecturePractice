@@ -13,8 +13,6 @@ namespace Infra
         {
             services.AddDbContext<MainContext>(opt =>
                 opt.UseSqlite($"Data Source={SQLite.Set()}"));
-            services.AddDbContext<AuditContext>(opt =>
-                opt.UseSqlite($"Data Source={SQLite.Set()}"));
 
             services.AddScoped(typeof(ITodoRepository), typeof(TodoRepository));
             services.AddScoped(typeof(IAuditRepository), typeof(AuditRepository));
