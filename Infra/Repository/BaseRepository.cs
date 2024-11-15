@@ -1,4 +1,5 @@
 ﻿using Application.Contracts.Infra;
+using Domain.Common;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -20,6 +21,11 @@ namespace Infra.Repository
 
         public async Task AddRecordAsync(T record)
         {
+            if (record is AuditableEntity auditable) { 
+                auditable.CreatedDate = DateTime.Now;
+                //auditable.CreatedBy = 0;
+            }
+
             await _context.Set<T>().AddAsync(record);
         }
 
@@ -48,6 +54,22 @@ namespace Infra.Repository
 
         public async Task<int> SaveRecordAsync(CancellationToken ct)
         {
+            var entries = _context.ChangeTracker.Entries<AuditableEntity>();
+
+            foreach (var entry in entries)
+            {
+                if (entry.State == EntityState.Added)
+                {
+                    entry.Entity.CreatedDate = DateTime.UtcNow;
+                    //entry.Entity.CreatedBy = 0;
+                }
+                else if (entry.State == EntityState.Modified)
+                {
+                    entry.Entity.LastUpdatedDate = DateTime.UtcNow;
+                    //entry.Entity.LastUpdatedBy = 0;
+                }
+            }
+
             return await _context.SaveChangesAsync(ct);
         }
     }

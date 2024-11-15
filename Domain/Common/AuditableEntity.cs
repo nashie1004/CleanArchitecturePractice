@@ -10,7 +10,7 @@ namespace Domain.Common
     {
         public long CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }
-        public long LastModifiedBy { get; set; }
-        public DateTime LastModifiedDate { get; set; }
+        public long LastUpdatedBy { get; set; }
+        public DateTime LastUpdatedDate { get; set; }
     }
 }
