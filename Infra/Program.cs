@@ -9,7 +9,7 @@ namespace Infra
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration) 
         {
             services.AddDbContext<MainContext>(opt =>
-                opt.UseSqlite(""));
+                opt.UseSqlite("Data Source=../Infra/app.db"));
 
             return services;
         }
