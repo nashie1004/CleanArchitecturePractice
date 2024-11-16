@@ -23,7 +23,10 @@ namespace Domain.Entities
         [ForeignKey("WorkoutHeader")]
         public long WorkoutHeaderId { get; set; }
 
+        public virtual WorkoutHeader WorkoutHeader { get; set; }
+
         [ForeignKey("Exercise")]
         public long ExerciseId { get; set; }
+        public virtual Exercise Exercise { get; set; }
     }
 }

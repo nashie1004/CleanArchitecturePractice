@@ -16,7 +16,7 @@ namespace Domain.Entities
         [MaxLength(300)]
         [Required]
         public string Title { get; set; }
-
         public decimal Duration { get; set; }
+        public ICollection<WorkoutDetail> WorkoutDetails { get; set; }
     }
 }

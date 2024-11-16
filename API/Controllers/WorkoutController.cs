@@ -16,9 +16,9 @@ namespace API.Controllers
             _mediator = mediator;
         }
 
-        [Route("/addWorkout")]
+        [Route("/addWorkoutHeader")]
         [HttpGet]
-        public async Task<IActionResult> AddWorkout([FromQuery] GetAllAuditRequest req)
+        public async Task<IActionResult> AddWorkoutHeader([FromQuery] GetAllAuditRequest req)
         {
             return Ok(await _mediator.Send(req));
         }

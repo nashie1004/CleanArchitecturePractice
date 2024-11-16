@@ -3,6 +3,7 @@ using System;
 using Infra;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infra.Migrations
 {
     [DbContext(typeof(MainContext))]
-    partial class MainContextModelSnapshot : ModelSnapshot
+    [Migration("20241116020828_WorkoutDetailOnetoMany")]
+    partial class WorkoutDetailOnetoMany
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.20");
@@ -205,7 +208,7 @@ namespace Infra.Migrations
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.WorkoutHeader", "WorkoutHeader")
-                        .WithMany("WorkoutDetails")
+                        .WithMany()
                         .HasForeignKey("WorkoutHeaderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -213,11 +216,6 @@ namespace Infra.Migrations
                     b.Navigation("Exercise");
 
                     b.Navigation("WorkoutHeader");
-                });
-
-            modelBuilder.Entity("Domain.Entities.WorkoutHeader", b =>
-                {
-                    b.Navigation("WorkoutDetails");
                 });
 #pragma warning restore 612, 618
         }
