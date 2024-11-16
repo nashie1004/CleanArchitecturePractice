@@ -8,11 +8,18 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class TodoItem : AuditableEntity
+    public class Exercise : AuditableEntity
     {
         [Key]
-        public long TodoItemId { get; set; }
-        public bool IsDone { get; set; }
+        public long ExerciseId { get; set; }
+
+        [Required]
+        public string Name { get; set; }
+
+        [Required]
         public string Description { get; set; }
+
+        [MaxLength(200)]
+        public string? ImageUrl { get; set; }
     }
 }

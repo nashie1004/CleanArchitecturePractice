@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Application.Contracts.Infra.Todo;
 using Infra.Repository.Todo;
 using Infra.Repository.Audit;
+using Infra.Repository.Exercise;
 
 namespace Infra
 {
@@ -16,6 +17,7 @@ namespace Infra
 
             services.AddScoped(typeof(ITodoRepository), typeof(TodoRepository));
             services.AddScoped(typeof(IAuditRepository), typeof(AuditRepository));
+            services.AddScoped(typeof(IExerciseRepository), typeof(ExerciseRepository));
 
             return services;
         }

@@ -30,10 +30,6 @@ namespace Application
         }
 
         public List<T> Items { get; set; }
-        //public List<T> Items {
-        //    get { return Items; }
-        //    set { RowsAffected = Items.Count(); }
-        //}
     }
 
     public class BaseRequestList

@@ -3,6 +3,7 @@ using System;
 using Infra;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infra.Migrations
 {
     [DbContext(typeof(MainContext))]
-    partial class MainContextModelSnapshot : ModelSnapshot
+    [Migration("20241116015811_AddWorkoutEntities")]
+    partial class AddWorkoutEntities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.20");
@@ -64,24 +67,12 @@ namespace Infra.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<long>("CreatedBy")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ImageUrl")
                         .HasMaxLength(200)
-                        .HasColumnType("TEXT");
-
-                    b.Property<long>("LastUpdatedBy")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("LastUpdatedDate")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")

@@ -14,6 +14,9 @@ namespace Infra
     {
         public DbSet<TodoItem> TodoItems { get; set; }
         public DbSet<Audit> Audits { get; set; }
+        public DbSet<Exercise> Exercises { get; set; }
+        public DbSet<WorkoutHeader> WorkoutHeaders { get; set; }
+        public DbSet<WorkoutDetail> WorkoutDetails { get; set; }
 
         public MainContext(DbContextOptions opt) : base(opt)
         {

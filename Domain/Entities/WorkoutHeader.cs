@@ -8,11 +8,15 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class TodoItem : AuditableEntity
+    public class WorkoutHeader : AuditableEntity
     {
         [Key]
-        public long TodoItemId { get; set; }
-        public bool IsDone { get; set; }
-        public string Description { get; set; }
+        public long WorkoutHeaderId { get; set; }
+
+        [MaxLength(300)]
+        [Required]
+        public string Title { get; set; }
+
+        public decimal Duration { get; set; }
     }
 }
