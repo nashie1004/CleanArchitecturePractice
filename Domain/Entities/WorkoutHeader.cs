@@ -17,6 +17,6 @@ namespace Domain.Entities
         [Required]
         public string Title { get; set; }
         public decimal Duration { get; set; }
-        public ICollection<WorkoutDetail> WorkoutDetails { get; set; }
+        public ICollection<WorkoutDetail> WorkoutDetails { get; set; } = new List<WorkoutDetail>(); 
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Application.Contracts.Infra.Repos;
+using Domain.Entities;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -23,7 +24,25 @@ namespace Application.Features.Workout.WorkoutHeader.Commands.AddWorkoutHeader
 
             try
             {
+                var workoutDetails = new List<WorkoutDetail>();
+                foreach (var item in req.Workout.WorkoutDetails)
+                {
+                    workoutDetails.Add(new WorkoutDetail()
+                    {
+                        Sets = item.Sets
+                        ,Reps = item.Reps
+                        ,ExerciseId = item.ExerciseId
+                        ,Weight = item.Weight
+                    });
+                }
 
+                await _workoutHeaderRepository.AddRecordAsync(new Domain.Entities.WorkoutHeader()
+                {
+                    Title = req.Workout.Title,
+                    Duration = req.Workout.Duration,
+                    WorkoutDetails = workoutDetails,
+                });
+                await _workoutHeaderRepository.SaveRecordAsync(ct);
             } 
             catch (Exception ex)
             {

@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Application.DTOs;
+using Domain.Entities;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -10,8 +11,6 @@ namespace Application.Features.Workout.WorkoutHeader.Commands.AddWorkoutHeader
 {
     public class AddWorkoutHeaderRequest : IRequest<AddWorkoutHeaderResponse>
     {
-        public string Title { get; set; }
-        public decimal Duration { get; set; }
-        public List<WorkoutDetail> WorkoutDetails { get; set; }
+        public WorkoutHeaderDTO Workout { get; set; }
     }
 }
