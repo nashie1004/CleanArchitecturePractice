@@ -87,7 +87,12 @@ namespace Infra.Repository
 
             rowsAffected = await _context.SaveChangesAsync(ct);
 
-            foreach(var entry in addedEntities)
+            var jsonSettings = new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore // This will ignore circular references
+            };
+
+            foreach (var entry in addedEntities)
             {
                 _context.Audits.Add(new Domain.Entities.Audit()
                 {
@@ -96,7 +101,7 @@ namespace Infra.Repository
                     ,TableName = entry.Metadata.GetTableName() ?? string.Empty
                     ,TablePrimaryKey = GetPrimaryKey(entry)
                     ,Action = (short)EntityState.Added
-                    ,NewData = JsonConvert.SerializeObject(entry.Entity)
+                    ,NewData = JsonConvert.SerializeObject(entry.Entity, jsonSettings)
                 });
             }
 
@@ -107,8 +112,8 @@ namespace Infra.Repository
                     TableName = entry.Metadata.GetTableName() ?? string.Empty
                     ,TablePrimaryKey = GetPrimaryKey(entry)
                     ,Action = (short)EntityState.Modified
-                    ,OldData = JsonConvert.SerializeObject(entry.OriginalValues.ToObject())
-                    ,NewData = JsonConvert.SerializeObject(entry.Entity)
+                    ,OldData = JsonConvert.SerializeObject(entry.OriginalValues.ToObject(), jsonSettings)
+                    ,NewData = JsonConvert.SerializeObject(entry.Entity, jsonSettings)
                     ,LastUpdatedDate = DateTime.UtcNow
                     //,LastUpdatedBy = 0
                 });
@@ -121,7 +126,7 @@ namespace Infra.Repository
                     TableName = entry.Metadata.GetTableName() ?? string.Empty
                     ,TablePrimaryKey = GetPrimaryKey(entry)
                     ,Action = (short)EntityState.Deleted
-                    ,OldData = JsonConvert.SerializeObject(entry.Entity)
+                    ,OldData = JsonConvert.SerializeObject(entry.Entity, jsonSettings)
                     ,LastUpdatedDate = DateTime.UtcNow
                     //,LastUpdatedBy = 0
                 });
