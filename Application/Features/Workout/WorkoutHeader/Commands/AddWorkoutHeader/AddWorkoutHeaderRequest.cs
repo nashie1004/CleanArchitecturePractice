@@ -11,6 +11,6 @@ namespace Application.Features.Workout.WorkoutHeader.Commands.AddWorkoutHeader
 {
     public class AddWorkoutHeaderRequest : IRequest<AddWorkoutHeaderResponse>
     {
-        public WorkoutHeaderDTO Workout { get; set; }
+        public WorkoutHeaderDTO WorkoutHeader { get; set; }
     }
 }

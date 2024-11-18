@@ -25,7 +25,7 @@ namespace Application.Features.Workout.WorkoutHeader.Commands.AddWorkoutHeader
             try
             {
                 var workoutDetails = new List<WorkoutDetail>();
-                foreach (var item in req.Workout.WorkoutDetails)
+                foreach (var item in req.WorkoutHeader.WorkoutDetails)
                 {
                     workoutDetails.Add(new WorkoutDetail()
                     {
@@ -38,8 +38,8 @@ namespace Application.Features.Workout.WorkoutHeader.Commands.AddWorkoutHeader
 
                 await _workoutHeaderRepository.AddRecordAsync(new Domain.Entities.WorkoutHeader()
                 {
-                    Title = req.Workout.Title,
-                    Duration = req.Workout.Duration,
+                    Title = req.WorkoutHeader.Title,
+                    Duration = req.WorkoutHeader.Duration,
                     WorkoutDetails = workoutDetails,
                 });
                 await _workoutHeaderRepository.SaveRecordAsync(ct);

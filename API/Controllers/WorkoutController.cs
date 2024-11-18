@@ -20,7 +20,7 @@ namespace API.Controllers
 
         [Route("/addWorkoutHeader")]
         [HttpPost]
-        public async Task<IActionResult> AddWorkoutHeader([FromQuery] AddWorkoutHeaderRequest req)
+        public async Task<IActionResult> AddWorkoutHeader([FromBody] AddWorkoutHeaderRequest req)
         {
             return Ok(await _mediator.Send(req));
         }
