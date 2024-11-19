@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Enums
 {
-    public enum DurationMeasurement
+    public enum DurationMeasurement : short
     {
         Seconds = 1
         ,Minutes = 2

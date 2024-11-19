@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Enums
 {
-    public enum WeightMeasurement
+    public enum WeightMeasurement : short
     {
         Kilogram = 1
         ,Pounds = 2

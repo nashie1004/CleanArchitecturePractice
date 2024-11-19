@@ -1,4 +1,5 @@
 ﻿using Domain.Common;
+using Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -18,7 +19,8 @@ namespace Domain.Entities
 
         public int Reps { get; set; }
 
-        public decimal Weight { get; set; }
+        public decimal? Weight { get; set; }
+        public WeightMeasurement WeightMeasurement { get; set; } = WeightMeasurement.Kilogram;
 
         [ForeignKey("WorkoutHeader")]
         public long WorkoutHeaderId { get; set; }

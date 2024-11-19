@@ -12,7 +12,12 @@ namespace Domain.Entities
     {
         [Key]
         public long CategoryId { get; set; }
+
+        [Required]
+        [MaxLength(100)]
         public string Name { get; set; } // Strength, Cardio
-        public string Description { get; set; }
+
+        [MaxLength(300)]
+        public string? Description { get; set; }
     }
 }

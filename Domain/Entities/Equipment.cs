@@ -1,5 +1,4 @@
 ﻿using Domain.Common;
-using Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -9,14 +8,16 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class User : AuditableEntity
+    public class Equipment : AuditableEntity
     {
         [Key]
-        public long UserId { get; set; }
+        public long EquipmentId { get; set; }
         
         [Required]
-        public string UserName { get; set; }
-        public decimal Weight { get; set; }
-        public WeightMeasurement WeightMeasurement { get; set; }
+        [MaxLength(200)]
+        public string Name { get; set; }
+
+        public string? Description { get; set; }
+        public string? ImageUrl { get; set; }
     }
 }
