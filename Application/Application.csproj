@@ -11,10 +11,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Exercise\Commands\UpdateExercise\" />
-    <Folder Include="Features\Exercise\Queries\GetExercise\" />
+    <Folder Include="Features\Exercise\ExerciseCategory\Commands\" />
+    <Folder Include="Features\Exercise\Exercise\Commands\UpdateExercise\" />
+    <Folder Include="Features\Exercise\Exercise\Queries\GetExercise\" />
     <Folder Include="Features\Todo\Commands\DeleteTodo\" />
-    <Folder Include="Features\Workout\WorkoutDetail\" />
   </ItemGroup>
 
   <ItemGroup>

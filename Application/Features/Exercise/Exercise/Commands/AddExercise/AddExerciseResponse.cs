@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Features.Exercise.Commands.AddExercise
+namespace Application.Features.Exercise.Exercise.Commands.AddExercise
 {
     public class AddExerciseResponse : BaseResponse
     {

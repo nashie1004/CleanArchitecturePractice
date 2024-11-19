@@ -1,4 +1,5 @@
 ﻿using Application.Features.Audit.Queries.GetAllAudit;
+using Application.Features.Workout.WorkoutDetail.Queries.GetManyWorkoutDetail;
 using Application.Features.Workout.WorkoutHeader.Commands.AddWorkoutHeader;
 using Application.Features.Workout.WorkoutHeader.Queries.GetManyWorkoutHeader;
 using MediatR;
@@ -28,6 +29,13 @@ namespace API.Controllers
         [Route("/getManyWorkoutHeader")]
         [HttpGet]
         public async Task<IActionResult> GetManyWorkoutHeader([FromQuery] GetManyWorkoutHeaderRequest req)
+        {
+            return Ok(await _mediator.Send(req));
+        }
+
+        [Route("/getManyWorkoutDetail")]
+        [HttpGet]
+        public async Task<IActionResult> GetManyWorkoutDetail([FromQuery] GetManyWorkoutDetailRequest req)
         {
             return Ok(await _mediator.Send(req));
         }

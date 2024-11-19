@@ -1,4 +1,4 @@
-﻿using Application.Features.Exercise.Commands.AddExercise;
+﻿using Application.Features.Exercise.Exercise.Commands.AddExercise;
 using Application.Features.Exercise.Queries.GetManyExercise;
 using Application.Features.Todo.Commands.AddTodo;
 using MediatR;

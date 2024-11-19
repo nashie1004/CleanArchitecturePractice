@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class Category : AuditableEntity
+    public class ExerciseCategory : AuditableEntity
     {
         [Key]
         public long CategoryId { get; set; }

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Features.Exercise.Commands.AddExercise
+namespace Application.Features.Exercise.Exercise.Commands.AddExercise
 {
     public class AddExerciseHandler : IRequestHandler<AddExerciseRequest, AddExerciseResponse>
     {
@@ -31,7 +31,7 @@ namespace Application.Features.Exercise.Commands.AddExercise
                 });
 
                 retVal.RowsAffected = await _exerciseRepository.SaveRecordAsync(ct);
-            } 
+            }
             catch (Exception ex)
             {
                 retVal.ValidationErrors.Add(ex.Message);

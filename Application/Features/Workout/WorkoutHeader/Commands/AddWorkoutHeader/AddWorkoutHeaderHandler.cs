@@ -24,10 +24,10 @@ namespace Application.Features.Workout.WorkoutHeader.Commands.AddWorkoutHeader
 
             try
             {
-                var workoutDetails = new List<WorkoutDetail>();
+                var workoutDetails = new List<Domain.Entities.WorkoutDetail>();
                 foreach (var item in req.WorkoutHeader.WorkoutDetails)
                 {
-                    workoutDetails.Add(new WorkoutDetail()
+                    workoutDetails.Add(new Domain.Entities.WorkoutDetail()
                     {
                         Sets = item.Sets
                         ,Reps = item.Reps
