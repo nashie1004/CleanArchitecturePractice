@@ -12,7 +12,7 @@ namespace Infra
 {
     public static class Program
     {
-        public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration) 
+        public static IServiceCollection AddInfrastructurePersistence(this IServiceCollection services, IConfiguration configuration) 
         {
             services.AddDbContext<MainContext>(opt =>
                 opt.UseSqlite($"Data Source={SQLite.Set()}"));

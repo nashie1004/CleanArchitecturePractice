@@ -17,9 +17,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastru
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API", "API\API.csproj", "{22F1BEBE-1DB4-493A-B2C4-80AE6EA6043B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infra", "Infra\Infra.csproj", "{A2A05671-CE26-482F-A148-6B461EBD3C13}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.Persistence", "Infra\Infrastructure.Persistence.csproj", "{A2A05671-CE26-482F-A148-6B461EBD3C13}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{5E38A9B2-71E6-4274-90B5-B008D3BD6323}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.Identity", "Infrastructure.Identity\Infrastructure.Identity.csproj", "{8D1E8F41-F724-471A-8D2B-15CD50B9E4FA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,6 +45,10 @@ Global
 		{A2A05671-CE26-482F-A148-6B461EBD3C13}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A2A05671-CE26-482F-A148-6B461EBD3C13}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A2A05671-CE26-482F-A148-6B461EBD3C13}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D1E8F41-F724-471A-8D2B-15CD50B9E4FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D1E8F41-F724-471A-8D2B-15CD50B9E4FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D1E8F41-F724-471A-8D2B-15CD50B9E4FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D1E8F41-F724-471A-8D2B-15CD50B9E4FA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -56,6 +62,7 @@ Global
 		{22F1BEBE-1DB4-493A-B2C4-80AE6EA6043B} = {4284CF0E-2119-46AA-91E6-CFB9B7BFFA99}
 		{A2A05671-CE26-482F-A148-6B461EBD3C13} = {1D4D45F0-675D-4119-938B-849D52A8354E}
 		{5E38A9B2-71E6-4274-90B5-B008D3BD6323} = {C217FAA9-9CCE-4B06-AD81-9BDFB5AEE9E3}
+		{8D1E8F41-F724-471A-8D2B-15CD50B9E4FA} = {1D4D45F0-675D-4119-938B-849D52A8354E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3EBEC7B9-B20C-40C6-B31D-26333522A00E}
