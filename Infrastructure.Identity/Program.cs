@@ -1,5 +1,6 @@
 ﻿using Application.Contracts.Infrastructure.Identity;
 using Infrastructure.Identity.Data;
+using Infrastructure.Identity.Models;
 using Infrastructure.Identity.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -8,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Infrastructure.Identity.Mapper;
 
 namespace Infrastructure.Identity
 {
@@ -15,10 +17,17 @@ namespace Infrastructure.Identity
     {
         public static IServiceCollection AddInfrastructureIdentity(this IServiceCollection services, IConfiguration configuration)
         {
+            string issuer = configuration["Jwt:Issuer"];
+            string audience = configuration["Jwt:Audience"];
+            string secretKey = configuration["Jwt:Key"];
+            double expiresInMins = double.Parse(configuration["Jwt:ExpiresInMinutes"]);
+
+            services.AddAutoMapper(typeof(Mapping));
+
             services.AddDbContext<IdentityContext>(opt =>
                 opt.UseSqlite($"Data Source={SQLite.Set()}"));
 
-            services.AddIdentity<IdentityUser, IdentityRole>()
+            services.AddIdentity<CustomUser, CustomRole>()
                 .AddEntityFrameworkStores<IdentityContext>()
                 .AddDefaultTokenProviders();
 
@@ -37,13 +46,20 @@ namespace Infrastructure.Identity
                         ValidateAudience = true,
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
-                        ValidIssuer = configuration["Jwt:Issuer"],
-                        ValidAudience = configuration["Jwt:Audience"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]))
+                        ValidIssuer = issuer,
+                        ValidAudience = audience,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
                     };
                 });
 
             services.AddScoped(typeof(IBaseRepositoryIdentityUser), typeof(BaseRepositoryIdentityUser));
+            services.AddScoped<IBaseRepositoryIdentityToken>(opt =>
+            {
+                return new BaseRepositoryIdentityToken(
+                    secretKey, issuer, audience, expiresInMins
+                    );
+
+            });
 
             return services;
         }

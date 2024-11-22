@@ -4,14 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Domain.Entities;
-using Domain.Enums;
 
 namespace Infrastructure.Identity.Models
 {
-    public class CustomUser : IdentityUser<long>
+    public class CustomRole : IdentityRole<long>
     {
-        public decimal Weight { get; set; }
-        public WeightMeasurement WeightMeasurement { get; set; }
     }
 }

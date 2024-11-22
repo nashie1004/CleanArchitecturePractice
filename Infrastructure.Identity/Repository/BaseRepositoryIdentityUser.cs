@@ -1,4 +1,5 @@
 ﻿using Application.Contracts.Infrastructure.Identity;
+using AutoMapper;
 using Infrastructure.Identity.Models;
 using Microsoft.AspNetCore.Identity;
 using System;
@@ -13,11 +14,13 @@ namespace Infrastructure.Identity.Repository
     {
         private readonly UserManager<CustomUser> _userManager;
         private readonly SignInManager<CustomUser> _signManager;
+        private readonly IMapper _mapper;
 
-        public BaseRepositoryIdentityUser(UserManager<CustomUser> userManager, SignInManager<CustomUser> signInManager)
+        public BaseRepositoryIdentityUser(UserManager<CustomUser> userManager, SignInManager<CustomUser> signInManager, IMapper mapper)
         {
             _userManager = userManager;
             _signManager = signInManager;
+            _mapper = mapper;
         }
 
         public async Task<(bool, string)> CreateUserAsync()
