@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Application.Contracts.Infrastructure.Identity
 {
-    public interface IBaseRepositoryIdentity<T> where T : class
+    public interface IBaseRepositoryIdentityToken<T> where T : class
     {
+        public Task<string> GenerateJWTTokenAsync(string userId, string userName);
     }
 }
