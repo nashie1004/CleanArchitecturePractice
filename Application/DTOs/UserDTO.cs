@@ -9,7 +9,7 @@ namespace Application.DTOs
 {
     public class UserDTO
     {
-        public long UserId { get; set; }
+        public long Id { get; set; }
         public string UserName { get; set; }
         public decimal Weight { get; set; }
         public WeightMeasurement WeightMeasurement { get; set; }

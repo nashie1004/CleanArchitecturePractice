@@ -12,13 +12,13 @@ namespace Application.Common
         {
             IsSuccess = true;
             RowsAffected = 0;
-            Message = string.Empty;
+            SuccessMessage = string.Empty;
             ValidationErrors = new List<string>();
         }
 
         public bool IsSuccess { get; set; }
         public int RowsAffected { get; set; }
-        public string Message { get; set; }
+        public string SuccessMessage { get; set; }
         public List<string> ValidationErrors { get; set; }
     }
 

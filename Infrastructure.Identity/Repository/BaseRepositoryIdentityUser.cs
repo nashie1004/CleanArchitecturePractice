@@ -1,4 +1,5 @@
 ﻿using Application.Contracts.Infrastructure.Identity;
+using Application.DTOs;
 using AutoMapper;
 using Infrastructure.Identity.Models;
 using Microsoft.AspNetCore.Identity;
@@ -71,14 +72,23 @@ namespace Infrastructure.Identity.Repository
             return (true, validationMsgs, user.Id);
         }
 
-        public async Task<(bool, List<string>)> GetUserDetailsAsync(string userName, string password)
+        public async Task<(bool, List<string>, UserDTO)> GetUserDetailsAsync(string userName, string password)
         {
             var validationMsgs = new List<string>();
 
+            var user = await _userManager.FindByNameAsync(userName);
+
+            if (user == null)
+            {
+                validationMsgs.Add("No user found");
+                return (false, validationMsgs, new UserDTO());
+            }
+
             // TODO
             // MAY NEED TO ADD DTO
+            var retVal = _mapper.Map<UserDTO>(user);
 
-            return (true, validationMsgs);
+            return (true, validationMsgs, retVal);
         }
 
         public async Task<(bool, List<string>)> ChangePasswordAsync(string userName, string oldPassword, string newPassword)

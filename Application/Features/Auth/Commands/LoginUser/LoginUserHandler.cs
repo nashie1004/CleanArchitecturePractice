@@ -28,12 +28,22 @@ namespace Application.Features.Auth.Commands.LoginUser
 
             try
             {
-                var res = await _baseRepositoryIdentityUser.LoginUserAsync(req.UserName, req.Password);
+                var loginAttempt = await _baseRepositoryIdentityUser.LoginUserAsync(req.UserName, req.Password);
 
-                retVal.IsSuccess = res.Item1;
-                retVal.ValidationErrors = res.Item2;
+                retVal.ValidationErrors = loginAttempt.Item2;
 
-                //var res2 = await _baseRepositoryIdentityToken.GenerateJWTTokenAsync();
+                // SUCCESS
+                if (loginAttempt.Item1)
+                {
+                    var userDetails = await _baseRepositoryIdentityUser.GetUserDetailsAsync(req.UserName, req.Password);
+
+                    retVal.JWTToken = await _baseRepositoryIdentityToken
+                        .GenerateJWTTokenAsync(
+                            userDetails.Item3.Id.ToString(), userDetails.Item3.UserName
+                        );
+
+                    retVal.UserProfile = userDetails.Item3;
+                }
             }
             catch (Exception ex)
             {

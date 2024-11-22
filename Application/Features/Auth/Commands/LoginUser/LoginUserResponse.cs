@@ -1,4 +1,5 @@
 ﻿using Application.Common;
+using Application.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,5 +10,7 @@ namespace Application.Features.Auth.Commands.LoginUser
 {
     public class LoginUserResponse : BaseResponse
     {
+        public UserDTO UserProfile { get; set; }
+        public string JWTToken { get; set; }
     }
 }

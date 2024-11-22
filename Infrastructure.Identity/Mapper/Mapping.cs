@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Application.DTOs;
+using AutoMapper;
 using Infrastructure.Identity.Models;
 using System;
 using System.Collections.Generic;
@@ -23,6 +24,8 @@ namespace Infrastructure.Identity.Mapper
                 .ForMember(dest => dest.Weight, opt => opt.MapFrom(src => src.Weight))
                 .ForMember(dest => dest.WeightMeasurement, opt => opt.MapFrom(src => src.WeightMeasurement))
                 ;
+
+            CreateMap<CustomUser, UserDTO>();
         }
     }
 }
