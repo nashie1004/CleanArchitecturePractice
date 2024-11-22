@@ -1,4 +1,6 @@
 ﻿using Application.Features.Audit.Queries.GetAllAudit;
+using Application.Features.Auth.Commands.LoginUser;
+using Application.Features.Auth.Commands.RegisterUser;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,14 +19,14 @@ namespace API.Controllers
         }
 
         [HttpPost("/register")]
-        public async Task<IActionResult> Register([FromBody] GetAllAuditRequest req)
+        public async Task<IActionResult> Register([FromBody] RegisterUserRequest req)
         {
             // TODO
             return Ok(await _mediator.Send(req));
         }
 
         [HttpPost("/login")]
-        public async Task<IActionResult> Login([FromBody] GetAllAuditRequest req)
+        public async Task<IActionResult> Login([FromBody] LoginUserRequest req)
         {
             // TODO
             return Ok(await _mediator.Send(req));

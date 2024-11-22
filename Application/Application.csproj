@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Auth\Commands\" />
+    <Folder Include="Features\Audit\Commands\" />
     <Folder Include="Features\Exercise\ExerciseCategory\Commands\" />
     <Folder Include="Features\Exercise\Exercise\Commands\UpdateExercise\" />
     <Folder Include="Features\Exercise\Exercise\Queries\GetExercise\" />
