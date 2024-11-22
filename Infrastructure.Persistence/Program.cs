@@ -7,6 +7,7 @@ using Infra.Repository.Audit;
 using Infra.Repository.Exercise;
 using Application.Contracts.Infra.Repos;
 using Infra.Repository.Workout;
+using Infrastructure.Persistence.Data;
 
 namespace Infra
 {

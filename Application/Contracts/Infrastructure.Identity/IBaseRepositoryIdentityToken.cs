@@ -8,6 +8,6 @@ namespace Application.Contracts.Infrastructure.Identity
 {
     public interface IBaseRepositoryIdentityToken<T> where T : class
     {
-        public Task<string> GenerateJWTTokenAsync(string userId, string userName);
+        Task<string> GenerateJWTTokenAsync(string userId, string userName);
     }
 }

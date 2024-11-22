@@ -11,6 +11,7 @@ using Domain.Entities;
 using Newtonsoft.Json;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Audit = Domain.Entities.Audit;
+using Infrastructure.Persistence.Data;
 
 namespace Infra.Repository
 {

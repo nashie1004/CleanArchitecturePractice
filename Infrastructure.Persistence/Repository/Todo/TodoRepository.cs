@@ -1,6 +1,7 @@
 ﻿using Application.Contracts.Infra;
 using Application.Contracts.Infra.Todo;
 using Domain.Entities;
+using Infrastructure.Persistence.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Infrastructure.Identity.Data;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Infrastructure.Identity
@@ -7,6 +9,10 @@ namespace Infrastructure.Identity
     {
         public static IServiceCollection AddInfrastructureIdentity(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<IdentityContext>()
+                .AddDefaultTokenProviders();
+
             return services;
         }
     }

@@ -1,5 +1,6 @@
 ﻿using Application.Contracts.Infra.Repos;
 using Domain.Entities;
+using Infrastructure.Persistence.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;

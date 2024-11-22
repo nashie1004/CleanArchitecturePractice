@@ -8,7 +8,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace Infra
+namespace Infrastructure.Persistence.Data
 {
     public class MainContext : DbContext
     {
@@ -20,7 +20,7 @@ namespace Infra
 
         public MainContext(DbContextOptions opt) : base(opt)
         {
-            
+
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

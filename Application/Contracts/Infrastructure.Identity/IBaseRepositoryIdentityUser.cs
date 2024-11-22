@@ -11,5 +11,7 @@ namespace Application.Contracts.Infrastructure.Identity
         Task<(bool, string userId)> CreateUserAsync();
         Task<(bool, string userId)> LoginUserAsync();
         Task<(bool, string userId)> GetUserDetailsAsync();
+        Task<bool> ChangePasswordAsync();
+        Task<bool> LogOutUserAsync();
     }
 }
