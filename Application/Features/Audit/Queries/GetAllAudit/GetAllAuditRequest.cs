@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Application;
+using Application.Common;
 
 namespace Application.Features.Audit.Queries.GetAllAudit
 {

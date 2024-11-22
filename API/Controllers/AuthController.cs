@@ -30,6 +30,7 @@ namespace API.Controllers
             return Ok(await _mediator.Send(req));
         }
 
+        /*
         [HttpPost("/logout")]
         public async Task<IActionResult> Logout([FromBody] GetAllAuditRequest req)
         {
@@ -50,5 +51,6 @@ namespace API.Controllers
             // TODO
             return Ok(await _mediator.Send(req));
         }
+        */
     }
 }

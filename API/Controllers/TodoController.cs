@@ -2,10 +2,12 @@
 using Application.Features.Todo.Queries.GetAllTodo;
 using Application.Features.Todo.Queries.GetTodo;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("/api/[controller]")]
     public class TodoController : ControllerBase

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application
+namespace Application.Common
 {
     public class BaseResponse
     {
@@ -16,13 +16,13 @@ namespace Application
             ValidationErrors = new List<string>();
         }
 
-        public bool IsSuccess { get; set; } 
+        public bool IsSuccess { get; set; }
         public int RowsAffected { get; set; }
         public string Message { get; set; }
         public List<string> ValidationErrors { get; set; }
     }
 
-    public class BaseResponseList<T> : BaseResponse where T:new()
+    public class BaseResponseList<T> : BaseResponse where T : new()
     {
         public BaseResponseList()
         {
@@ -34,7 +34,7 @@ namespace Application
 
     public class BaseRequestList
     {
-        public BaseRequestList() 
+        public BaseRequestList()
         {
             PageSize = 15;
             PageNumber = 1;
