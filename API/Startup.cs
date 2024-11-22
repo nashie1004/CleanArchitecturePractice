@@ -1,5 +1,6 @@
 using Application;
 using Infra;
+using Infrastructure.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 {
@@ -11,6 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 
     builder.Services.AddApplication();
     builder.Services.AddInfrastructurePersistence(builder.Configuration);
+    builder.Services.AddInfrastructureIdentity(builder.Configuration);
     //builder.Services.AddInfrastructurePersistence(builder.Configuration);
 }
 
