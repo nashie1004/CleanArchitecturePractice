@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Infra.Repository.Workout
 {
-    public class WorkoutHeaderRepository : BaseRepository<WorkoutHeader>, IWorkoutHeaderRepository
+    public class WorkoutHeaderRepository : BaseRepositoryPersistence<WorkoutHeader>, IWorkoutHeaderRepository
     {
         public WorkoutHeaderRepository(MainContext ctx) : base(ctx)
         {

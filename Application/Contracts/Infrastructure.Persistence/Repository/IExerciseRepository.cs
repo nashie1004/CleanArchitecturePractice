@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Application.Contracts.Infra.Todo
 {
-    public interface IAuditRepository : IBaseRepository<Audit>
+    public interface IExerciseRepository : IBaseRepositoryPersistence<Exercise>
     {
     }
 }

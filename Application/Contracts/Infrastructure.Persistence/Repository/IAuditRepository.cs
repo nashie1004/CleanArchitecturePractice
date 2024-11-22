@@ -5,10 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Contracts.Infra.Repos
+namespace Application.Contracts.Infra.Todo
 {
-    public interface IWorkoutHeaderRepository : IBaseRepository<WorkoutHeader>
+    public interface IAuditRepository : IBaseRepositoryPersistence<Audit>
     {
-
     }
 }

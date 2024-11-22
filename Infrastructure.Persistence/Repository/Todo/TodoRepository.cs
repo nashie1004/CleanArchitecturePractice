@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Infra.Repository.Todo
 {
-    public class TodoRepository : BaseRepository<TodoItem>, ITodoRepository
+    public class TodoRepository : BaseRepositoryPersistence<TodoItem>, ITodoRepository
     {
         public TodoRepository(MainContext ctx) : base(ctx)
         {

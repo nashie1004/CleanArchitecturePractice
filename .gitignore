@@ -363,3 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 
 /Infra/SQLiteDB
+/Infrastructure.Persistence/SQLiteDB

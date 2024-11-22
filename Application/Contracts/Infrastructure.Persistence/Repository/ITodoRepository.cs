@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Contracts.Infra.Repos
+namespace Application.Contracts.Infra.Todo
 {
-    public interface IWorkoutDetailRepository : IBaseRepository<WorkoutDetail>
+    public interface ITodoRepository : IBaseRepositoryPersistence<TodoItem>
     {
     }
 }

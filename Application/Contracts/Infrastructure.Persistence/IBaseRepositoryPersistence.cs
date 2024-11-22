@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Application.Contracts.Infra
 {
-    public interface IBaseRepository<T> where T : class
+    public interface IBaseRepositoryPersistence<T> where T : class
     {
         Task AddRecordAsync(T record);
         //Task<bool> UpdateRecordAsync(T record);

@@ -14,12 +14,12 @@ using Audit = Domain.Entities.Audit;
 
 namespace Infra.Repository
 {
-    public class BaseRepository<T> : IBaseRepository<T>
+    public class BaseRepositoryPersistence<T> : IBaseRepositoryPersistence<T>
      where T : class
     {
         private readonly MainContext _context;
 
-        public BaseRepository(MainContext context)
+        public BaseRepositoryPersistence(MainContext context)
         {
             _context = context;
         }

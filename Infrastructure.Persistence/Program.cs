@@ -31,15 +31,16 @@ namespace Infra
     {
         public static string Set()
         {
+            var projectRoot = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", ".."));
             var folder = "SQLiteDB";
-            var path = Path.Combine(Directory.GetCurrentDirectory(), folder);
+            var path = Path.Combine(projectRoot, "Infrastructure.Persistence", folder);
 
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
             }
 
-            return $"../Infra/{folder}/app.db";
+            return $"../Infrastructure.Persistence/{folder}/app.db";
         }
     }
 }
