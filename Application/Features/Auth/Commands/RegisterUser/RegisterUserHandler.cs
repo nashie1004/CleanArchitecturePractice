@@ -1,4 +1,6 @@
-﻿using Application.Contracts.Infrastructure.Identity;
+﻿using Application.Contracts.Infra.Todo;
+using Application.Contracts.Infrastructure.Identity;
+using Application.Contracts.Infrastructure.Persistence.Repository;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -11,10 +13,21 @@ namespace Application.Features.Auth.Commands.RegisterUser
     public class RegisterUserHandler : IRequestHandler<RegisterUserRequest, RegisterUserResponse>
     {
         private readonly IBaseRepositoryIdentityUser _baseRepositoryIdentityUser;
+        private readonly IUserRepository _userRepository;
+        private readonly IAuditRepository _auditRepository;
+        private readonly IUserAuthHistoryRepository _userAuthHistoryRepository;
 
-        public RegisterUserHandler(IBaseRepositoryIdentityUser baseRepositoryIdentityUser)
+        public RegisterUserHandler(
+            IBaseRepositoryIdentityUser baseRepositoryIdentityUser,
+            IUserRepository userRepository,
+            IAuditRepository auditRepository,
+            IUserAuthHistoryRepository userAuthHistoryRepository
+            )
         {
             _baseRepositoryIdentityUser = baseRepositoryIdentityUser;
+            _userRepository = userRepository;
+            _auditRepository = auditRepository;
+            _userAuthHistoryRepository = userAuthHistoryRepository;
         }
 
         public async Task<RegisterUserResponse> Handle(RegisterUserRequest req, CancellationToken ct)

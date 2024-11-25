@@ -3,6 +3,8 @@ using Application.Contracts.Infrastructure.Identity;
 using Application.Contracts.Infrastructure.Persistence.Repository;
 using Application.DTOs;
 using AutoMapper;
+using Domain.Entities;
+using Domain.Enums;
 using Infrastructure.Identity.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -24,13 +26,15 @@ namespace Infrastructure.Identity.Repository
         private readonly IBaseRepositoryIdentityToken _baseRepositoryIdentityToken;
         private readonly IUserRepository _userRepository;
         private readonly IAuditRepository _auditRepository;
+        private readonly IUserAuthHistoryRepository _userAuthHistoryRepository;
 
         public BaseRepositoryIdentityUser(
             UserManager<CustomUser> userManager, 
             SignInManager<CustomUser> signInManager, IMapper mapper, 
             IBaseRepositoryIdentityToken baseRepositoryIdentityToken,
             IUserRepository userRepository,
-            IAuditRepository auditRepository
+            IAuditRepository auditRepository,
+            IUserAuthHistoryRepository userAuthHistoryRepository
             )
         {
             _userManager = userManager;
@@ -39,6 +43,7 @@ namespace Infrastructure.Identity.Repository
             _baseRepositoryIdentityToken = baseRepositoryIdentityToken;
             _userRepository = userRepository;
             _auditRepository = auditRepository;
+            _userAuthHistoryRepository = userAuthHistoryRepository;
         }
 
         public async Task<(bool, List<string>, long)> CreateUserAsync(string userName, string password)
@@ -48,6 +53,7 @@ namespace Infrastructure.Identity.Repository
                 UserName = userName,
             };
 
+            // 1. Save to ASP.NET Identity Table
             var identityResult = await _userManager.CreateAsync(newIdentityUser, password);
 
             if (!identityResult.Succeeded)
@@ -61,11 +67,11 @@ namespace Infrastructure.Identity.Repository
                 IdentityImplementationId = newIdentityUser.Id
             };
 
-            // Save to Main Table
+            // 2. Save to Main User Table
             await _userRepository.AddRecordAsync(newBaseUser);
             await _userRepository.SaveRecordAsync();
 
-            // Save to Audit Table
+            // 3. Save to Audit Table
             await _auditRepository.AddRecordAsync(new Domain.Entities.Audit()
             {
                 CreatedDate = DateTime.UtcNow,
@@ -73,10 +79,18 @@ namespace Infrastructure.Identity.Repository
                 TableName = "AspNetUsers",
                 TablePrimaryKey = newIdentityUser.Id,
                 Action = (short)EntityState.Added,
-                NewData = JsonConvert.SerializeObject(identityResult)
+                NewData = JsonConvert.SerializeObject(newIdentityUser)
 
             });
             await _auditRepository.SaveRecordNoAuditAsync();
+
+            // 4. Save to Auth History Table
+            await _userAuthHistoryRepository.AddRecordAsync(new Domain.Entities.UserAuthHistory()
+            {
+                Action = UserAuthAction.Register,
+                CreatedBy = newBaseUser.UserId
+            });
+            await _userAuthHistoryRepository.SaveRecordAsync();
 
             return (true, new List<string>(), newIdentityUser.Id);
         }
@@ -84,16 +98,16 @@ namespace Infrastructure.Identity.Repository
         public async Task<(bool, List<string>, long)> LoginUserAsync(string userName, string password)
         {
             var validationMsgs = new List<string>();
-            var user = await _userManager.FindByNameAsync(userName);
+            var identityUser = await _userManager.FindByNameAsync(userName);
 
-            if (user == null)
+            if (identityUser == null)
             {
                 validationMsgs.Add("Invalid username or password");
 
                 return (false, validationMsgs, 0);
             }
 
-            var loginOk = await _userManager.CheckPasswordAsync(user, password);
+            var loginOk = await _userManager.CheckPasswordAsync(identityUser, password);
 
             if (!loginOk)
             {
@@ -102,8 +116,18 @@ namespace Infrastructure.Identity.Repository
                 return (false, validationMsgs, 0);
             }
 
-            // TODO: GENERATE TOKEN
-            return (true, validationMsgs, user.Id);
+            // 1. Get User from Main Table
+            var baseUser = await _userRepository.GetRecordByPropertyAsync(i => i.IdentityImplementationId == identityUser.Id);
+
+            // 2. Save to Auth History Table
+            await _userAuthHistoryRepository.AddRecordAsync(new Domain.Entities.UserAuthHistory()
+            {
+                Action = UserAuthAction.Login,
+                CreatedBy = baseUser.UserId
+            });
+            await _userAuthHistoryRepository.SaveRecordAsync();
+
+            return (true, validationMsgs, identityUser.Id);
         }
 
         public async Task<(bool, List<string>, UserDTO)> GetUserDetailsAsync(string userName, string password)
@@ -129,19 +153,31 @@ namespace Infrastructure.Identity.Repository
         {
             var validationMsgs = new List<string>();
 
-            var user = await _userManager.FindByIdAsync("");
+            var identityUser = await _userManager.FindByNameAsync(userName);
 
-            if (user == null)
+            if (identityUser == null)
             {
+                validationMsgs.Add("No user found");
                 return (false, validationMsgs);
             }
 
-            var retVal = await _userManager.ChangePasswordAsync(user, oldPassword, newPassword);
+            var retVal = await _userManager.ChangePasswordAsync(identityUser, oldPassword, newPassword);
 
             if (!retVal.Succeeded)
             {
                 return (false, retVal.Errors.Select(i => i.Description).ToList());
             }
+
+            // 1. Get User from Main Table
+            var baseUser = await _userRepository.GetRecordByPropertyAsync(i => i.IdentityImplementationId == identityUser.Id);
+
+            // 2. Save to Auth History Table
+            await _userAuthHistoryRepository.AddRecordAsync(new Domain.Entities.UserAuthHistory()
+            {
+                Action = UserAuthAction.ChangePassword,
+                CreatedBy = baseUser.UserId
+            });
+            await _userAuthHistoryRepository.SaveRecordAsync();
 
             return (true, validationMsgs);
         }
@@ -150,20 +186,5 @@ namespace Infrastructure.Identity.Repository
         //{
         //    return true;
         //}
-
-        private long GetPrimaryKey(EntityEntry entry)
-        {
-            try
-            {
-                var primaryKeyProperty = entry.Metadata.FindPrimaryKey()?.Properties.First();
-                var key = entry.Property(primaryKeyProperty.Name).CurrentValue;
-                if (key == null) { return 0; }
-                return Convert.ToInt64(key);
-            }
-            catch (Exception ex)
-            {
-                return 0;
-            }
-        }
     }
 }

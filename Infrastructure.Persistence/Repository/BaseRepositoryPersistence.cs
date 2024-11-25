@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Audit = Domain.Entities.Audit;
 using Infrastructure.Persistence.Data;
+using System.Linq.Expressions;
 
 namespace Infra.Repository
 {
@@ -48,10 +49,16 @@ namespace Infra.Repository
             return await _context.Set<T>().FindAsync(id);
         }
 
+        public async Task<T> GetRecordByPropertyAsync(Expression<Func<T, bool>> predicate)
+        {
+            return await _context.Set<T>().FirstOrDefaultAsync(predicate);
+        }
+        
         public async Task<List<T>> GetAllRecordAsync()
         {
             return await _context.Set<T>().AsNoTracking().ToListAsync();
         }
+
         public async Task<List<T>> GetAllRecordAsync(int pageSize = 15, int pageNo = 1)
         {
             var list = await _context

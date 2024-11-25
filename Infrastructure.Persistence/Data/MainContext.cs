@@ -18,6 +18,7 @@ namespace Infrastructure.Persistence.Data
         public DbSet<WorkoutHeader> WorkoutHeaders { get; set; }
         public DbSet<WorkoutDetail> WorkoutDetails { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<UserAuthHistory> UserAuthHistories { get; set; }
 
         public MainContext(DbContextOptions<MainContext> opt) : base(opt)
         {

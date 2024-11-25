@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,6 +13,7 @@ namespace Application.Contracts.Infra
         //Task<bool> UpdateRecordAsync(T record);
         Task<bool> DeleteRecordAsync(long id);
         Task<T> GetRecordAsync(long id);
+        Task<T> GetRecordByPropertyAsync(Expression<Func<T, bool>> predicate);
         Task<List<T>> GetAllRecordAsync();
         Task<List<T>> GetAllRecordAsync(int pageSize, int pageNo);
         Task<int> SaveRecordAsync(CancellationToken ct = default);

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Enums
 {
-    public enum AuditAction : short
+    public enum UserAuthAction : short
     {
         Login = 1,
         Register = 2,
