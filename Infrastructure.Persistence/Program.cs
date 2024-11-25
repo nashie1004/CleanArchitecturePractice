@@ -24,6 +24,7 @@ namespace Infra
             services.AddScoped(typeof(IAuditRepository), typeof(AuditRepository));
             services.AddScoped(typeof(IExerciseRepository), typeof(ExerciseRepository));
             services.AddScoped(typeof(IWorkoutHeaderRepository), typeof(WorkoutHeaderRepository));
+            services.AddScoped(typeof(IWorkoutDetailRepository), typeof(WorkoutDetailRepository));
             services.AddScoped(typeof(IUserRepository), typeof(UserRepository));
 
             return services;
