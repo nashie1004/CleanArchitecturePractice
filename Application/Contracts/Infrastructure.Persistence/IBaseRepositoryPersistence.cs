@@ -14,6 +14,6 @@ namespace Application.Contracts.Infra
         Task<T> GetRecordAsync(long id);
         Task<List<T>> GetAllRecordAsync();
         Task<List<T>> GetAllRecordAsync(int pageSize, int pageNo);
-        Task<int> SaveRecordAsync(CancellationToken ct);
+        Task<int> SaveRecordAsync(CancellationToken ct = default);
     }
 }

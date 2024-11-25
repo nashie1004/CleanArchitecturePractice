@@ -11,7 +11,7 @@ namespace Infrastructure.Identity.Models
 {
     public class CustomUser : IdentityUser<long>
     {
-        public decimal Weight { get; set; }
-        public WeightMeasurement WeightMeasurement { get; set; }
+        //public decimal Weight { get; set; }
+        //public WeightMeasurement WeightMeasurement { get; set; }
     }
 }

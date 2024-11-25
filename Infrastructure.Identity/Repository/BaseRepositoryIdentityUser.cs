@@ -1,8 +1,13 @@
-﻿using Application.Contracts.Infrastructure.Identity;
+﻿using Application.Contracts.Infra.Todo;
+using Application.Contracts.Infrastructure.Identity;
+using Application.Contracts.Infrastructure.Persistence.Repository;
 using Application.DTOs;
 using AutoMapper;
 using Infrastructure.Identity.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,34 +22,63 @@ namespace Infrastructure.Identity.Repository
         private readonly SignInManager<CustomUser> _signManager;
         private readonly IMapper _mapper;
         private readonly IBaseRepositoryIdentityToken _baseRepositoryIdentityToken;
+        private readonly IUserRepository _userRepository;
+        private readonly IAuditRepository _auditRepository;
 
         public BaseRepositoryIdentityUser(
             UserManager<CustomUser> userManager, 
             SignInManager<CustomUser> signInManager, IMapper mapper, 
-            IBaseRepositoryIdentityToken baseRepositoryIdentityToken
+            IBaseRepositoryIdentityToken baseRepositoryIdentityToken,
+            IUserRepository userRepository,
+            IAuditRepository auditRepository
             )
         {
             _userManager = userManager;
             _signManager = signInManager;
             _mapper = mapper;
             _baseRepositoryIdentityToken = baseRepositoryIdentityToken;
+            _userRepository = userRepository;
+            _auditRepository = auditRepository;
         }
 
         public async Task<(bool, List<string>, long)> CreateUserAsync(string userName, string password)
         {
-            var newUser = new CustomUser()
+            var newIdentityUser = new CustomUser()
             {
                 UserName = userName,
             };
 
-            var identityResult = await _userManager.CreateAsync(newUser, password);
+            var identityResult = await _userManager.CreateAsync(newIdentityUser, password);
 
             if (!identityResult.Succeeded)
             {
                 return (false, identityResult.Errors.Select(i => i.Description).ToList(), 0);
             }
 
-            return (true, new List<string>(), newUser.Id);
+            var newBaseUser = new Domain.Entities.User()
+            {
+                UserName = userName,
+                IdentityImplementationId = newIdentityUser.Id
+            };
+
+            // Save to Main Table
+            await _userRepository.AddRecordAsync(newBaseUser);
+            await _userRepository.SaveRecordAsync();
+
+            // Save to Audit Table
+            await _auditRepository.AddRecordAsync(new Domain.Entities.Audit()
+            {
+                CreatedDate = DateTime.UtcNow,
+                CreatedBy = newBaseUser.UserId,
+                TableName = "AspNetUsers",
+                TablePrimaryKey = newIdentityUser.Id,
+                Action = (short)EntityState.Added,
+                NewData = JsonConvert.SerializeObject(identityResult)
+
+            });
+            await _auditRepository.SaveRecordNoAuditAsync();
+
+            return (true, new List<string>(), newIdentityUser.Id);
         }
 
         public async Task<(bool, List<string>, long)> LoginUserAsync(string userName, string password)
@@ -116,5 +150,20 @@ namespace Infrastructure.Identity.Repository
         //{
         //    return true;
         //}
+
+        private long GetPrimaryKey(EntityEntry entry)
+        {
+            try
+            {
+                var primaryKeyProperty = entry.Metadata.FindPrimaryKey()?.Properties.First();
+                var key = entry.Property(primaryKeyProperty.Name).CurrentValue;
+                if (key == null) { return 0; }
+                return Convert.ToInt64(key);
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+        }
     }
 }
