@@ -30,6 +30,7 @@ namespace Application.Features.Auth.Commands.LoginUser
             {
                 var loginAttempt = await _baseRepositoryIdentityUser.LoginUserAsync(req.UserName, req.Password);
 
+                retVal.IsSuccess = loginAttempt.Item1;
                 retVal.ValidationErrors = loginAttempt.Item2;
 
                 // SUCCESS
