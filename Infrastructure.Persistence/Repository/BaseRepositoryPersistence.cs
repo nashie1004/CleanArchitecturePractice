@@ -63,7 +63,7 @@ namespace Infra.Repository
             return list;
         }
 
-        public async Task<int> SaveRecordAsync(CancellationToken ct)
+        public async Task<int> SaveRecordAsync(CancellationToken ct = default)
         {
             int rowsAffected = 0;
             var entries = _context.ChangeTracker.Entries<AuditableEntity>().ToList();

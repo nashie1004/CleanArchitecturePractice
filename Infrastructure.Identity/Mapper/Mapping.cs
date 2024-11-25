@@ -13,6 +13,7 @@ namespace Infrastructure.Identity.Mapper
     {
         public Mapping()
         {
+            /*
             CreateMap<Domain.Entities.User, CustomUser>()
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.UserName))
                 .ForMember(dest => dest.Weight, opt => opt.MapFrom(src => src.Weight))
@@ -24,7 +25,7 @@ namespace Infrastructure.Identity.Mapper
                 .ForMember(dest => dest.Weight, opt => opt.MapFrom(src => src.Weight))
                 .ForMember(dest => dest.WeightMeasurement, opt => opt.MapFrom(src => src.WeightMeasurement))
                 ;
-
+            */
             CreateMap<CustomUser, UserDTO>();
         }
     }
