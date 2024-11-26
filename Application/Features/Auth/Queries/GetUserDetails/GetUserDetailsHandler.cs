@@ -26,7 +26,7 @@ namespace Application.Features.Auth.Queries.GetUserDetails
             try
             {
                 var res = await _baseRepositoryIdentityUser.GetUserDetailsAsync(req.UserName, req.Password);
-                
+
                 retVal.IsSuccess = res.Item1;
                 retVal.ValidationErrors = res.Item2;
                 retVal.UserProfile = res.Item3;
@@ -37,5 +37,6 @@ namespace Application.Features.Auth.Queries.GetUserDetails
             }
 
             return retVal;
+        }
     }
 }

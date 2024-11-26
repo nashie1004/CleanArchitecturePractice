@@ -38,6 +38,8 @@ namespace Application.Features.Auth.Commands.LoginUser
                 {
                     var userDetails = await _baseRepositoryIdentityUser.GetUserDetailsAsync(req.UserName, req.Password);
 
+                    retVal.IsSuccess = userDetails.Item1;
+
                     retVal.JWTToken = await _baseRepositoryIdentityToken
                         .GenerateJWTTokenAsync(
                             userDetails.Item3.Id.ToString(), userDetails.Item3.UserName
