@@ -1,4 +1,5 @@
 ﻿using Application.Contracts.Infrastructure.Identity;
+using Application.Contracts.Infrastructure.Persistence.Repository;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -11,12 +12,15 @@ namespace Application.Features.Auth.Queries.GetUserDetails
     public class GetUserDetailsHandler : IRequestHandler<GetUserDetailsRequest, GetUserDetailsResponse>
     {
         private readonly IBaseRepositoryIdentityUser _baseRepositoryIdentityUser;
+        private readonly IUserRepository _userRepository;
 
         public GetUserDetailsHandler(
-            IBaseRepositoryIdentityUser baseRepositoryIdentityUser
+            IBaseRepositoryIdentityUser baseRepositoryIdentityUser,
+            IUserRepository userRepository
             )
         {
             _baseRepositoryIdentityUser = baseRepositoryIdentityUser;
+            _userRepository = userRepository;
         }
 
         public async Task<GetUserDetailsResponse> Handle(GetUserDetailsRequest req, CancellationToken ct)
