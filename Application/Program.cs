@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using Application.DTOs;
+using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
@@ -14,6 +15,7 @@ namespace Application
                 configuration.RegisterServicesFromAssembly(assembly)
             );
             services.AddValidatorsFromAssembly(assembly);
+            services.AddAutoMapper(typeof(Mapper));
 
             return services;
         }

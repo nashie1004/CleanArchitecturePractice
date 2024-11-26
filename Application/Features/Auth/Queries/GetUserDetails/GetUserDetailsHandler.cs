@@ -1,5 +1,7 @@
 ﻿using Application.Contracts.Infrastructure.Identity;
 using Application.Contracts.Infrastructure.Persistence.Repository;
+using Application.DTOs;
+using AutoMapper;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -13,14 +15,17 @@ namespace Application.Features.Auth.Queries.GetUserDetails
     {
         private readonly IBaseRepositoryIdentityUser _baseRepositoryIdentityUser;
         private readonly IUserRepository _userRepository;
+        private readonly IMapper _mapper;
 
         public GetUserDetailsHandler(
             IBaseRepositoryIdentityUser baseRepositoryIdentityUser,
-            IUserRepository userRepository
+            IUserRepository userRepository,
+            IMapper mapper
             )
         {
             _baseRepositoryIdentityUser = baseRepositoryIdentityUser;
             _userRepository = userRepository;
+            _mapper = mapper;
         }
 
         public async Task<GetUserDetailsResponse> Handle(GetUserDetailsRequest req, CancellationToken ct)
@@ -29,11 +34,16 @@ namespace Application.Features.Auth.Queries.GetUserDetails
 
             try
             {
-                var res = await _baseRepositoryIdentityUser.GetUserDetailsAsync(req.UserName, req.Password);
+                var userAuthId = await _baseRepositoryIdentityUser.GetUserImplementationIdAsync(req.UserName, req.Password);
 
-                retVal.IsSuccess = res.Item1;
-                retVal.ValidationErrors = res.Item2;
-                retVal.UserProfile = res.Item3;
+                if (userAuthId == 0)
+                {
+                    retVal.IsSuccess = false;
+                    retVal.SuccessMessage = "Incorrect username or password";
+                }
+
+                var user = await _userRepository.GetRecordByPropertyAsync(i => i.IdentityImplementationId == userAuthId);
+                retVal.UserProfile = _mapper.Map<UserDTO>(user);
             }
             catch (Exception ex)
             {

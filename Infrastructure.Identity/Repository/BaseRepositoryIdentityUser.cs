@@ -46,11 +46,11 @@ namespace Infrastructure.Identity.Repository
             _userAuthHistoryRepository = userAuthHistoryRepository;
         }
 
-        public async Task<(bool, List<string>, long)> CreateUserAsync(string userName, string password)
+        public async Task<(bool, List<string>, long)> CreateUserAsync(UserDTO profileInfo, string password)
         {
             var newIdentityUser = new CustomUser()
             {
-                UserName = userName,
+                UserName = profileInfo.UserName,
             };
 
             // 1. Save to ASP.NET Identity Table
@@ -63,7 +63,14 @@ namespace Infrastructure.Identity.Repository
 
             var newBaseUser = new Domain.Entities.User()
             {
-                UserName = userName,
+                UserName = profileInfo.UserName,
+                Weight = profileInfo.Weight,
+                WeightMeasurement = profileInfo.WeightMeasurement,
+                Height = profileInfo.Height,
+                HeightMeasurement = profileInfo.HeightMeasurement,
+                ProfileImageUrl = profileInfo.ProfileImageUrl,
+                DateOfBirth = profileInfo.DateOfBirth,
+                Gender = profileInfo.Gender,
                 IdentityImplementationId = newIdentityUser.Id
             };
 
@@ -186,5 +193,24 @@ namespace Infrastructure.Identity.Repository
         //{
         //    return true;
         //}
+
+        public async Task<bool> CheckPasswordAsync(string userName, string password)
+        {
+            var identityUser = await _userManager.FindByNameAsync(userName);
+
+            if (identityUser == null) return false;
+
+            return await _userManager.CheckPasswordAsync(identityUser, password);
+        }
+
+        public async Task<long> GetUserImplementationIdAsync(string userName, string password)
+        {
+            var identityUser = await _userManager.FindByNameAsync(userName);
+
+            if (identityUser == null) return 0;
+
+            return identityUser.Id;
+        }
+
     }
 }

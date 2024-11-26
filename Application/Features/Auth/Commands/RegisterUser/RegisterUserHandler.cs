@@ -13,21 +13,12 @@ namespace Application.Features.Auth.Commands.RegisterUser
     public class RegisterUserHandler : IRequestHandler<RegisterUserRequest, RegisterUserResponse>
     {
         private readonly IBaseRepositoryIdentityUser _baseRepositoryIdentityUser;
-        private readonly IUserRepository _userRepository;
-        private readonly IAuditRepository _auditRepository;
-        private readonly IUserAuthHistoryRepository _userAuthHistoryRepository;
 
         public RegisterUserHandler(
-            IBaseRepositoryIdentityUser baseRepositoryIdentityUser,
-            IUserRepository userRepository,
-            IAuditRepository auditRepository,
-            IUserAuthHistoryRepository userAuthHistoryRepository
+            IBaseRepositoryIdentityUser baseRepositoryIdentityUser
             )
         {
             _baseRepositoryIdentityUser = baseRepositoryIdentityUser;
-            _userRepository = userRepository;
-            _auditRepository = auditRepository;
-            _userAuthHistoryRepository = userAuthHistoryRepository;
         }
 
         public async Task<RegisterUserResponse> Handle(RegisterUserRequest req, CancellationToken ct)
@@ -36,7 +27,7 @@ namespace Application.Features.Auth.Commands.RegisterUser
 
             try
             {
-                var res = await _baseRepositoryIdentityUser.CreateUserAsync(req.UserName, req.Password);
+                var res = await _baseRepositoryIdentityUser.CreateUserAsync(req.RegisterInfo, req.Password);
 
                 retVal.IsSuccess = res.Item1;
                 retVal.ValidationErrors = res.Item2;    
