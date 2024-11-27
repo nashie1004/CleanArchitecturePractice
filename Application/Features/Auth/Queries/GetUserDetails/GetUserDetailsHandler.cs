@@ -40,6 +40,8 @@ namespace Application.Features.Auth.Queries.GetUserDetails
                 {
                     retVal.IsSuccess = false;
                     retVal.SuccessMessage = "Incorrect username or password";
+
+                    return retVal;
                 }
 
                 var user = await _userRepository.GetRecordByPropertyAsync(i => i.IdentityImplementationId == userAuthId);

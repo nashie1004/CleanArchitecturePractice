@@ -13,9 +13,9 @@ namespace Application.DTOs
         public Mapper()
         {
             CreateMap<User, UserDTO>()
-                .ForMember(dest => dest.WeightMeasurement, opt => opt.MapFrom(src => src.WeightMeasurement.ToString()))
-                .ForMember(dest => dest.Height, opt => opt.MapFrom(src => src.HeightMeasurement.ToString()))
-                .ForMember(dest => dest.Gender, opt => opt.MapFrom(src => src.Gender.ToString()))
+                .ForMember(dest => dest.WeightMeasurementText, opt => opt.MapFrom(src => src.WeightMeasurement.ToString()))
+                .ForMember(dest => dest.HeightMeasurementText, opt => opt.MapFrom(src => src.HeightMeasurement.ToString()))
+                .ForMember(dest => dest.GenderText, opt => opt.MapFrom(src => src.Gender.ToString()))
                 ;
         }
     }

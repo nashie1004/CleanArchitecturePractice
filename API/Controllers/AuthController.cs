@@ -1,5 +1,6 @@
 ﻿using Application.Features.Audit.Queries.GetAllAudit;
 using Application.Features.Auth.Commands.ChangePassword;
+using Application.Features.Auth.Commands.ChangeUserDetails;
 using Application.Features.Auth.Commands.LoginUser;
 using Application.Features.Auth.Commands.RegisterUser;
 using Application.Features.Auth.Queries.GetUserDetails;
@@ -45,6 +46,13 @@ namespace API.Controllers
         [Authorize]
         [HttpGet("/getUserDetails")]
         public async Task<IActionResult> GetUserDetails([FromQuery] GetUserDetailsRequest req)
+        {
+            return Ok(await _mediator.Send(req));
+        }
+
+        [Authorize]
+        [HttpPut("/changeUserDetails")]
+        public async Task<IActionResult> ChangeUserDetails([FromBody] ChangeUserDetailsRequest req)
         {
             return Ok(await _mediator.Send(req));
         }

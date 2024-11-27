@@ -42,7 +42,7 @@ namespace Application.Features.Auth.Commands.LoginUser
 
                     retVal.JWTToken = await _baseRepositoryIdentityToken
                         .GenerateJWTTokenAsync(
-                            userDetails.Item3.Id.ToString(), userDetails.Item3.UserName
+                            userDetails.Item3.UserId.ToString(), userDetails.Item3.UserName
                         );
 
                     retVal.UserProfile = userDetails.Item3;
