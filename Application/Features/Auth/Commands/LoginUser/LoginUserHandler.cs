@@ -33,20 +33,22 @@ namespace Application.Features.Auth.Commands.LoginUser
                 retVal.IsSuccess = loginAttempt.Item1;
                 retVal.ValidationErrors = loginAttempt.Item2;
 
+                // LOGIN FAILED
+                if (!retVal.IsSuccess) return retVal;
+
                 // SUCCESS
-                if (loginAttempt.Item1)
-                {
-                    var userDetails = await _baseRepositoryIdentityUser.GetUserDetailsAsync(req.UserName, req.Password);
+                var userDetails = await _baseRepositoryIdentityUser.GetUserDetailsAsync(req.UserName, req.Password);
 
-                    retVal.IsSuccess = userDetails.Item1;
+                retVal.IsSuccess = userDetails.Item1;
 
-                    retVal.JWTToken = await _baseRepositoryIdentityToken
-                        .GenerateJWTTokenAsync(
-                            userDetails.Item3.UserId.ToString(), userDetails.Item3.UserName
-                        );
+                retVal.JWTToken = await _baseRepositoryIdentityToken
+                    .GenerateJWTTokenAsync(
+                        userDetails.Item3.UserId.ToString(), userDetails.Item3.UserName
+                    );
 
-                    retVal.UserProfile = userDetails.Item3;
-                }
+                retVal.UserProfile = userDetails.Item3;
+
+                // TODO: Implement Set browser cookies
             }
             catch (Exception ex)
             {
