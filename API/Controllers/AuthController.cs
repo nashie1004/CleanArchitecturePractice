@@ -31,7 +31,22 @@ namespace API.Controllers
         [HttpPost("/login")]
         public async Task<IActionResult> Login([FromBody] LoginUserRequest req)
         {
-            return Ok(await _mediator.Send(req));
+            //return Ok(await _mediator.Send(req));
+
+            var loginResult = await _mediator.Send(req);
+
+            if (!loginResult.IsSuccess) return Ok(loginResult);
+
+            Response.Cookies.Append("AccessToken", $"Bearer {loginResult.JWTToken}", new CookieOptions()
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.Strict,
+                Expires = DateTime.Now.AddMinutes(180)
+            });
+
+            return Ok(loginResult);
+
         }
 
         // TO TEST
