@@ -40,7 +40,11 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddApplication();
     builder.Services.AddInfrastructurePersistence(builder.Configuration);
     builder.Services.AddInfrastructureIdentity(builder.Configuration);
-    //builder.Services.AddInfrastructurePersistence(builder.Configuration);
+
+    builder.Services.AddSpaStaticFiles(c =>
+    {
+        c.RootPath = "dist";
+    });
 }
 
 var app = builder.Build();
@@ -50,12 +54,32 @@ var app = builder.Build();
     {
         app.UseSwagger();
         app.UseSwaggerUI();
+        //app.UseDeveloperExceptionPage();
+        //app.UseCors(b => b.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
     }
+
     app.UseHttpsRedirection();
+
+    app.UseRouting();
+
+    app.UseEndpoints(endpoints =>
+    {
+        endpoints.MapDefaultControllerRoute();
+    });
 
     app.UseAuthorization();
 
     app.MapControllers();
+
+    app.UseSpaStaticFiles();
+
+    app.UseSpa(b =>
+    {
+        if (app.Environment.IsDevelopment())
+        {
+            b.UseProxyToSpaDevelopmentServer("http://localhost:61216");
+        }
+    });
 
     app.Run();
 }

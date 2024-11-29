@@ -19,21 +19,21 @@ namespace API.Controllers
             _mediator = mediator;
         }
 
-        [Route("/addWorkoutHeader")]
+        [Route("addWorkoutHeader")]
         [HttpPost]
         public async Task<IActionResult> AddWorkoutHeader([FromBody] AddWorkoutHeaderRequest req)
         {
             return Ok(await _mediator.Send(req));
         }
 
-        [Route("/getManyWorkoutHeader")]
+        [Route("getManyWorkoutHeader")]
         [HttpGet]
         public async Task<IActionResult> GetManyWorkoutHeader([FromQuery] GetManyWorkoutHeaderRequest req)
         {
             return Ok(await _mediator.Send(req));
         }
 
-        [Route("/getManyWorkoutDetail")]
+        [Route("getManyWorkoutDetail")]
         [HttpGet]
         public async Task<IActionResult> GetManyWorkoutDetail([FromQuery] GetManyWorkoutDetailRequest req)
         {

@@ -22,13 +22,13 @@ namespace API.Controllers
             _mediator = mediator;
         }
 
-        [HttpPost("/register")]
+        [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterUserRequest req)
         {
             return Ok(await _mediator.Send(req));
         }
 
-        [HttpPost("/login")]
+        [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginUserRequest req)
         {
             //return Ok(await _mediator.Send(req));
@@ -51,7 +51,7 @@ namespace API.Controllers
 
         // TO TEST
         [Authorize]
-        [HttpPut("/changePassword")]
+        [HttpPut("changePassword")]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest req)
         {
             return Ok(await _mediator.Send(req));
@@ -59,14 +59,14 @@ namespace API.Controllers
 
         // TODO
         [Authorize]
-        [HttpGet("/getUserDetails")]
+        [HttpGet("getUserDetails")]
         public async Task<IActionResult> GetUserDetails([FromQuery] GetUserDetailsRequest req)
         {
             return Ok(await _mediator.Send(req));
         }
 
         [Authorize]
-        [HttpPut("/changeUserDetails")]
+        [HttpPut("changeUserDetails")]
         public async Task<IActionResult> ChangeUserDetails([FromBody] ChangeUserDetailsRequest req)
         {
             return Ok(await _mediator.Send(req));

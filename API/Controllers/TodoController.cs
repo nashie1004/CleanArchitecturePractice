@@ -19,21 +19,21 @@ namespace API.Controllers
             mediator_ = mediator;
         }
 
-        [Route("/add")]
+        [Route("add")]
         [HttpPost]
         public async Task<IActionResult> AddTodo([FromBody] AddTodoRequest req)
         {
             return Ok(await mediator_.Send(req));
         }
 
-        [Route("/get")]
+        [Route("get")]
         [HttpGet]
         public async Task<IActionResult> GetTodo([FromQuery] GetTodoRequest req)
         {
             return Ok(await mediator_.Send(req));
         }
 
-        [Route("/getManyTodo")]
+        [Route("getManyTodo")]
         [HttpGet]
         public async Task<IActionResult> GetManyTodo([FromQuery] GetAllTodoRequest req)
         {

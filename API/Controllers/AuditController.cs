@@ -15,7 +15,7 @@ namespace API.Controllers
             mediator_ = mediator;
         }
 
-        [Route("/getManyAudit")]
+        [Route("getManyAudit")]
         [HttpGet]
         public async Task<IActionResult> GetMany([FromQuery] GetAllAuditRequest req)
         {

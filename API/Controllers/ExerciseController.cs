@@ -18,14 +18,14 @@ namespace API.Controllers
             mediator_ = mediator;
         }
 
-        [Route("/addExercise")]
+        [Route("addExercise")]
         [HttpPost]
         public async Task<IActionResult> AddExercise([FromBody] AddExerciseRequest req)
         {
             return Ok(await mediator_.Send(req));
         }
 
-        [Route("/getManyExercise")]
+        [Route("getManyExercise")]
         [HttpGet]
         public async Task<IActionResult> GetManyExercise([FromQuery] GetManyExerciseRequest req)
         {
