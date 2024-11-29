@@ -10,6 +10,7 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilMagnifyingGlass } from '@coreui/icons'
+import { Link } from 'react-router'
 
 const Error = () => {
     return (
@@ -24,6 +25,7 @@ const Error = () => {
                                 The page you are looking for is temporarily unavailable.
                             </p>
                         </span>
+                        <Link to="/">Go to Home</Link>
                         <CInputGroup className="input-prepend">
                             <CInputGroupText>
                                 <CIcon icon={cilMagnifyingGlass} />
