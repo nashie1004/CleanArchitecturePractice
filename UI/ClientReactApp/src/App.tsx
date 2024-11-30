@@ -8,30 +8,27 @@ import Error from './Views/Error/Error'
 import '@coreui/coreui/dist/css/coreui.min.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import DefaultLayout from './Layout/DefaultLayout'
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { BrowserRouter, NavLink, Link, Outlet, Route, Routes } from 'react-router'
 
-const router = createBrowserRouter([
-    {
-        path: "/",
-        element: <DefaultLayout />,
-        errorElement: <Error />
-    },
-    {
-        path: "/login",
-        element: <Login />
-    },
-    {
-        path: "/register",
-        element: <Register />
-    }
-])
+
+function ProtectedRoute() {
+    const loggedIn = true;
+    return loggedIn ? <Outlet /> : <NavLink to="/login">Login now</NavLink>
+}
 
 function App() {
 
   return (
-      <>
-          <RouterProvider router={router} />
-    </>
+      <BrowserRouter>
+          <Routes>
+            <Route path="/login" element={<Login /> } />
+            <Route path="/register" element={<Register /> } />
+            <Route element={<ProtectedRoute />}>
+                <Route path="*" element={<DefaultLayout />} />
+              </Route>
+            <Route path="*" element={<Error /> } />
+          </Routes>
+    </BrowserRouter>
   )
 }
 
