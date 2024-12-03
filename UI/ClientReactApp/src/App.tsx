@@ -12,11 +12,12 @@ import { BrowserRouter, NavLink, Link, Outlet, Route, Routes } from 'react-route
 
 
 function ProtectedRoute() {
-    const loggedIn = true;
+    const loggedIn = false;
     return loggedIn ? <Outlet /> : <NavLink to="/login">Login now</NavLink>
 }
 
 function App() {
+    console.log(import.meta.env.PORT)
 
   return (
       <BrowserRouter>

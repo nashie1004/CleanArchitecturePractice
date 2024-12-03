@@ -9,9 +9,7 @@
     <BuildOutputFolder>$(MSBuildProjectDirectory)\dist</BuildOutputFolder>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="src\Hooks\" />
-    <Folder Include="src\Services\API\" />
-    <Folder Include="src\Services\Auth\" />
-    <Folder Include="src\Services\State\" />
+    <None Remove="src\Services\State\**" />
+    <TypeScriptConfiguration Remove="src\Services\State\**" />
   </ItemGroup>
 </Project>
