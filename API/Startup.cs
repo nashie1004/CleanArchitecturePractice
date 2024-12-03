@@ -41,10 +41,12 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddInfrastructurePersistence(builder.Configuration);
     builder.Services.AddInfrastructureIdentity(builder.Configuration);
 
+    /*
     builder.Services.AddSpaStaticFiles(c =>
     {
         c.RootPath = "dist";
     });
+    */
 }
 
 var app = builder.Build();
@@ -54,8 +56,8 @@ var app = builder.Build();
     {
         app.UseSwagger();
         app.UseSwaggerUI();
-        //app.UseDeveloperExceptionPage();
-        //app.UseCors(b => b.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+        
+        app.UseCors(b => b.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
     }
 
     app.UseHttpsRedirection();
@@ -71,6 +73,7 @@ var app = builder.Build();
 
     app.MapControllers();
 
+    /*
     app.UseSpaStaticFiles();
 
     app.UseSpa(b =>
@@ -80,6 +83,7 @@ var app = builder.Build();
             b.UseProxyToSpaDevelopmentServer("http://localhost:61216");
         }
     });
+    */
 
     app.Run();
 }
