@@ -1,5 +1,5 @@
 import api from "./api";
-import BaseService from "./BaseService";
+import BaseService, { ReturnMessage } from "./BaseService";
 
 class AuthService extends BaseService {
 
@@ -8,6 +8,7 @@ class AuthService extends BaseService {
     }
 
     async getMe() {
-        this.baseGet("/api/Auth/me");   
+        const retVal = await this.baseGet("/api/Auth/me");   
+        return retVal;
     }
 }
