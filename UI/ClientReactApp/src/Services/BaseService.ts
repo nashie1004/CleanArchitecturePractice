@@ -1,7 +1,14 @@
 import axios from "axios";
 import api from "./api";
 
-export interface ReturnMessage {
+export interface GenericListRequest {
+    pageSize: number,
+    pageNumber: number,
+    sortBy: string,
+    filters: string
+}
+
+export interface GenericReturnMessage {
     status: number,
     data: any,
     message: string
@@ -15,7 +22,7 @@ export default class BaseService {
 
     }
 
-    protected handleError(error: axios.AxiosError | any): ReturnMessage {
+    protected handleError(error: axios.AxiosError | any): GenericReturnMessage {
         if (axios.isAxiosError(error)) {
             return {
                 status: error.response?.status ?? 500
@@ -31,7 +38,7 @@ export default class BaseService {
         }
     }
 
-    protected handleResponse(response: axios.AxiosResponse, message: string = this.genericSuccessMsg): ReturnMessage {
+    protected handleResponse(response: axios.AxiosResponse, message: string = this.genericSuccessMsg): GenericReturnMessage {
         return {
             status: response.status,
             data: response.data,
