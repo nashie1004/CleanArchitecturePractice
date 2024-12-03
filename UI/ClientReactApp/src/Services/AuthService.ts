@@ -1,7 +1,7 @@
 import api from "./api";
 import BaseService, { GenericReturnMessage } from "./BaseService";
 
-class AuthService extends BaseService {
+export default class AuthService extends BaseService {
 
     constructor() {
         super();

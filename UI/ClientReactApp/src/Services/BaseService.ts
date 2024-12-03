@@ -9,6 +9,7 @@ export interface GenericListRequest {
 }
 
 export interface GenericReturnMessage {
+    isOk: boolean,
     status: number,
     data: any,
     message: string
@@ -25,13 +26,15 @@ export default class BaseService {
     protected handleError(error: axios.AxiosError | any): GenericReturnMessage {
         if (axios.isAxiosError(error)) {
             return {
-                status: error.response?.status ?? 500
+                isOk: false
+                , status: error.response?.status ?? 500
                 , data: null
                 , message: error.response?.data?.message ?? this.genericErrorMsg
             }
         }
 
         return {
+            isOk: false,
             status: 500,
             data: null,
             message: error instanceof Error ? error.message : `${error}`
@@ -40,6 +43,7 @@ export default class BaseService {
 
     protected handleResponse(response: axios.AxiosResponse, message: string = this.genericSuccessMsg): GenericReturnMessage {
         return {
+            isOk: true,
             status: response.status,
             data: response.data,
             message
