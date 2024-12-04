@@ -8,22 +8,18 @@ export default class AuthService extends BaseService {
     }
 
     async getMe() {
-        const retVal = await this.baseGet("/api/Auth/me");   
-        return retVal;
+        return await this.baseGet("/api/Auth/me");   
     }
 
     async login(data: any) {
-        const retVal = await this.basePost("/api/Auth/login", data);
-        return retVal;
+        return await this.basePost("/api/Auth/login", data);
     }
 
     async register(data: any) {
-        const retVal = await this.basePost("/api/Auth/register", data);
-        return retVal;
+        return await this.basePost("/api/Auth/register", data);
     }
 
     async changePassword(data: any) {
-        const retVal = await this.basePut("/api/Auth/changePassword", data);
-        return retVal;
+        return await this.basePut("/api/Auth/changePassword", data);
     }
 }

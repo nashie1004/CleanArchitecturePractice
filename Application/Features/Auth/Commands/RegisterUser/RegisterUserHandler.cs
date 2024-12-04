@@ -27,7 +27,8 @@ namespace Application.Features.Auth.Commands.RegisterUser
 
             try
             {
-                var res = await _baseRepositoryIdentityUser.CreateUserAsync(req.RegisterInfo, req.Password);
+                //var res = await _baseRepositoryIdentityUser.CreateUserAsync(req.RegisterInfo, req.Password);
+                var res = await _baseRepositoryIdentityUser.CreateUserAsync(new DTOs.UserDTO(), "ok");
 
                 retVal.IsSuccess = res.Item1;
                 retVal.ValidationErrors = res.Item2;    

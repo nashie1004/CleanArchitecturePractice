@@ -22,12 +22,14 @@ namespace API.Controllers
             _mediator = mediator;
         }
 
+        [AllowAnonymous]
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterUserRequest req)
         {
             return Ok(await _mediator.Send(req));
         }
 
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginUserRequest req)
         {
