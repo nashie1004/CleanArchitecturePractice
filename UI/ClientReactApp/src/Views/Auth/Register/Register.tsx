@@ -10,6 +10,9 @@ import {
     CInputGroup,
     CInputGroupText,
     CRow,
+    CToast,
+    CToastBody,
+    CToastClose,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
@@ -24,11 +27,17 @@ const Register = () => {
 
         const formData = new FormData(e.target as HTMLFormElement);
         const payLoad = Object.fromEntries(formData);
+
+        if (payLoad["password"] !== payLoad["repeatPassword"]) {
+            alert("incorrect pw")
+        }
+
         const response = await authService.register({
-            username: payLoad["username"]
+            registerInfo: {
+                username: payLoad["username"]
+            }
             , email: payLoad["email"]
             , password: payLoad["password"]
-            , repeatPassword: payLoad["repeatPassword"]
         });
 
         console.log(response, payLoad)
@@ -41,6 +50,13 @@ const Register = () => {
     return (
         <div className="bg-body-tertiary min-vh-100 d-flex flex-row align-items-center">
             <CContainer>
+                <CToast autohide={false} visible={true} color="primary" className="text-white align-items-center">
+                    <div className="d-flex">
+                        <CToastBody>Hello, world! This is a toast message.</CToastBody>
+                        <CToastClose className="me-2 m-auto" white />
+                    </div>
+                </CToast>
+
                 <CRow className="justify-content-center">
                     <CCol md={9} lg={7} xl={6}>
                         <CCard className="mx-4">
