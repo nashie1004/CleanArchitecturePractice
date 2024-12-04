@@ -17,6 +17,7 @@ import {
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
 import AuthService from "../../../Services/AuthService";
+import Toaster from '../../../Components/UI/Toaster';
 
 const authService = new AuthService();
 
@@ -50,12 +51,7 @@ const Register = () => {
     return (
         <div className="bg-body-tertiary min-vh-100 d-flex flex-row align-items-center">
             <CContainer>
-                <CToast autohide={false} visible={true} color="primary" className="text-white align-items-center">
-                    <div className="d-flex">
-                        <CToastBody>Hello, world! This is a toast message.</CToastBody>
-                        <CToastClose className="me-2 m-auto" white />
-                    </div>
-                </CToast>
+                <Toaster message="test only" />
 
                 <CRow className="justify-content-center">
                     <CCol md={9} lg={7} xl={6}>
