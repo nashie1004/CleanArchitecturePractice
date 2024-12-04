@@ -1,6 +1,7 @@
 using Application;
 using Infra;
 using Infrastructure.Identity;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -41,6 +42,17 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddInfrastructurePersistence(builder.Configuration);
     builder.Services.AddInfrastructureIdentity(builder.Configuration);
 
+    builder.Services.AddCors(opts =>
+    {
+        opts.AddPolicy("AllowReactApp", policy =>
+        {
+            policy.WithOrigins("http://localhost:61216")  // Specify the allowed origin
+                  .AllowAnyMethod()  // Allow any HTTP method (GET, POST, etc.)
+                  .AllowAnyHeader()  // Allow any header
+                  .AllowCredentials();  // Allow credentials (cookies, HTTP authentication)
+        });
+    });
+
     /*
     builder.Services.AddSpaStaticFiles(c =>
     {
@@ -56,8 +68,9 @@ var app = builder.Build();
     {
         app.UseSwagger();
         app.UseSwaggerUI();
-        
-        app.UseCors(b => b.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+
+        app.UseCors("AllowReactApp");
+        //app.UseCors(b => b.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
     }
 
     app.UseHttpsRedirection();

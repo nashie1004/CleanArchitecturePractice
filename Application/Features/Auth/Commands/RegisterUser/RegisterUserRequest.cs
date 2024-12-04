@@ -11,6 +11,7 @@ namespace Application.Features.Auth.Commands.RegisterUser
 {
     public class RegisterUserRequest : IRequest<RegisterUserResponse>
     {
+        public string Email { get; set; }
         public string Password { get; set; }
         public UserDTO RegisterInfo { get; set; }
     }

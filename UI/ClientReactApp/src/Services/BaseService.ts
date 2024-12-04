@@ -16,8 +16,8 @@ export interface GenericReturnMessage {
 }
 
 export default class BaseService {
-    genericSuccessMsg = "Success";
-    genericErrorMsg = "Error in the request";
+    private genericSuccessMsg = "Success";
+    private genericErrorMsg = "Error in the request";
 
     constructor() {
 
@@ -29,7 +29,8 @@ export default class BaseService {
                 isOk: false
                 , status: error.response?.status ?? 500
                 , data: null
-                , message: error.response?.data?.message ?? this.genericErrorMsg
+                //, message: error.response?.data?.message ?? this.genericErrorMsg
+                , message: error.message ?? this.genericErrorMsg
             }
         }
 
@@ -50,7 +51,7 @@ export default class BaseService {
         }
     }
 
-    async baseGet(url: string, config?: axios.AxiosRequestConfig) {
+    protected async baseGet(url: string, config?: axios.AxiosRequestConfig) {
         try {
             const response = await api.get(url, config);
             return this.handleResponse(response);
@@ -60,7 +61,7 @@ export default class BaseService {
         }
     }
 
-    async basePost(url: string, data: any, config?: axios.AxiosRequestConfig) {
+    protected async basePost(url: string, data: any, config?: axios.AxiosRequestConfig) {
         try {
             const response = await api.post(url, data, config);
             return this.handleResponse(response);
@@ -70,7 +71,7 @@ export default class BaseService {
         }
     }
 
-    async baseDelete(url: string, config?: axios.AxiosRequestConfig) {
+    protected async baseDelete(url: string, config?: axios.AxiosRequestConfig) {
         try {
             const response = await api.delete(url, config);
             return this.handleResponse(response);
@@ -80,7 +81,7 @@ export default class BaseService {
         }
     }
 
-    async basePut(url: string, data: any, config?: axios.AxiosRequestConfig) {
+    protected async basePut(url: string, data: any, config?: axios.AxiosRequestConfig) {
         try {
             const response = await api.put(url, data, config);
             return this.handleResponse(response);

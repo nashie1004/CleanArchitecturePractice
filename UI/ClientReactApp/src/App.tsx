@@ -13,7 +13,10 @@ import { BrowserRouter, NavLink, Link, Outlet, Route, Routes } from 'react-route
 
 function ProtectedRoute() {
     const loggedIn = false;
-    return loggedIn ? <Outlet /> : <NavLink to="/login">Login now</NavLink>
+    return loggedIn ? <Outlet /> : <>
+        <NavLink to="/login">Login now</NavLink>
+        <NavLink to="/register">Register now</NavLink>
+    </>
 }
 
 function App() {
