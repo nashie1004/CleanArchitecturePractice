@@ -21,6 +21,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router';
 
 const schema = z.object({
     username: z.string().min(8),
@@ -42,6 +43,7 @@ type FormFields = z.infer<typeof schema>;
 const authService = new AuthService();
 
 const Register = () => {
+    const navigate = useNavigate();
 
     const {
         register, handleSubmit, setError,
@@ -65,8 +67,9 @@ const Register = () => {
             return;
         } 
 
-        toast("Register success. Redirecting...", { type: "success", autoClose: false });
+        toast("Register success. Redirecting...", { type: "success" });
         // TODO Redirect
+        navigate("/login")
     }
 
     useEffect(() => {
@@ -93,6 +96,7 @@ const Register = () => {
                                             autoComplete="username"
                                             feedbackInvalid={errors.username ? errors.username.message : ""}
                                             invalid={errors.username ? true : false}
+                                            valid={!errors.username ? true : false}
                                             {...register("username")}
                                         />
                                     </CInputGroup>
@@ -103,6 +107,7 @@ const Register = () => {
                                             autoComplete="email"
                                             feedbackInvalid={errors.email ? errors.email.message : ""}
                                             invalid={errors.email ? true : false}
+                                            valid={!errors.email ? true : false}
                                             {...register("email")}
                                         />
                                     </CInputGroup>
@@ -116,6 +121,7 @@ const Register = () => {
                                             autoComplete="new-password"
                                             feedbackInvalid={errors.password ? errors.password.message : ""}
                                             invalid={errors.password ? true : false}
+                                            valid={!errors.password ? true : false}
                                             {...register("password")}
                                         />
                                     </CInputGroup>
@@ -129,6 +135,7 @@ const Register = () => {
                                             autoComplete="new-password"
                                             feedbackInvalid={errors.repeatPassword ? errors.repeatPassword.message : ""}
                                             invalid={errors.repeatPassword ? true : false}
+                                            valid={!errors.repeatPassword ? true : false}
                                             {...register("repeatPassword")}
                                         />
                                     </CInputGroup>
