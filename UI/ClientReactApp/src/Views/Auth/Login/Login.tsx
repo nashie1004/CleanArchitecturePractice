@@ -22,10 +22,11 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
+import useFirstRender from '../../../Hooks/useFirstRender';
 
 const schema = z.object({
-    username: z.string().min(8),
-    password: z.string().min(8),
+    username: z.string().min(8, "Username must contain at least 8 character(s)"),
+    password: z.string().min(8, "Password must contain at least 8 character(s)")
 });
 
 type FormFields = z.infer<typeof schema>;
@@ -34,6 +35,7 @@ const authService = new AuthService();
 
 const Login = () => {
     const navigate = useNavigate();
+    const firstRender = useFirstRender();
 
     const {
         register, handleSubmit, setError,
@@ -85,7 +87,7 @@ const Login = () => {
                                             autoComplete="username"
                                             feedbackInvalid={errors.username ? errors.username.message : ""}
                                             invalid={errors.username ? true : false}
-                                            valid={!errors.username ? true : false}
+                                            valid={!errors.username && !firstRender ? true : false}
                                             {...register("username")}
                                         />
                                     </CInputGroup>
@@ -99,7 +101,7 @@ const Login = () => {
                                             autoComplete="new-password"
                                             feedbackInvalid={errors.password ? errors.password.message : ""}
                                             invalid={errors.password ? true : false}
-                                            valid={!errors.password ? true : false}
+                                            valid={!errors.password && !firstRender ? true : false}
                                             {...register("password")}
                                         />
                                     </CInputGroup>

@@ -22,17 +22,18 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
+import useFirstRender from '../../../Hooks/useFirstRender';
 
 const schema = z.object({
-    username: z.string().min(8),
+    username: z.string().min(8, "Username must contain at least 8 character(s)"),
     email: z.string().email(),
-    password: z.string().min(8),
-    repeatPassword: z.string().min(8)
+    password: z.string().min(8, "Password must contain at least 8 character(s)"),
+    repeatPassword: z.string().min(8, "Repeat password must contain at least 8 character(s)")
 }).superRefine(({ repeatPassword, password }, ctx) => {
     if (repeatPassword !== password) {
         ctx.addIssue({
             code: "custom",
-            message: "The passwords did not match",
+            message: "The password and repeat password did not match",
             path: ['repeatPassword']
         });
     }
@@ -44,6 +45,7 @@ const authService = new AuthService();
 
 const Register = () => {
     const navigate = useNavigate();
+    const firstRender = useFirstRender();
 
     const {
         register, handleSubmit, setError,
@@ -73,7 +75,7 @@ const Register = () => {
     }
 
     useEffect(() => {
-
+        
     }, [])
 
     return (
@@ -96,7 +98,7 @@ const Register = () => {
                                             autoComplete="username"
                                             feedbackInvalid={errors.username ? errors.username.message : ""}
                                             invalid={errors.username ? true : false}
-                                            valid={!errors.username ? true : false}
+                                            valid={!errors.username && !firstRender ? true : false}
                                             {...register("username")}
                                         />
                                     </CInputGroup>
@@ -107,7 +109,7 @@ const Register = () => {
                                             autoComplete="email"
                                             feedbackInvalid={errors.email ? errors.email.message : ""}
                                             invalid={errors.email ? true : false}
-                                            valid={!errors.email ? true : false}
+                                            valid={!errors.email && !firstRender ? true : false}
                                             {...register("email")}
                                         />
                                     </CInputGroup>
@@ -121,7 +123,7 @@ const Register = () => {
                                             autoComplete="new-password"
                                             feedbackInvalid={errors.password ? errors.password.message : ""}
                                             invalid={errors.password ? true : false}
-                                            valid={!errors.password ? true : false}
+                                            valid={!errors.password && !firstRender ? true : false}
                                             {...register("password")}
                                         />
                                     </CInputGroup>
@@ -135,7 +137,7 @@ const Register = () => {
                                             autoComplete="new-password"
                                             feedbackInvalid={errors.repeatPassword ? errors.repeatPassword.message : ""}
                                             invalid={errors.repeatPassword ? true : false}
-                                            valid={!errors.repeatPassword ? true : false}
+                                            valid={!errors.repeatPassword && !firstRender ? true : false}
                                             {...register("repeatPassword")}
                                         />
                                     </CInputGroup>
