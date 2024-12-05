@@ -145,6 +145,23 @@ namespace Infra.Repository
             return rowsAffected;
         }
 
+        /*
+        public async Task<List<T2>> ExecRawQuery<T2>(string sqlQuery, params object[] parameters)
+        {
+            using (var ctx = new MainContext())
+            {
+                var list = await ctx.Set<T2>().FromSqlRaw(sqlQuery, parameters).ToListAsync();
+                return list;
+            }
+        }
+        */
+
+        public async Task ExecRawCommand<T2>(string sqlQuery, params object[] parameters)
+        {
+            await _context.Database.ExecuteSqlRawAsync(sqlQuery, parameters);
+            return;
+        }
+
         private long GetPrimaryKey(EntityEntry entry)
         {
             try
