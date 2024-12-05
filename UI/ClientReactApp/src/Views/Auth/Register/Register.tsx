@@ -34,10 +34,10 @@ const Register = () => {
             (
             payLoad["password"] !== payLoad["repeatPassword"]
             )
-            &&
-            payLoad["password"] !== "" 
-            &&
-            payLoad["repeatPassword"] ! == ""
+            ||
+            payLoad["password"] === "" 
+            ||
+            payLoad["repeatPassword"] === ""
         ) {
 
             toast("Password and repeat password do not match", { type: "error" })

@@ -15,6 +15,13 @@ export interface GenericReturnMessage {
     message: string
 }
 
+interface RequestBaseResponse {
+    isSuccess: boolean,
+    rowsAffected: number
+    successMessage: string
+    validationErrors: string[]
+}
+
 export default class BaseService {
     private genericSuccessMsg = "Success";
     private genericErrorMsg = "Error in the request";
@@ -42,16 +49,12 @@ export default class BaseService {
         }
     }
 
-    protected handleResponse(response: axios.AxiosResponse, message: string = this.genericSuccessMsg): GenericReturnMessage {
-
-        if (response.data) {
-            // TODO
-        }
+    protected handleResponse(response: axios.AxiosResponse<RequestBaseResponse>, message: string = this.genericSuccessMsg): GenericReturnMessage {
         return {
-            isOk: true,
+            isOk: response.data.isSuccess,
             status: response.status,
             data: response.data,
-            message
+            message: response.data.isSuccess ? message : response.data.validationErrors.join("\n")
         }
     }
 
