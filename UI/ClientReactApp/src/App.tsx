@@ -16,6 +16,7 @@ function ProtectedRoute() {
     return loggedIn ? <Outlet /> : <>
         <NavLink to="/login">Login now</NavLink>
         <NavLink to="/register">Register now</NavLink>
+        <NavLink to="/dashboard">Dashboard</NavLink>
     </>
 }
 
@@ -27,6 +28,7 @@ function App() {
           <Routes>
             <Route path="/login" element={<Login /> } />
             <Route path="/register" element={<Register /> } />
+            <Route path="/dashboard" element={<DefaultLayout /> } />
             <Route element={<ProtectedRoute />}>
                 <Route path="*" element={<DefaultLayout />} />
               </Route>

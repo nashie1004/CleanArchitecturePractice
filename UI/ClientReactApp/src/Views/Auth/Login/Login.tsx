@@ -105,7 +105,7 @@ const Login = () => {
                                     </CInputGroup>
                                     <div className="d-grid">
                                         <CButton color="dark" type="submit" disabled={isSubmitting}>
-                                            {isSubmitting ? <CSpinner /> : "Create Account"}
+                                            {isSubmitting ? <CSpinner /> : "Login Now"}
                                         </CButton>
                                     </div>
                                 </CForm>
