@@ -22,8 +22,6 @@ namespace Infrastructure.Identity
             string secretKey = configuration["Jwt:Key"];
             double expiresInMins = double.Parse(configuration["Jwt:ExpiresInMinutes"]);
 
-            services.AddAutoMapper(typeof(Mapping));
-
             services.AddDbContext<IdentityContext>(opt =>
                 opt.UseSqlite($"Data Source={SQLite.Set()}"));
 

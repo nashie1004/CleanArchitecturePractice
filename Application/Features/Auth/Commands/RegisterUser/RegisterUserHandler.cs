@@ -1,6 +1,7 @@
 ﻿using Application.Contracts.Infra.Todo;
 using Application.Contracts.Infrastructure.Identity;
 using Application.Contracts.Infrastructure.Persistence.Repository;
+using Application.DTOs;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -27,7 +28,12 @@ namespace Application.Features.Auth.Commands.RegisterUser
 
             try
             {
-                var res = await _baseRepositoryIdentityUser.CreateUserAsync(req.RegisterInfo, req.Password);
+                var userDto = new UserDTO()
+                {
+                    UserName = req.UserName,
+                };
+
+                var res = await _baseRepositoryIdentityUser.CreateUserAsync(userDto, req.Password, req.Email);
 
                 retVal.IsSuccess = res.Item1;
                 retVal.ValidationErrors = res.Item2;    
