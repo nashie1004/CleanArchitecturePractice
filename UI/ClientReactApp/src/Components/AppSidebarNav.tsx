@@ -1,9 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { CBadge, CNavLink, CSidebarNav } from '@coreui/react'
+import { CBadge, CNavGroup, CNavItem, CNavLink, CNavTitle, CSidebar, CSidebarNav } from '@coreui/react'
+import { cilSpeedometer, cilPuzzle, cilCloudDownload, cilLayers } from '@coreui/icons'
+import CIcon from '@coreui/icons-react'
 
 export const AppSidebarNav = ({ items }) => {
+    /*
     const navLink = (name, icon, badge, indent = false) => {
         return (
             <>
@@ -55,12 +58,40 @@ export const AppSidebarNav = ({ items }) => {
             </Component>
         )
     }
+    */
+
+    function navItem() {
+        return (
+            <CSidebarNav>
+                <CNavTitle>Nav Title</CNavTitle>
+                <CNavItem href="#"><CIcon customClassName="nav-icon" icon={cilSpeedometer} /> Nav item sd</CNavItem>
+                <CNavItem href="#"><CIcon customClassName="nav-icon" icon={cilSpeedometer} /> With badge <CBadge color="primary ms-auto">NEW</CBadge></CNavItem>
+                <CNavGroup
+                    toggler={
+                        <>
+                            <CIcon customClassName="nav-icon" icon={cilPuzzle} /> Nav dropdown
+                        </>
+                    }
+                >
+                    <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span> Nav dropdown item</CNavItem>
+                    <CNavItem href="#"><span className="nav-icon"><span className="nav-icon-bullet"></span></span> Nav dropdown item</CNavItem>
+                </CNavGroup>
+                <CNavItem href="https://coreui.io"><CIcon customClassName="nav-icon" icon={cilCloudDownload} /> Download CoreUI</CNavItem>
+                <CNavItem href="https://coreui.io/pro/"><CIcon customClassName="nav-icon" icon={cilLayers} /> Try CoreUI PRO</CNavItem>
+            </CSidebarNav>
+        )
+    }
 
     return (
-        <CSidebarNav>
+        <>
+            {/*
             {items &&
                 items.map((item, index) => (item.items ? navGroup(item, index) : navItem(item, index)))}
-        </CSidebarNav>
+                */ }
+            {items.map((item, idx) => {
+                return <CNavItem href="https://coreui.io"><CIcon customClassName="nav-icon" icon={cilCloudDownload} /> 123 Download CoreUI</CNavItem>
+            })}
+        </>
     )
 }
 

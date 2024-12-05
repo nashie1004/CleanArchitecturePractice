@@ -4,6 +4,8 @@ import { AppSidebarNav } from "./AppSidebarNav";
 import { cilSpeedometer, cilPuzzle, cilCloudDownload, cilLayers } from "@coreui/icons";
 import { useState } from "react";
 
+const tempItems = new Array(20).fill(0);
+
 export default function AppSidebar() {
     const [visible, setVisible] = useState(true);
 
@@ -11,7 +13,8 @@ export default function AppSidebar() {
         <CSidebar
             className="border-end"
             colorScheme="dark"
-            visible={visible }
+            visible={visible}
+            position="fixed"
         >
             <CSidebarHeader className="border-bottom">
                 <CSidebarBrand>CoreUI</CSidebarBrand>
@@ -32,6 +35,7 @@ export default function AppSidebar() {
                 </CNavGroup>
                 <CNavItem href="https://coreui.io"><CIcon customClassName="nav-icon" icon={cilCloudDownload} /> Download CoreUI</CNavItem>
                 <CNavItem href="https://coreui.io/pro/"><CIcon customClassName="nav-icon" icon={cilLayers} /> Try CoreUI PRO</CNavItem>
+                <AppSidebarNav items={tempItems} />
             </CSidebarNav>
             <CSidebarFooter className="border-top d-none d-lg-flex">
                 <CSidebarToggler
