@@ -46,11 +46,12 @@ namespace Infrastructure.Identity.Repository
             _userAuthHistoryRepository = userAuthHistoryRepository;
         }
 
-        public async Task<(bool, List<string>, long)> CreateUserAsync(UserDTO profileInfo, string password)
+        public async Task<(bool, List<string>, long)> CreateUserAsync(UserDTO profileInfo, string password, string email)
         {
             var newIdentityUser = new CustomUser()
             {
                 UserName = profileInfo.UserName,
+                Email = email,
             };
 
             // 1. Save to ASP.NET Identity Table

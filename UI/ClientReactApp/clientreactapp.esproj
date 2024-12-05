@@ -12,4 +12,7 @@
     <None Remove="src\Services\State\**" />
     <TypeScriptConfiguration Remove="src\Services\State\**" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="src\Components\UI\" />
+  </ItemGroup>
 </Project>

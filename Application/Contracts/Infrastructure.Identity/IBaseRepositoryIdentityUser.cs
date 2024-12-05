@@ -10,7 +10,7 @@ namespace Application.Contracts.Infrastructure.Identity
 {
     public interface IBaseRepositoryIdentityUser
     {
-        Task<(bool, List<string>, long)> CreateUserAsync(UserDTO profileInfo, string password);
+        Task<(bool, List<string>, long)> CreateUserAsync(UserDTO profileInfo, string password, string email);
         Task<(bool, List<string>, long)> LoginUserAsync(string userName, string password);
         Task<(bool, List<string>, UserDTO)> GetUserDetailsAsync(string userName, string password);
         Task<(bool, List<string>)> ChangePasswordAsync(string userName, string oldPassword, string newPassword);

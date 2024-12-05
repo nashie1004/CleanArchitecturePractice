@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     CButton,
     CCard,
@@ -17,7 +17,8 @@ import {
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
 import AuthService from "../../../Services/AuthService";
-import Toaster from '../../../Components/UI/Toaster';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const authService = new AuthService();
 
@@ -29,19 +30,36 @@ const Register = () => {
         const formData = new FormData(e.target as HTMLFormElement);
         const payLoad = Object.fromEntries(formData);
 
-        if (payLoad["password"] !== payLoad["repeatPassword"]) {
-            alert("incorrect pw")
+        if (
+            (
+            payLoad["password"] !== payLoad["repeatPassword"]
+            )
+            &&
+            payLoad["password"] !== "" 
+            &&
+            payLoad["repeatPassword"] ! == ""
+        ) {
+
+            toast("Password and repeat password do not match", { type: "error" })
+
+            return;
         }
 
         const response = await authService.register({
-            registerInfo: {
-                username: payLoad["username"]
-            }
+            username: payLoad["username"]
             , email: payLoad["email"]
             , password: payLoad["password"]
         });
 
-        console.log(response, payLoad)
+        if (!response.isOk) {
+            toast(response.message, { type: "error" })
+
+            return;
+        } 
+
+        toast("Register success. Redirecting...", { type: "success", autoClose: false });
+
+        // TODO Redirect
     }
 
     useEffect(() => {
@@ -51,8 +69,7 @@ const Register = () => {
     return (
         <div className="bg-body-tertiary min-vh-100 d-flex flex-row align-items-center">
             <CContainer>
-                <Toaster message="test only" />
-
+                <ToastContainer theme="dark" autoClose={4000}  />
                 <CRow className="justify-content-center">
                     <CCol md={9} lg={7} xl={6}>
                         <CCard className="mx-4">
@@ -101,7 +118,7 @@ const Register = () => {
                                         />
                                     </CInputGroup>
                                     <div className="d-grid">
-                                        <CButton color="success" type="submit">Create Account</CButton>
+                                        <CButton color="dark" type="submit">Create Account</CButton>
                                     </div>
                                 </CForm>
                             </CCardBody>

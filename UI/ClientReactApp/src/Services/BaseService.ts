@@ -43,6 +43,10 @@ export default class BaseService {
     }
 
     protected handleResponse(response: axios.AxiosResponse, message: string = this.genericSuccessMsg): GenericReturnMessage {
+
+        if (response.data) {
+            // TODO
+        }
         return {
             isOk: true,
             status: response.status,
