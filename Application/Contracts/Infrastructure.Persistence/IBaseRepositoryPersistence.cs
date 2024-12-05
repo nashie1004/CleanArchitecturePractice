@@ -17,7 +17,7 @@ namespace Application.Contracts.Infra
         Task<List<T>> GetAllRecordAsync();
         Task<List<T>> GetAllRecordAsync(int pageSize, int pageNo);
         Task<int> SaveRecordAsync(CancellationToken ct = default);
-        Task<List<T2>> ExecRawQuery<T2>(string sqlQuery, params object[] parameters);
-        //Task ExecRawCommand<T2>(string sqlQuery, params object[] parameters);
+        //Task<List<T2>> ExecRawQuery<T2>(string sqlQuery, params object[] parameters);
+        Task ExecRawCommand<T2>(string sqlQuery, params object[] parameters);
     }
 }

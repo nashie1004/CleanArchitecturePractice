@@ -7,58 +7,65 @@ import {
     CContainer,
     CForm,
     CFormInput,
+    CFormText,
     CInputGroup,
     CInputGroupText,
     CRow,
-    CToast,
-    CToastBody,
-    CToastClose,
+    CSpinner,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
 import AuthService from "../../../Services/AuthService";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from 'react-hook-form';
+
+const schema = z.object({
+    username: z.string().min(8),
+    email: z.string().email(),
+    password: z.string().min(8),
+    repeatPassword: z.string().min(8)
+}).superRefine(({ repeatPassword, password }, ctx) => {
+    if (repeatPassword !== password) {
+        ctx.addIssue({
+            code: "custom",
+            message: "The passwords did not match",
+            path: ['repeatPassword']
+        });
+    }
+});
+
+type FormFields = z.infer<typeof schema>;
 
 const authService = new AuthService();
 
 const Register = () => {
 
-    async function submitForm(e: React.FormEvent<HTMLFormElement>) {
-        e.preventDefault();
+    const {
+        register, handleSubmit, setError,
+        formState: { errors, isSubmitting }
+    } = useForm<FormFields>({
+        defaultValues: {
 
-        const formData = new FormData(e.target as HTMLFormElement);
-        const payLoad = Object.fromEntries(formData);
+        },
+        resolver: zodResolver(schema)
+    })
 
-        if (
-            (
-            payLoad["password"] !== payLoad["repeatPassword"]
-            )
-            ||
-            payLoad["password"] === "" 
-            ||
-            payLoad["repeatPassword"] === ""
-        ) {
-
-            toast("Password and repeat password do not match", { type: "error" })
-
-            return;
-        }
-
+    async function submitForm(data: FormFields) {
         const response = await authService.register({
-            username: payLoad["username"]
-            , email: payLoad["email"]
-            , password: payLoad["password"]
+            username: data.username
+            , email: data.email
+            , password: data.password
         });
 
         if (!response.isOk) {
             toast(response.message, { type: "error" })
-
             return;
         } 
 
         toast("Register success. Redirecting...", { type: "success", autoClose: false });
-
         // TODO Redirect
     }
 
@@ -74,7 +81,7 @@ const Register = () => {
                     <CCol md={9} lg={7} xl={6}>
                         <CCard className="mx-4">
                             <CCardBody className="p-4">
-                                <CForm onSubmit={submitForm}>
+                                <CForm onSubmit={handleSubmit(submitForm)}>
                                     <h1>Register</h1>
                                     <p className="text-body-secondary">Create your account</p>
                                     <CInputGroup className="mb-3">
@@ -82,17 +89,21 @@ const Register = () => {
                                             <CIcon icon={cilUser} />
                                         </CInputGroupText>
                                         <CFormInput
-                                            name="username"
                                             placeholder="Username"
                                             autoComplete="username"
+                                            feedbackInvalid={errors.username ? errors.username.message : ""}
+                                            invalid={errors.username ? true : false}
+                                            {...register("username")}
                                         />
                                     </CInputGroup>
                                     <CInputGroup className="mb-3">
                                         <CInputGroupText>@</CInputGroupText>
                                         <CFormInput
-                                            name="email"
                                             placeholder="Email"
                                             autoComplete="email"
+                                            feedbackInvalid={errors.email ? errors.email.message : ""}
+                                            invalid={errors.email ? true : false}
+                                            {...register("email")}
                                         />
                                     </CInputGroup>
                                     <CInputGroup className="mb-3">
@@ -100,10 +111,12 @@ const Register = () => {
                                             <CIcon icon={cilLockLocked} />
                                         </CInputGroupText>
                                         <CFormInput
-                                            name="password"
                                             type="password"
                                             placeholder="Password"
                                             autoComplete="new-password"
+                                            feedbackInvalid={errors.password ? errors.password.message : ""}
+                                            invalid={errors.password ? true : false}
+                                            {...register("password")}
                                         />
                                     </CInputGroup>
                                     <CInputGroup className="mb-4">
@@ -111,14 +124,18 @@ const Register = () => {
                                             <CIcon icon={cilLockLocked} />
                                         </CInputGroupText>
                                         <CFormInput
-                                            name="repeatPassword"
                                             type="password"
                                             placeholder="Repeat password"
                                             autoComplete="new-password"
+                                            feedbackInvalid={errors.repeatPassword ? errors.repeatPassword.message : ""}
+                                            invalid={errors.repeatPassword ? true : false}
+                                            {...register("repeatPassword")}
                                         />
                                     </CInputGroup>
                                     <div className="d-grid">
-                                        <CButton color="dark" type="submit">Create Account</CButton>
+                                        <CButton color="dark" type="submit" disabled={isSubmitting}>
+                                            {isSubmitting ? <CSpinner />: "Create Account"}
+                                        </CButton>
                                     </div>
                                 </CForm>
                             </CCardBody>
