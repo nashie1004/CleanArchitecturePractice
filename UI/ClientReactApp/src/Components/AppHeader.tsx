@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useContext } from 'react'
 import {
     CContainer,
     CDropdown,
@@ -23,12 +23,13 @@ import {
     cilMoon,
     cilSun,
 } from '@coreui/icons'
+import { sidebarContext } from "../Context/SidebarContext"
 
 
 const AppHeader = () => {
     const headerRef = useRef()
     const { colorMode, setColorMode } = useColorModes('coreui-free-react-admin-template-theme')
-
+    const { visible, setVisible } = useContext(sidebarContext);
 
     useEffect(() => {
         document.addEventListener('scroll', () => {
@@ -41,6 +42,7 @@ const AppHeader = () => {
         <CHeader position="sticky" className="mb-4 p-0" >
             <CContainer className="border-bottom px-4" fluid>
                 <CHeaderToggler
+                    onClick={() => setVisible(prev => !prev)}
                     style={{ marginInlineStart: '-14px' }}
                 >
                     <CIcon icon={cilMenu} size="lg" />

@@ -9,6 +9,9 @@ import '@coreui/coreui/dist/css/coreui.min.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import DefaultLayout from './Layout/DefaultLayout'
 import { BrowserRouter, NavLink, Link, Outlet, Route, Routes } from 'react-router'
+import SidebarContext from './Context/SidebarContext'
+import './Assets/style.scss'
+import './Assets/examples.scss'
 
 
 function ProtectedRoute() {
@@ -24,17 +27,19 @@ function App() {
     console.log(import.meta.env.PORT)
 
   return (
-      <BrowserRouter>
-          <Routes>
-            <Route path="/login" element={<Login /> } />
-            <Route path="/register" element={<Register /> } />
-            <Route path="/dashboard" element={<DefaultLayout /> } />
-            <Route element={<ProtectedRoute />}>
-                <Route path="*" element={<DefaultLayout />} />
-              </Route>
-            <Route path="*" element={<Error /> } />
-          </Routes>
-    </BrowserRouter>
+      <SidebarContext>
+          <BrowserRouter>
+              <Routes>
+                <Route path="/login" element={<Login /> } />
+                <Route path="/register" element={<Register /> } />
+                <Route path="/dashboard" element={<DefaultLayout /> } />
+                <Route element={<ProtectedRoute />}>
+                    <Route path="*" element={<DefaultLayout />} />
+                  </Route>
+                <Route path="*" element={<Error /> } />
+              </Routes>
+        </BrowserRouter>
+      </SidebarContext>
   )
 }
 

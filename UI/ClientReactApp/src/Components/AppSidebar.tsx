@@ -2,12 +2,13 @@ import CIcon from "@coreui/icons-react";
 import { CSidebar, CSidebarHeader, CSidebarBrand, CCloseButton, CSidebarFooter, CSidebarToggler, CBadge, CNavGroup, CNavItem, CNavTitle, CSidebarNav } from "@coreui/react";
 import { AppSidebarNav } from "./AppSidebarNav";
 import { cilSpeedometer, cilPuzzle, cilCloudDownload, cilLayers } from "@coreui/icons";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { sidebarContext } from "../Context/SidebarContext";
 
 const tempItems = new Array(20).fill(0);
 
 export default function AppSidebar() {
-    const [visible, setVisible] = useState(true);
+    const { visible, setVisible } = useContext(sidebarContext);
 
     return <>
         <CSidebar
