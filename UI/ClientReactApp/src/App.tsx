@@ -11,15 +11,15 @@ function App() {
   return (
       <SidebarContext>
           <BrowserRouter>
-              <Routes>
-                {routesPages.map((item, idx) => {
-                  return <Route 
-                    key={idx}
-                    path={item.path}
-                    element={item.element}
-                  />
-                })}
-              </Routes>
+            <Routes>
+              {routesPages.map((item, idx) => {
+                return <Route 
+                  key={idx}
+                  path={item.path}
+                  element={item.element}
+                />
+              })}
+            </Routes>
         </BrowserRouter>
       </SidebarContext>
   )

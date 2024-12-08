@@ -1,3 +1,7 @@
 export default function useAuth(){
-    return []
+    const isSignedIn = false;
+    
+    return {
+        isSignedIn
+    }
 }

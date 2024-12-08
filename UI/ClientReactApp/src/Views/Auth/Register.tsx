@@ -23,6 +23,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 import useFirstRender from '../../Hooks/useFirstRender';
+import useAuth from '../../Hooks/useAuth';
 
 const schema = z.object({
     username: z.string().min(8, "Username must contain at least 8 character(s)"),
@@ -46,6 +47,7 @@ const authService = new AuthService();
 const Register = () => {
     const navigate = useNavigate();
     const firstRender = useFirstRender();
+    const { isSignedIn } = useAuth();
 
     const {
         register, handleSubmit, setError,
@@ -69,13 +71,13 @@ const Register = () => {
             return;
         } 
 
-        toast("Register success. Redirecting...", { type: "success" });
-        // TODO Redirect
         navigate("/login")
     }
 
     useEffect(() => {
-        
+        if (isSignedIn){
+            navigate("/")
+        }
     }, [])
 
     return (
