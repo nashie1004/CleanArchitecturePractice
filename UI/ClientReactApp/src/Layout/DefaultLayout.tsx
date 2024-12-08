@@ -10,7 +10,6 @@ export default function DefaultLayout() {
             <div className="wrapper d-flex flex-column min-vh-100">
                 <AppHeader />
                 <div className="body flex-grow-1">
-                    Todo here &nbsp;
                     <AppContent />
                 </div>
                 <AppFooter />

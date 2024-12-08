@@ -10,6 +10,12 @@ const nav = [
     icon: <CIcon icon={cilSpeedometer} customClassName="nav-icon" />,
   },
   {
+    component: CNavItem,
+    name: 'Profile',
+    to: '/myProfile',
+    icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
+  },
+  {
     component: CNavTitle,
     name: 'Theme',
   },
@@ -20,10 +26,21 @@ const nav = [
     icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
   },
   {
-    component: CNavItem,
+    component: CNavGroup,
     name: 'Workout',
-    to: '/workout',
-    icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
+    icon: <CIcon icon={cilStar} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Workout Form',
+        to: '/workout/form',
+      },
+      {
+        component: CNavItem,
+        name: 'Workout List',
+        to: '/workout/list',
+      },
+    ],
   },
   {
     component: CNavGroup,
@@ -33,14 +50,24 @@ const nav = [
       {
         component: CNavItem,
         name: 'Exercise List',
-        to: '/exerciseList',
+        to: '/exercise/list',
       },
       {
         component: CNavItem,
         name: 'Exercise Category List',
-        to: '/exerciseCategoryList',
+        to: '/exercise/category/list',
       },
     ],
+  },
+  {
+    component: CNavTitle,
+    name: 'Others',
+  },
+  {
+    component: CNavItem,
+    name: 'Reports',
+    to: '/reports',
+    icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
   },
 ]
 
