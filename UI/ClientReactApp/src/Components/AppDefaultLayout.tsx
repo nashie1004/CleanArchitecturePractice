@@ -1,9 +1,9 @@
-import AppContent from "../Components/AppContent";
-import AppFooter from "../Components/AppFooter";
-import AppHeader from "../Components/AppHeader";
-import AppSidebar from "../Components/AppSidebar";
+import AppContent from "./AppContent";
+import AppFooter from "./AppFooter";
+import AppHeader from "./AppHeader";
+import AppSidebar from "./AppSidebar";
 
-export default function DefaultLayout() {
+export default function AppDefaultLayout() {
     return <>
         <div>
             <AppSidebar />

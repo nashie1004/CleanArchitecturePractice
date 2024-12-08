@@ -6,13 +6,13 @@ const nav = [
   {
     component: CNavItem,
     name: 'Dashboard',
-    to: '/dashboard',
+    to: '/',
     icon: <CIcon icon={cilSpeedometer} customClassName="nav-icon" />,
   },
   {
     component: CNavItem,
     name: 'Profile',
-    to: '/myProfile',
+    to: '/profile',
     icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
   },
   {
@@ -22,7 +22,7 @@ const nav = [
   {
     component: CNavItem,
     name: 'Schedule',
-    to: '/mySchedule',
+    to: '/schedule',
     icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
   },
   {

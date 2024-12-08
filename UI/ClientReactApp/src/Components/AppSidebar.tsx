@@ -1,15 +1,11 @@
-import CIcon from "@coreui/icons-react";
 import { CSidebar, CSidebarHeader, CSidebarBrand, CCloseButton, CSidebarFooter, CSidebarToggler, CBadge, CNavGroup, CNavItem, CNavTitle, CSidebarNav } from "@coreui/react";
 import { AppSidebarNav } from "./AppSidebarNav";
-import { cilSpeedometer, cilPuzzle, cilCloudDownload, cilLayers } from "@coreui/icons";
 import { useContext, useState } from "react";
-import { sidebarContext } from "../Context/SidebarContext";
 import nav from "../nav";
-
-const tempItems = new Array(20).fill(0);
+import useSidebar from "../Hooks/useSidebar";
 
 export default function AppSidebar() {
-    const { visible, setVisible } = useContext(sidebarContext);
+    const { visible, setVisible } = useSidebar();
 
     return <>
         <CSidebar
