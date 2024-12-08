@@ -8,10 +8,6 @@ const nav = [
     name: 'Dashboard',
     to: '/dashboard',
     icon: <CIcon icon={cilSpeedometer} customClassName="nav-icon" />,
-    badge: {
-      color: 'info',
-      text: 'NEW',
-    },
   },
   {
     component: CNavTitle,
@@ -19,36 +15,30 @@ const nav = [
   },
   {
     component: CNavItem,
-    name: 'Colors',
-    to: '/theme/colors',
+    name: 'Schedule',
+    to: '/mySchedule',
     icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
   },
   {
     component: CNavItem,
-    name: 'Typography',
-    to: '/theme/typography',
-    icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
+    name: 'Workout',
+    to: '/workout',
+    icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
   },
-  
   {
     component: CNavGroup,
-    name: 'Icons',
+    name: 'Exercise',
     icon: <CIcon icon={cilStar} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,
-        name: 'CoreUI Free',
-        to: '/icons/coreui-icons',
+        name: 'Exercise List',
+        to: '/exerciseList',
       },
       {
         component: CNavItem,
-        name: 'CoreUI Flags',
-        to: '/icons/flags',
-      },
-      {
-        component: CNavItem,
-        name: 'CoreUI Brands',
-        to: '/icons/brands',
+        name: 'Exercise Category List',
+        to: '/exerciseCategoryList',
       },
     ],
   },

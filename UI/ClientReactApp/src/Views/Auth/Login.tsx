@@ -15,14 +15,14 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
-import AuthService from "../../../Services/AuthService";
+import AuthService from "../../Services/AuthService";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
-import useFirstRender from '../../../Hooks/useFirstRender';
+import useFirstRender from '../../Hooks/useFirstRender';
 
 const schema = z.object({
     username: z.string().min(8, "Username must contain at least 8 character(s)"),

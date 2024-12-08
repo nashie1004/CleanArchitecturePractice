@@ -2,8 +2,8 @@ import { useState } from 'react'
 import reactLogo from './Assets/react.svg'
 import viteLogo from '/vite.svg'
 import './Assets/App.css'
-import Login from './Views/Auth/Login/Login'
-import Register from './Views/Auth/Register/Register'
+import Login from './Views/Auth/Login'
+import Register from './Views/Auth/Register'
 import Error from './Views/Error/Error'
 import '@coreui/coreui/dist/css/coreui.min.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
@@ -32,11 +32,7 @@ function App() {
               <Routes>
                 <Route path="/login" element={<Login /> } />
                 <Route path="/register" element={<Register /> } />
-                <Route path="/dashboard" element={<DefaultLayout /> } />
-                <Route element={<ProtectedRoute />}>
-                    <Route path="*" element={<DefaultLayout />} />
-                  </Route>
-                <Route path="*" element={<Error /> } />
+                <Route path="*" element={<DefaultLayout />} />
               </Routes>
         </BrowserRouter>
       </SidebarContext>
