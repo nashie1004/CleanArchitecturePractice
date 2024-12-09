@@ -1,29 +1,55 @@
-import { useState, useEffect, createContext } from "react";
-import api from "../Services/api";
+import { useState, useEffect, createContext, ReactNode } from "react";
 
-const authContext = createContext();
+export interface User{
+    username: string;
+    profileImg: string;
+    email: string;
+}
 
-function AuthContext() {
-    const [token, setToken] = useState<string | null>(null);
+interface IAuthContext{
+    isSignedIn: boolean;
+    user: null | User;
+    login: (user: User) => void;
+    logout: () => void;
+}
+
+interface AuthContextProps {
+    children: ReactNode
+}
+
+export const authContext = createContext<IAuthContext>({
+    isSignedIn: false,
+    user: null,
+    login: () => {},
+    logout: () => {},
+});
+
+function AuthContext({children} : AuthContextProps) {
+    const [user, setUser] = useState<User | null>(null);
     const [isSignedIn, setIsSignedIn] = useState(false);
 
     useEffect(() => {
 
-        const fetchMe = async () => {
-            try {
-                // const res = await api
-            }
-            catch {
-                setToken(null);
-            }
-        }
-
-        fetchMe();
-
     }, [])
 
+    function login(user: User){
+        setIsSignedIn(true);
+        setUser(user);
+    }
+
+    function logout(){
+        setIsSignedIn(false);
+        setUser(null)
+    }
+
+    const data = {
+        user, isSignedIn, login, logout
+    }
+
   return (
-    <p>Hello world!</p>
+    <authContext.Provider value={data}>
+        {children}
+    </authContext.Provider>
   );
 }
 

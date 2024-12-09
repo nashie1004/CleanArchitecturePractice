@@ -33,8 +33,6 @@ namespace API.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginUserRequest req)
         {
-            //return Ok(await _mediator.Send(req));
-
             var loginResult = await _mediator.Send(req);
 
             if (!loginResult.IsSuccess) return Ok(loginResult);
@@ -47,6 +45,8 @@ namespace API.Controllers
                 Expires = DateTime.Now.AddMinutes(180)
             });
 
+            loginResult.JWTToken = string.Empty;
+            
             return Ok(loginResult);
 
         }
@@ -72,6 +72,14 @@ namespace API.Controllers
         public async Task<IActionResult> ChangeUserDetails([FromBody] ChangeUserDetailsRequest req)
         {
             return Ok(await _mediator.Send(req));
+        }
+
+        [HttpPost]
+        public IActionResult LogOut()
+        {
+            Response.Cookies.Delete("");
+
+            return Ok();
         }
 
         /*

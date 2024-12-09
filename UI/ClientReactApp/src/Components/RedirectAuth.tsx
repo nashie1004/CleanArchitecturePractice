@@ -6,14 +6,13 @@ export default function RedirectAuth(){
     const navigate = useNavigate();
     const { isSignedIn } = useAuth();
 
-    console.log(isSignedIn)
     useEffect(() => {
 
         if (!isSignedIn){
             navigate("/login")
         }
         
-    }, [])
+    }, [isSignedIn])
 
     return <Outlet />
 }

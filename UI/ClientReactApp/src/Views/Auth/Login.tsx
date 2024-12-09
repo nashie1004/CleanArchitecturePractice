@@ -37,7 +37,7 @@ const authService = new AuthService();
 const Login = () => {
     const navigate = useNavigate();
     const firstRender = useFirstRender();
-    const {isSignedIn} = useAuth();
+    const {isSignedIn, login} = useAuth();
 
     const {
         register, handleSubmit, setError,
@@ -60,8 +60,12 @@ const Login = () => {
             return;
         }
 
-        toast("Register success. Redirecting...", { type: "success" });
-        // TODO Redirect
+        login({
+            username: "",
+            email: "",
+            profileImg: ""
+        });
+
         navigate("/")
     }
 

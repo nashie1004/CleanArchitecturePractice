@@ -1,7 +1,6 @@
+import { useContext } from "react";
+import { authContext } from "../Context/AuthContext";
+
 export default function useAuth(){
-    const isSignedIn = false;
-    
-    return {
-        isSignedIn
-    }
+    return useContext(authContext);
 }
