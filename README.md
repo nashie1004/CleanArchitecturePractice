@@ -13,3 +13,7 @@
 - Exercise List
 - Exercise Category List
 - Report
+
+## EF Core Migrations Command
+
+dotnet ef database update --context IdentityContext --project Infrastructure.Identity --startup-project API

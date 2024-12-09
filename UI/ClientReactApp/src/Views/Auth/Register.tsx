@@ -21,7 +21,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router';
+import { NavLink, useNavigate } from 'react-router';
 import useFirstRender from '../../Hooks/useFirstRender';
 import useAuth from '../../Hooks/useAuth';
 
@@ -90,7 +90,7 @@ const Register = () => {
                             <CCardBody className="p-4">
                                 <CForm onSubmit={handleSubmit(submitForm)}>
                                     <h1>Register</h1>
-                                    <p className="text-body-secondary">Create your account</p>
+                                    <p className="text-body-secondary">Create your account or <NavLink to="/login" style={{ textDecoration: "none"}}>Login</NavLink></p>
                                     <CInputGroup className="mb-3">
                                         <CInputGroupText>
                                             <CIcon icon={cilUser} />
