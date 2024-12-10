@@ -5,6 +5,6 @@ import plugin from '@vitejs/plugin-react-swc';
 export default defineConfig({
     plugins: [plugin()],
     server: {
-        port: 61216,
+        port: import.meta.env.VITE_PORT,
     }
 })

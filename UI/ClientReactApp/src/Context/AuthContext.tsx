@@ -29,8 +29,8 @@ function AuthContext({children} : AuthContextProps) {
     const [isSignedIn, setIsSignedIn] = useState(false);
 
     useEffect(() => {
-
-    }, [])
+        console.log(user, isSignedIn)
+    }, [isSignedIn, user])
 
     function login(user: User){
         setIsSignedIn(true);

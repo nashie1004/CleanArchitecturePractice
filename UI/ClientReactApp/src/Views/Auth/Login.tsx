@@ -60,11 +60,18 @@ const Login = () => {
             return;
         }
 
+        if (!(response?.data?.userProfile)) {
+            toast("Something went wrong. Please try again.", { type: "error" })
+            return;
+        }
+
         login({
-            username: "",
+            username: response.data.userProfile.userName,
             email: "",
-            profileImg: ""
+            profileImg: response.data.userProfile.profileImageUrl
         });
+
+        console.log(isSignedIn, response)
 
         navigate("/")
     }

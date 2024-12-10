@@ -57,6 +57,7 @@ namespace Infrastructure.Identity
                     );
 
             });
+            services.AddAutoMapper(typeof(Infrastructure.Identity.Mapper.Mapper));
 
             return services;
         }
