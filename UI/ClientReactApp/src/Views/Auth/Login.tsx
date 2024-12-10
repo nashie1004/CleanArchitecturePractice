@@ -44,7 +44,8 @@ const Login = () => {
         formState: { errors, isSubmitting }
     } = useForm<FormFields>({
         defaultValues: {
-
+            username: "testOnlySir",
+            password: "A@@__!!!aazz00_asd"
         },
         resolver: zodResolver(schema)
     })
@@ -70,8 +71,6 @@ const Login = () => {
             email: "",
             profileImg: response.data.userProfile.profileImageUrl
         });
-
-        console.log(isSignedIn, response)
 
         navigate("/")
     }

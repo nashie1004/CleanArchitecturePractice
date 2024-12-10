@@ -6,21 +6,24 @@ import SidebarContext from './Context/SidebarContext'
 import './Assets/style.scss'
 import './Assets/examples.scss'
 import routesPages from './routesPages'
+import AuthContext from './Context/AuthContext'
 
 function App() {
   return (
       <SidebarContext>
-          <BrowserRouter>
+        <AuthContext>
+            <BrowserRouter>
             <Routes>
-              {routesPages.map((item, idx) => {
+                {routesPages.map((item, idx) => {
                 return <Route 
-                  key={idx}
-                  path={item.path}
-                  element={item.element}
+                    key={idx}
+                    path={item.path}
+                    element={item.element}
                 />
-              })}
+                })}
             </Routes>
         </BrowserRouter>
+        </AuthContext>
       </SidebarContext>
   )
 }
