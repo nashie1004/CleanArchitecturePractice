@@ -1,4 +1,5 @@
 import { useState, useEffect, createContext, ReactNode } from "react";
+import AuthService from "../Services/AuthService";
 
 export interface User{
     username: string;
@@ -24,13 +25,23 @@ export const authContext = createContext<IAuthContext>({
     logout: () => {},
 });
 
+const authService = new AuthService();
+
 function AuthContext({children} : AuthContextProps) {
     const [user, setUser] = useState<User | null>(null);
     const [isSignedIn, setIsSignedIn] = useState(false);
 
     useEffect(() => {
-        console.log(user, isSignedIn)
-    }, [isSignedIn, user])
+        async function me() {
+            const res = await authService.getMe();
+            // TODO
+            //setIsSignedIn(res.isOk);
+            //setUser(res.data);
+        }
+
+        //me();
+
+    }, [])
 
     function login(user: User){
         setIsSignedIn(true);
@@ -40,6 +51,10 @@ function AuthContext({children} : AuthContextProps) {
     function logout(){
         setIsSignedIn(false);
         setUser(null)
+    }
+
+    async function isStillSignedIn() {
+        const response = await authService.getMe();
     }
 
     const data = {

@@ -18,6 +18,8 @@ const routesAuthenticated = [
     { path: '/exercise/list',  element: ExerciseList },
     { path: '/exercise/category/List', element: ExerciseCategoryList },
     { path: '/reports', element: Reports },
+    { path: '/audit', element: Reports },
+    { path: '/userLoginHistory', element: Reports },
 ]
 
 export default routesAuthenticated;

@@ -1,5 +1,6 @@
 ﻿using Application.Features.Audit.Queries.GetAllAudit;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -15,7 +16,7 @@ namespace API.Controllers
             mediator_ = mediator;
         }
 
-        [Route("getManyAudit")]
+        [Route("getMany")]
         [HttpGet]
         public async Task<IActionResult> GetMany([FromQuery] GetAllAuditRequest req)
         {

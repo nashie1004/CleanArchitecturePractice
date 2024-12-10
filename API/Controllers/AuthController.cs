@@ -74,12 +74,18 @@ namespace API.Controllers
             return Ok(await _mediator.Send(req));
         }
 
-        [HttpPost]
+        [Authorize]
+        [HttpPost("logout")]
         public IActionResult LogOut()
         {
-            Response.Cookies.Delete("");
+            Response.Cookies.Delete("AccessToken");
 
-            return Ok();
+            var retVal = new Application.Common.BaseResponse()
+            {
+                SuccessMessage = "Successfully logged out"
+            };
+
+            return Ok(retVal);
         }
 
         /*

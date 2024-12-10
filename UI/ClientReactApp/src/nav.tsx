@@ -69,6 +69,18 @@ const nav = [
     to: '/reports',
     icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
   },
+  {
+    component: CNavItem,
+    name: 'Audit Logs',
+    to: '/audit',
+    icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavItem,
+    name: 'User Login History',
+    to: '/userLoginHistory',
+    icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
+  },
 ]
 
 export default nav;
