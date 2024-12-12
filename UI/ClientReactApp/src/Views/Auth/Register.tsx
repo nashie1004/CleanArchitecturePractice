@@ -47,7 +47,7 @@ const authService = new AuthService();
 const Register = () => {
     const navigate = useNavigate();
     const firstRender = useFirstRender();
-    const { isSignedIn } = useAuth();
+    const { isSignedIn, isAuthenticating } = useAuth();
 
     const {
         register, handleSubmit, setError,
@@ -78,7 +78,9 @@ const Register = () => {
         if (isSignedIn){
             navigate("/")
         }
-    }, [])
+    }, [isSignedIn])
+
+    const loading = isSubmitting || isAuthenticating;
 
     return (
         <div className="bg-body-tertiary min-vh-100 d-flex flex-row align-items-center">
@@ -144,8 +146,8 @@ const Register = () => {
                                         />
                                     </CInputGroup>
                                     <div className="d-grid">
-                                        <CButton color="dark" type="submit" disabled={isSubmitting}>
-                                            {isSubmitting ? <CSpinner />: "Create Account"}
+                                        <CButton color="dark" type="submit" disabled={loading}>
+                                            {loading ? <CSpinner /> : "Create Account"}
                                         </CButton>
                                     </div>
                                 </CForm>

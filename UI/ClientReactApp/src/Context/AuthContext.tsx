@@ -11,6 +11,7 @@ interface IAuthContext{
     user: null | User;
     login: (user: User) => void;
     logout: () => void;
+    isAuthenticating: boolean;
 }
 
 interface AuthContextProps {
@@ -21,7 +22,8 @@ export const authContext = createContext<IAuthContext>({
     isSignedIn: false,
     user: null,
     login: () => {},
-    logout: () => {},
+    logout: () => { },
+    isAuthenticating: true
 });
 
 const authService = new AuthService();
@@ -29,24 +31,24 @@ const authService = new AuthService();
 function AuthContext({children} : AuthContextProps) {
     const [user, setUser] = useState<User | null>(null);
     const [isSignedIn, setIsSignedIn] = useState(false);
+    const [isAuthenticating, setisAuthenticating] = useState(true);
 
     useEffect(() => {
         async function authenticate() {
             const res = await authService.authenticate();
 
             console.log(res)
-            //if (!res.isOk) {
-            //    return;
-            //}
 
-            // TODO
-            //setIsSignedIn(res.isOk);
-            //setUser(res.data);
+            if (res.isOk) {
+                setIsSignedIn(true);
+                setUser({ username: res.data.userName, userImg: res.data.userImage });
+            } 
+
+            setisAuthenticating(false)
         }
 
         authenticate();
-
-    }, [user, isSignedIn])
+    }, [])
 
     function login(user: User){
         setIsSignedIn(true);
@@ -59,7 +61,7 @@ function AuthContext({children} : AuthContextProps) {
     }
 
     const data = {
-        user, isSignedIn, login, logout
+        user, isSignedIn, login, logout, isAuthenticating
     }
 
   return (

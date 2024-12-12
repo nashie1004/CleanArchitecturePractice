@@ -61,11 +61,7 @@ namespace API.Controllers
         {
             var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            if (string.IsNullOrEmpty(userIdString) || !long.TryParse(userIdString, out var userId)) return Unauthorized();
-
-            var response = await _mediator.Send(new AuthenticateRequest() { UserId = userId });
-
-            return Ok(response);
+            return Ok(await _mediator.Send(new AuthenticateRequest() { UserIdString = userIdString }));
         }
 
         // TO TEST
@@ -97,12 +93,7 @@ namespace API.Controllers
         {
             Response.Cookies.Delete("token");
 
-            var retVal = new Application.Common.BaseResponse()
-            {
-                SuccessMessage = "Successfully logged out"
-            };
-
-            return Ok(retVal);
+            return Ok(new BaseResponse());
         }
 
         /*

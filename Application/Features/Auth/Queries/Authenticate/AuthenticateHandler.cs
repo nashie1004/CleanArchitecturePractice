@@ -26,7 +26,17 @@ namespace Application.Features.Auth.Queries.Authenticate
 
             try
             {
-                var res = await _userRepository.GetRecordAsync(req.UserId);
+                long userId = 0;
+                bool validId = long.TryParse(req.UserIdString, out userId);
+
+                if (string.IsNullOrEmpty(req.UserIdString) || !validId || userId == 0)
+                {
+                    retVal.IsSuccess = false;
+                    retVal.ValidationErrors.Add("Unauthorized accesss");
+                    return retVal;
+                };
+
+                var res = await _userRepository.GetRecordAsync(userId);
 
                 if (res == null)
                 {
