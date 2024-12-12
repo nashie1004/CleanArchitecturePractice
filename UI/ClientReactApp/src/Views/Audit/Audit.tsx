@@ -1,3 +1,4 @@
+import { CSpinner } from "@coreui/react";
 import AuditService from "../../Services/AuditService";
 import { useEffect, useState } from "react";
 
@@ -24,6 +25,7 @@ export default function Audit() {
     }, [])
 
     return <>
+    <CSpinner/> 
         dashboard component
         {data !== null ? JSON.stringify(data) : "no data"}
     </>

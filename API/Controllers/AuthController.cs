@@ -1,13 +1,17 @@
-﻿using Application.Features.Audit.Queries.GetAllAudit;
+﻿using Application.Common;
+using Application.Features.Audit.Queries.GetAllAudit;
 using Application.Features.Auth.Commands.ChangePassword;
 using Application.Features.Auth.Commands.ChangeUserDetails;
 using Application.Features.Auth.Commands.LoginUser;
 using Application.Features.Auth.Commands.RegisterUser;
+using Application.Features.Auth.Queries.Authenticate;
 using Application.Features.Auth.Queries.GetUserDetails;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
+using System.Security.Claims;
 
 namespace API.Controllers
 {
@@ -42,13 +46,26 @@ namespace API.Controllers
                 HttpOnly = true,
                 Secure = true,
                 IsEssential = true,
-                SameSite = SameSiteMode.Strict,
+                SameSite = SameSiteMode.None, // So that our react app can have access 
                 Expires = DateTime.Now.AddMinutes(180)
             });
 
             loginResult.JWTToken = string.Empty;
             
             return Ok(loginResult);
+        }
+
+        [Authorize]
+        [HttpGet("authenticate")]
+        public async Task<IActionResult> Authenticate()
+        {
+            var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(userIdString) || !long.TryParse(userIdString, out var userId)) return Unauthorized();
+
+            var response = await _mediator.Send(new AuthenticateRequest() { UserId = userId });
+
+            return Ok(response);
         }
 
         // TO TEST

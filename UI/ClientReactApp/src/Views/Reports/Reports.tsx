@@ -14,7 +14,7 @@ export default function Reports(){
         <CListGroup>
             {
                 reportsList.map((item, idx) => {
-                    return <CListGroupItem key={idx} as="button" >
+                    return <CListGroupItem key={idx}  >
                         <NavLink to={`/reports/${item.link}`} style={{ textDecoration: "none" }}>
                             {item.name}
                         </NavLink>

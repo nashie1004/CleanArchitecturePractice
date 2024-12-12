@@ -3,8 +3,7 @@ import AuthService from "../Services/AuthService";
 
 export interface User{
     username: string;
-    profileImg: string;
-    email: string;
+    userImg: string;
 }
 
 interface IAuthContext{
@@ -32,16 +31,22 @@ function AuthContext({children} : AuthContextProps) {
     const [isSignedIn, setIsSignedIn] = useState(false);
 
     useEffect(() => {
-        async function me() {
-            const res = await authService.getMe();
+        async function authenticate() {
+            const res = await authService.authenticate();
+
+            console.log(res)
+            //if (!res.isOk) {
+            //    return;
+            //}
+
             // TODO
             //setIsSignedIn(res.isOk);
             //setUser(res.data);
         }
 
-        //me();
+        authenticate();
 
-    }, [])
+    }, [user, isSignedIn])
 
     function login(user: User){
         setIsSignedIn(true);
@@ -51,10 +56,6 @@ function AuthContext({children} : AuthContextProps) {
     function logout(){
         setIsSignedIn(false);
         setUser(null)
-    }
-
-    async function isStillSignedIn() {
-        const response = await authService.getMe();
     }
 
     const data = {

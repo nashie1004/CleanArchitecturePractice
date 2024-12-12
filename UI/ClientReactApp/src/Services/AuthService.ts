@@ -24,8 +24,10 @@ export default class AuthService extends BaseService {
         super();
     }
 
-    async getMe() {
-        return await this.baseGet("/api/Auth/me");   
+    async authenticate() {
+        const response = await this.baseGet("/api/Auth/authenticate");   
+
+        return response
     }
 
     async login(data: any) {
