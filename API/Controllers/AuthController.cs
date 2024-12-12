@@ -37,10 +37,11 @@ namespace API.Controllers
 
             if (!loginResult.IsSuccess) return Ok(loginResult);
 
-            Response.Cookies.Append("AccessToken", $"Bearer {loginResult.JWTToken}", new CookieOptions()
+            Response.Cookies.Append("token", loginResult.JWTToken, new CookieOptions()
             {
                 HttpOnly = true,
                 Secure = true,
+                IsEssential = true,
                 SameSite = SameSiteMode.Strict,
                 Expires = DateTime.Now.AddMinutes(180)
             });
@@ -48,7 +49,6 @@ namespace API.Controllers
             loginResult.JWTToken = string.Empty;
             
             return Ok(loginResult);
-
         }
 
         // TO TEST
