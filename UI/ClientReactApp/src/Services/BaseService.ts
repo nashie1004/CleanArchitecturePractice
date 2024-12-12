@@ -50,16 +50,38 @@ export default class BaseService {
     }
 
     protected handleResponse(response: axios.AxiosResponse<RequestBaseResponse>, message: string = this.genericSuccessMsg): GenericReturnMessage {
+        if (response.data.isSuccess && response.data.validationErrors.length < 1) {
+            return {
+                isOk: true,
+                status: response.status,
+                data: response.data,
+                message: message
+            }
+        }
+
         return {
-            isOk: response.data.isSuccess,
+            isOk: false,
             status: response.status,
             data: response.data,
-            message: response.data.isSuccess ? message : response.data.validationErrors.join("\n")
+            message: response.data.validationErrors.join("\n")
         }
     }
 
     protected async baseGet(url: string, config?: axios.AxiosRequestConfig) {
         try {
+            const response = await api.get(url, config);
+            return this.handleResponse(response);
+        }
+        catch (err) {
+            return this.handleError(err);
+        }
+    }
+
+    protected async baseGetList(url: string, listParams: GenericListRequest, config?: axios.AxiosRequestConfig) {
+        try {
+            const { pageSize, pageNumber, sortBy, filters } = listParams;
+            url = `${url}?pageSize=${pageSize}&pageNumber=${pageNumber}&sortBy=${sortBy}&filters=${filters}`;
+
             const response = await api.get(url, config);
             return this.handleResponse(response);
         }

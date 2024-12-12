@@ -77,8 +77,8 @@ const nav = [
   },
   {
     component: CNavItem,
-    name: 'User Login History',
-    to: '/userLoginHistory',
+    name: 'Login History',
+    to: '/loginHistory',
     icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
   },
 ]

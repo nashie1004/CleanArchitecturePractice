@@ -37,7 +37,7 @@ const authService = new AuthService();
 const Login = () => {
     const navigate = useNavigate();
     const firstRender = useFirstRender();
-    const {isSignedIn, login} = useAuth();
+    const {isSignedIn, login, isAuthenticating} = useAuth();
 
     const {
         register, handleSubmit, setError,
@@ -68,8 +68,7 @@ const Login = () => {
 
         login({
             username: response.data.userProfile.userName,
-            email: "",
-            profileImg: response.data.userProfile.profileImageUrl
+            userImg: response.data.userProfile.profileImageUrl
         });
 
         navigate("/")
@@ -79,7 +78,9 @@ const Login = () => {
         if (isSignedIn){
             navigate("/")
         }
-    }, [])
+    }, [isSignedIn])
+
+    const loading = isSubmitting || isAuthenticating;
 
     return (
         <div className="bg-body-tertiary min-vh-100 d-flex flex-row align-items-center">
@@ -124,8 +125,8 @@ const Login = () => {
                                         />
                                     </CInputGroup>
                                     <div className="d-grid">
-                                        <CButton color="dark" type="submit" disabled={isSubmitting}>
-                                            {isSubmitting ? <CSpinner /> : "Login Now"}
+                                        <CButton color="dark" type="submit" disabled={loading}>
+                                            {loading ? <CSpinner /> : "Login Now"}
                                         </CButton>
                                     </div>
                                 </CForm>

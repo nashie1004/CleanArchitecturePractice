@@ -212,6 +212,5 @@ namespace Infrastructure.Identity.Repository
 
             return identityUser.Id;
         }
-
     }
 }

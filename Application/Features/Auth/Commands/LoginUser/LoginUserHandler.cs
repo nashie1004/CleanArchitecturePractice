@@ -1,4 +1,7 @@
 ﻿using Application.Contracts.Infrastructure.Identity;
+using Application.Contracts.Infrastructure.Persistence.Repository;
+using Application.DTOs;
+using AutoMapper;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -11,15 +14,21 @@ namespace Application.Features.Auth.Commands.LoginUser
     public class LoginUserHandler : IRequestHandler<LoginUserRequest, LoginUserResponse>
     {
         private readonly IBaseRepositoryIdentityUser _baseRepositoryIdentityUser;
+        private readonly IUserRepository _userRepository;
         private readonly IBaseRepositoryIdentityToken _baseRepositoryIdentityToken;
+        private readonly IMapper _mapper;
 
         public LoginUserHandler(
             IBaseRepositoryIdentityUser baseRepositoryIdentityUser,
-            IBaseRepositoryIdentityToken baseRepositoryIdentityToken
+            IBaseRepositoryIdentityToken baseRepositoryIdentityToken,
+            IUserRepository userRepository,
+            IMapper mapper
             )
         {
             _baseRepositoryIdentityUser = baseRepositoryIdentityUser;
             _baseRepositoryIdentityToken = baseRepositoryIdentityToken;
+            _userRepository = userRepository;
+            _mapper = mapper;
         }
 
         public async Task<LoginUserResponse> Handle(LoginUserRequest req, CancellationToken ct)
@@ -37,18 +46,23 @@ namespace Application.Features.Auth.Commands.LoginUser
                 if (!retVal.IsSuccess) return retVal;
 
                 // SUCCESS
-                var userDetails = await _baseRepositoryIdentityUser.GetUserDetailsAsync(req.UserName, req.Password);
+                var userData = await _userRepository
+                    .GetRecordByPropertyAsync(i => i.IdentityImplementationId == loginAttempt.Item3);
 
-                retVal.IsSuccess = userDetails.Item1;
+                if (userData == null)
+                {
+                    retVal.IsSuccess = false;
+                    retVal.ValidationErrors.Add("Identity login successful but no user found");
+
+                    return retVal;
+                }
+
+                retVal.UserProfile = _mapper.Map<UserDTO>(userData);
 
                 retVal.JWTToken = await _baseRepositoryIdentityToken
                     .GenerateJWTTokenAsync(
-                        userDetails.Item3.UserId.ToString(), userDetails.Item3.UserName
+                        retVal.UserProfile.UserId.ToString(), retVal.UserProfile.UserName
                     );
-
-                retVal.UserProfile = userDetails.Item3;
-
-                // TODO: Implement Set browser cookies
             }
             catch (Exception ex)
             {

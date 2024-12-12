@@ -3,8 +3,7 @@ import AuthService from "../Services/AuthService";
 
 export interface User{
     username: string;
-    profileImg: string;
-    email: string;
+    userImg: string;
 }
 
 interface IAuthContext{
@@ -12,6 +11,7 @@ interface IAuthContext{
     user: null | User;
     login: (user: User) => void;
     logout: () => void;
+    isAuthenticating: boolean;
 }
 
 interface AuthContextProps {
@@ -22,7 +22,8 @@ export const authContext = createContext<IAuthContext>({
     isSignedIn: false,
     user: null,
     login: () => {},
-    logout: () => {},
+    logout: () => { },
+    isAuthenticating: true
 });
 
 const authService = new AuthService();
@@ -30,17 +31,21 @@ const authService = new AuthService();
 function AuthContext({children} : AuthContextProps) {
     const [user, setUser] = useState<User | null>(null);
     const [isSignedIn, setIsSignedIn] = useState(false);
+    const [isAuthenticating, setIsAuthenticating] = useState(true);
 
     useEffect(() => {
-        async function me() {
-            const res = await authService.getMe();
-            // TODO
-            //setIsSignedIn(res.isOk);
-            //setUser(res.data);
+        async function authenticate() {
+            const res = await authService.authenticate();
+
+            if (res.isOk) {
+                setIsSignedIn(true);
+                setUser({ username: res.data.userName, userImg: res.data.userImage });
+            } 
+
+            setIsAuthenticating(false)
         }
 
-        //me();
-
+        authenticate();
     }, [])
 
     function login(user: User){
@@ -53,12 +58,8 @@ function AuthContext({children} : AuthContextProps) {
         setUser(null)
     }
 
-    async function isStillSignedIn() {
-        const response = await authService.getMe();
-    }
-
     const data = {
-        user, isSignedIn, login, logout
+        user, isSignedIn, login, logout, isAuthenticating
     }
 
   return (

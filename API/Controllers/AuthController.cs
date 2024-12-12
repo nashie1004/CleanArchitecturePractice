@@ -1,13 +1,17 @@
-﻿using Application.Features.Audit.Queries.GetAllAudit;
+﻿using Application.Common;
+using Application.Features.Audit.Queries.GetAllAudit;
 using Application.Features.Auth.Commands.ChangePassword;
 using Application.Features.Auth.Commands.ChangeUserDetails;
 using Application.Features.Auth.Commands.LoginUser;
 using Application.Features.Auth.Commands.RegisterUser;
+using Application.Features.Auth.Queries.Authenticate;
 using Application.Features.Auth.Queries.GetUserDetails;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
+using System.Security.Claims;
 
 namespace API.Controllers
 {
@@ -35,20 +39,29 @@ namespace API.Controllers
         {
             var loginResult = await _mediator.Send(req);
 
-            if (!loginResult.IsSuccess) return Ok(loginResult);
+            if (!loginResult.IsSuccess || loginResult.ValidationErrors.Count() > 0) return Ok(loginResult);
 
             Response.Cookies.Append("token", loginResult.JWTToken, new CookieOptions()
             {
                 HttpOnly = true,
                 Secure = true,
                 IsEssential = true,
-                SameSite = SameSiteMode.Strict,
+                SameSite = SameSiteMode.None, // So that our react app can have access 
                 Expires = DateTime.Now.AddMinutes(180)
             });
 
             loginResult.JWTToken = string.Empty;
             
             return Ok(loginResult);
+        }
+
+        [Authorize]
+        [HttpGet("authenticate")]
+        public async Task<IActionResult> Authenticate()
+        {
+            var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            return Ok(await _mediator.Send(new AuthenticateRequest() { UserIdString = userIdString }));
         }
 
         // TO TEST
@@ -78,14 +91,16 @@ namespace API.Controllers
         [HttpPost("logout")]
         public IActionResult LogOut()
         {
-            Response.Cookies.Delete("AccessToken");
-
-            var retVal = new Application.Common.BaseResponse()
+            Response.Cookies.Delete("token", new CookieOptions()
             {
-                SuccessMessage = "Successfully logged out"
-            };
+                HttpOnly = true,
+                Secure = true,
+                IsEssential = true,
+                SameSite = SameSiteMode.None,
+                Expires = DateTime.Now.AddDays(-1)
+            });
 
-            return Ok(retVal);
+            return Ok(new BaseResponse());
         }
 
         /*
