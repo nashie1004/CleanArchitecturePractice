@@ -26,5 +26,10 @@ namespace Domain.Entities
 
         // This is to link external Identity Service to this main Domain User table
         public long IdentityImplementationId { get; set; }
+        //public string FacebookURL { get; set; }
+        //public string YoutubeURL { get; set; }
+        //public string InstagramURL { get; set; }
+        //public string TwitterURL { get; set; }
+        //public string CustomWebsiteURL { get; set; }
     }
 }

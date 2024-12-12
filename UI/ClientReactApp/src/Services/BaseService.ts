@@ -50,11 +50,20 @@ export default class BaseService {
     }
 
     protected handleResponse(response: axios.AxiosResponse<RequestBaseResponse>, message: string = this.genericSuccessMsg): GenericReturnMessage {
+        if (response.data.isSuccess && response.data.validationErrors.length < 1) {
+            return {
+                isOk: true,
+                status: response.status,
+                data: response.data,
+                message: message
+            }
+        }
+
         return {
-            isOk: response.data.isSuccess,
+            isOk: false,
             status: response.status,
             data: response.data,
-            message: response.data.isSuccess ? message : response.data.validationErrors.join("\n")
+            message: response.data.validationErrors.join("\n")
         }
     }
 

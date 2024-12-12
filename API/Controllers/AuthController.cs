@@ -35,7 +35,7 @@ namespace API.Controllers
         {
             var loginResult = await _mediator.Send(req);
 
-            if (!loginResult.IsSuccess) return Ok(loginResult);
+            if (!loginResult.IsSuccess || loginResult.ValidationErrors.Count() > 0) return Ok(loginResult);
 
             Response.Cookies.Append("token", loginResult.JWTToken, new CookieOptions()
             {

@@ -14,7 +14,7 @@ const AppBreadcrumb = () => {
     }
 
     const getBreadcrumbs = (location) => {
-        console.log(location)
+        //console.log(location)
 
         const breadcrumbs = []
         location.split('/').reduce((prev, curr, index, array) => {
@@ -29,7 +29,7 @@ const AppBreadcrumb = () => {
             return currentPathname
         })
 
-        console.log(breadcrumbs)
+        //console.log(breadcrumbs)
         return breadcrumbs
     }
 
