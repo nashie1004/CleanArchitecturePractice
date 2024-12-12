@@ -11,9 +11,8 @@ export default function Dashboard() {
             const res = await authService.getMany();
             if (res.isOk) {
                 setData(res.data)
-            console.log(res.data.items)
+                console.log(res)
             }
-
         }
 
         getData();

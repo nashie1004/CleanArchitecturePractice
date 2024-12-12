@@ -28,15 +28,20 @@ namespace Infrastructure.Identity
                 .AddEntityFrameworkStores<IdentityContext>()
                 .AddDefaultTokenProviders();
 
-            services
-                 .AddAuthentication(opt =>
-                 {
-                     opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                     opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                     opt.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                 })
-                .AddJwtBearer(options =>
+            // For react app
+            services.AddAuthentication(opt =>
+                    {
+                        opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                        opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                    })
+                .AddCookie(opt =>
                 {
+                    opt.Cookie.Name = "token";
+                })
+                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+                {
+                    options.RequireHttpsMetadata = false;
+                    options.SaveToken = true;
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = true,
@@ -47,7 +52,20 @@ namespace Infrastructure.Identity
                         ValidAudience = audience,
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
                     };
-                });
+
+                    options.Events = new JwtBearerEvents()
+                    {
+                        OnMessageReceived = (ctx) =>
+                        {
+                            ctx.Token = ctx.Request.Cookies["token"];
+
+                            Console.WriteLine($"{DateTime.Now}: ", ctx.Token);
+
+                            return Task.CompletedTask;
+                        }
+                    };
+                })
+                ;
 
             services.AddScoped(typeof(IBaseRepositoryIdentityUser), typeof(BaseRepositoryIdentityUser));
             services.AddScoped<IBaseRepositoryIdentityToken>(opt =>
