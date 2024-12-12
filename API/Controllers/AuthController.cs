@@ -78,7 +78,7 @@ namespace API.Controllers
         [HttpPost("logout")]
         public IActionResult LogOut()
         {
-            Response.Cookies.Delete("AccessToken");
+            Response.Cookies.Delete("token");
 
             var retVal = new Application.Common.BaseResponse()
             {

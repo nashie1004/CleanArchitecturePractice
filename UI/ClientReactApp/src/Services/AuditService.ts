@@ -1,11 +1,11 @@
-import BaseService from "./BaseService";
+import BaseService, { GenericListRequest } from "./BaseService";
 
 export default class AuditService extends BaseService {
     constructor() {
         super();
     }
 
-    async getMany() {
-        return this.baseGet("/api/Audit/getMany");
+    async getMany(listParams: GenericListRequest) {
+        return this.baseGetList("/api/Audit/getMany", listParams);
     }
 }

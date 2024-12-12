@@ -24,6 +24,7 @@ import {
     cilSun,
 } from '@coreui/icons'
 import { sidebarContext } from "../Context/SidebarContext"
+import AppBreadcrumb from './AppBreadcrumb'
 
 
 const AppHeader = () => {
@@ -127,7 +128,7 @@ const AppHeader = () => {
                 </CHeaderNav>
             </CContainer>
             <CContainer className="px-4" fluid>
-                todo
+                <AppBreadcrumb />
             </CContainer>
         </CHeader>
     )

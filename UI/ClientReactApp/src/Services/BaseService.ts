@@ -68,6 +68,19 @@ export default class BaseService {
         }
     }
 
+    protected async baseGetList(url: string, listParams: GenericListRequest, config?: axios.AxiosRequestConfig) {
+        try {
+            const { pageSize, pageNumber, sortBy, filters } = listParams;
+            url = `${url}?pageSize=${pageSize}&pageNumber=${pageNumber}&sortBy=${sortBy}&filters=${filters}`;
+
+            const response = await api.get(url, config);
+            return this.handleResponse(response);
+        }
+        catch (err) {
+            return this.handleError(err);
+        }
+    }
+
     protected async basePost(url: string, data: any, config?: axios.AxiosRequestConfig) {
         try {
             const response = await api.post(url, data, config);

@@ -8,6 +8,8 @@ const WorkoutForm = React.lazy(() => import('./views/Workout/WorkoutForm'))
 const ExerciseList = React.lazy(() => import('./views/Exercise/ExerciseList'))
 const ExerciseCategoryList = React.lazy(() => import('./views/Exercise/ExerciseCategoryList'))
 const Reports = React.lazy(() => import('./views/Reports/Reports'))
+const Audit = React.lazy(() => import('./views/Audit/Audit'))
+const LoginHistory = React.lazy(() => import('./views/LoginHistory/LoginHistory'))
 
 const routesAuthenticated = [
     { path: '/', element: Dashboard },
@@ -18,8 +20,8 @@ const routesAuthenticated = [
     { path: '/exercise/list',  element: ExerciseList },
     { path: '/exercise/category/List', element: ExerciseCategoryList },
     { path: '/reports', element: Reports },
-    { path: '/audit', element: Reports },
-    { path: '/userLoginHistory', element: Reports },
+    { path: '/audit', element: Audit },
+    { path: '/loginHistory', element: LoginHistory },
 ]
 
 export default routesAuthenticated;
