@@ -91,7 +91,14 @@ namespace API.Controllers
         [HttpPost("logout")]
         public IActionResult LogOut()
         {
-            Response.Cookies.Delete("token");
+            Response.Cookies.Delete("token", new CookieOptions()
+            {
+                HttpOnly = true,
+                Secure = true,
+                IsEssential = true,
+                SameSite = SameSiteMode.None,
+                Expires = DateTime.Now.AddDays(-1)
+            });
 
             return Ok(new BaseResponse());
         }

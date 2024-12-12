@@ -31,20 +31,18 @@ const authService = new AuthService();
 function AuthContext({children} : AuthContextProps) {
     const [user, setUser] = useState<User | null>(null);
     const [isSignedIn, setIsSignedIn] = useState(false);
-    const [isAuthenticating, setisAuthenticating] = useState(true);
+    const [isAuthenticating, setIsAuthenticating] = useState(true);
 
     useEffect(() => {
         async function authenticate() {
             const res = await authService.authenticate();
-
-            console.log(res)
 
             if (res.isOk) {
                 setIsSignedIn(true);
                 setUser({ username: res.data.userName, userImg: res.data.userImage });
             } 
 
-            setisAuthenticating(false)
+            setIsAuthenticating(false)
         }
 
         authenticate();
