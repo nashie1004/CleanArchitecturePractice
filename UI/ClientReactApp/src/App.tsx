@@ -7,6 +7,12 @@ import './Assets/style.scss'
 import './Assets/examples.scss'
 import routesPages from './routesPages'
 import AuthContext from './Context/AuthContext'
+import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community'; 
+// import "ag-grid-community/styles/ag-grid.css"
+// import "ag-grid-community/styles/ag-theme-quartz.css"
+
+// Register all Community features
+ModuleRegistry.registerModules([AllCommunityModule]);
 
 function App() {
   return (
