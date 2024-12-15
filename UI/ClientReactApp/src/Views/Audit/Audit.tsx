@@ -3,7 +3,7 @@ https://github.com/syket-git/react-table/blob/main/src/App.jsx
 https://tanstack.com/table/latest/docs/framework/react/examples/basic
 */
 
-import { CButton, CContainer, CDropdown, CDropdownItem, CDropdownMenu, CDropdownToggle, CFormInput, CFormSelect, CInputGroup, CInputGroupText, CPagination, CPaginationItem, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react";
+import { CButton, CCard, CCardBody, CCol, CContainer, CDropdown, CDropdownItem, CDropdownMenu, CDropdownToggle, CFormInput, CFormSelect, CInputGroup, CInputGroupText, CPagination, CPaginationItem, CRow, CTable, CTableBody, CTableCaption, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow } from "@coreui/react";
 import {
     createColumnHelper,
     flexRender,
@@ -15,7 +15,7 @@ import {
 import { useState, useEffect } from "react";
 import AuditService from "../../Services/AuditService"
 import CIcon  from '@coreui/icons-react';
-import { cilMoodGood, cilNotes, cilPencil, cilPhone } from '@coreui/icons';
+import { cilFilter, cilMoodGood, cilNotes, cilPencil, cilPhone, cilSearch, cilSend, cilTrash } from '@coreui/icons';
 
 const mockData = 
     [
@@ -42,11 +42,17 @@ const columnHelper = createColumnHelper();
 
 const columns = [
     columnHelper.accessor("id", {
-        cell: (info) => info.getValue(),
+        cell: (info) => <div className="d-flex justify-content-around">
+            <CButton color="primary" size="sm">
+                <CIcon icon={cilPencil} size="lg"   />
+            </CButton>
+            <CButton color="danger" size="sm" style={{'--ci-primary-color': 'white'}}>
+                <CIcon icon={cilTrash} size="lg"  />
+            </CButton>
+        </div>,
         header: () => (
-            <div className="d-flex align-items-center">
-                <CIcon icon={cilMoodGood} size="lg"  />
-                <span>Id</span>
+            <div className="d-flex align-items-center justify-content-center">
+                <span>Action</span>
             </div>
         ),
     }),
@@ -55,7 +61,6 @@ const columns = [
         cell: (info) => info.getValue(),
         header: () => (
             <div className="d-flex align-items-center">
-                <CIcon icon={cilMoodGood} size="lg" />
                 <span>Name</span>
             </div>
         ),
@@ -67,7 +72,6 @@ const columns = [
         ),
         header: () => (
             <div className="d-flex align-items-center">
-                <CIcon icon={cilNotes} size="lg" />
                 <span>Email</span>
             </div>
         ),
@@ -75,7 +79,6 @@ const columns = [
     columnHelper.accessor("phone", {
         header: () => (
             <div className="d-flex align-items-center">
-                <CIcon icon={cilPhone} size="lg" />
                 <span>Phone</span>
             </div>
         ),
@@ -135,21 +138,27 @@ export default function Audit() {
     return (
         <>
             <CInputGroup className="mb-3">
-                <CInputGroupText >Icon</CInputGroupText>
-                <CFormInput placeholder="Search..." aria-label="Search" aria-describedby="basic-addon1" />
-                <CDropdown alignment="end" variant="input-group">
-                    <CDropdownToggle color="dark" >Dropdown</CDropdownToggle>
-                    <CDropdownMenu>
-                        <CDropdownItem href="#">Action</CDropdownItem>
-                        <CDropdownItem href="#">Another action</CDropdownItem>
-                        <CDropdownItem href="#">Something else here</CDropdownItem>
-                    </CDropdownMenu>
-                </CDropdown>
-                <CButton type="button" color="dark" id="button-addon2">Search</CButton>
+                    <CInputGroupText>
+                        <CIcon icon={cilSearch} size="lg" />
+                    </CInputGroupText>
+                    <CFormInput placeholder="Search..." aria-label="Search" aria-describedby="basic-addon1" />
+                    <CDropdown alignment="end" variant="input-group">
+                        <CDropdownToggle color="dark" >
+                            <CIcon icon={cilFilter} size="lg" />
+                        </CDropdownToggle>
+                        <CDropdownMenu>
+                            <CDropdownItem href="#">Action</CDropdownItem>
+                            <CDropdownItem href="#">Another action</CDropdownItem>
+                            <CDropdownItem href="#">Something else here</CDropdownItem>
+                        </CDropdownMenu>
+                    </CDropdown>
+                    <CButton type="button" color="dark" id="button-addon2">
+                        Search
+                    </CButton>
             </CInputGroup>
 
-            <CTable responsive bordered>
-                    <CTableHead>
+            <CTable responsive bordered hover striped>
+                <CTableHead >
                         {table.getHeaderGroups().map((headerGroup) => (
                             <CTableRow key={headerGroup.id}>
                                 {headerGroup.headers.map((header) => (
@@ -172,68 +181,79 @@ export default function Audit() {
                             </CTableRow>
                         ))}
                 </CTableHead>
-                    <CTableBody >
-                        {table.getRowModel().rows.map((row) => (
-                            <CTableRow key={row.id} >
-                                {row.getVisibleCells().map((cell) => (
-                                    <CTableDataCell
-                                        key={cell.id}
-                                    >
-                                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                    </CTableDataCell>
+                <CTableBody >
+                    {table.getRowModel().rows.map((row) => (
+                        <CTableRow key={row.id} >
+                            {row.getVisibleCells().map((cell) => (
+                                <CTableDataCell
+                                    key={cell.id}
+                                >
+                                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                </CTableDataCell>
+                            ))}
+                        </CTableRow>
+                    ))}
+                </CTableBody>
+                <CTableCaption>
+                    Showing 0 out of 100 records
+                </CTableCaption>
+            </CTable>
+
+            <CContainer>
+                <CRow className="justify-content-end">
+                    <CCol xs={2}>
+                        <CFormSelect 
+                                style={{}}
+                                value={table.getState().pagination.pageSize}
+                                onChange={(e) => {
+                                    table.setPageSize(Number(e.target.value));
+                                }}
+                            >
+                                {[5, 10, 20, 30].map((pageSize) => (
+                                    <option key={pageSize} value={pageSize}>
+                                        {pageSize} rows
+                                    </option>
                                 ))}
-                            </CTableRow>
-                        ))}
-                    </CTableBody>
-                </CTable>
+                        </CFormSelect>
+                    </CCol>
+                    <CCol xs={3}>
+                        <CPagination aria-label="Page navigation example">
+                            <CPaginationItem
+                                aria-label="Last"
+                                onClick={() => table.setPageIndex(0)}
+                                disabled={!table.getCanPreviousPage()}
+                            >
+                                <span aria-hidden="true">&laquo;</span>
+                            </CPaginationItem>
+                            <CPaginationItem
+                                aria-label="Previous"
+                                onClick={() => table.previousPage()}
+                                disabled={!table.getCanPreviousPage()}
+                            >
+                                <span aria-hidden="true">&laquo;</span>
+                            </CPaginationItem>
+                            <CPaginationItem>1</CPaginationItem>
+                            <CPaginationItem>2</CPaginationItem>
+                            <CPaginationItem>3</CPaginationItem>
+                            <CPaginationItem
+                                aria-label="Next"
+                                onClick={() => table.nextPage()}
+                                disabled={!table.getCanNextPage()}
+                            >
+                                <span aria-hidden="true">&raquo;</span>
+                            </CPaginationItem>
+                            <CPaginationItem
+                                aria-label="End"
+                                onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+                                disabled={!table.getCanNextPage()}
+                            >
+                                <span aria-hidden="true">&raquo;</span>
+                            </CPaginationItem>
+                        </CPagination>
+                    </CCol>
+                </CRow>
 
-                    <span >Items per page</span>
-                    <CFormSelect 
-                        value={table.getState().pagination.pageSize}
-                        onChange={(e) => {
-                            table.setPageSize(Number(e.target.value));
-                        }}
-                    >
-                        {[5, 10, 20, 30].map((pageSize) => (
-                            <option key={pageSize} value={pageSize}>
-                                {pageSize}
-                            </option>
-                        ))}
-                    </CFormSelect>
-
-                <CPagination aria-label="Page navigation example">
-                    <CPaginationItem
-                        aria-label="Last"
-                        onClick={() => table.setPageIndex(0)}
-                        disabled={!table.getCanPreviousPage()}
-                    >
-                        <span aria-hidden="true">&laquo;</span>
-                    </CPaginationItem>
-                    <CPaginationItem
-                        aria-label="Previous"
-                        onClick={() => table.previousPage()}
-                        disabled={!table.getCanPreviousPage()}
-                    >
-                        <span aria-hidden="true">&laquo;</span>
-                    </CPaginationItem>
-                    <CPaginationItem>1</CPaginationItem>
-                    <CPaginationItem>2</CPaginationItem>
-                    <CPaginationItem>3</CPaginationItem>
-                    <CPaginationItem
-                        aria-label="Next"
-                        onClick={() => table.nextPage()}
-                        disabled={!table.getCanNextPage()}
-                    >
-                        <span aria-hidden="true">&raquo;</span>
-                    </CPaginationItem>
-                    <CPaginationItem
-                        aria-label="End"
-                        onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-                        disabled={!table.getCanNextPage()}
-                    >
-                        <span aria-hidden="true">&raquo;</span>
-                    </CPaginationItem>
-                </CPagination>
+            </CContainer>
             {/* 
                 <span >
                     <input
