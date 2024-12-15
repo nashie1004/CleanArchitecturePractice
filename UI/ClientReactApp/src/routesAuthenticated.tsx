@@ -12,16 +12,56 @@ const Audit = React.lazy(() => import('./views/Audit/Audit'))
 const LoginHistory = React.lazy(() => import('./views/LoginHistory/LoginHistory'))
 
 const routesAuthenticated = [
-    { path: '/', element: Dashboard },
-    { path: '/schedule', element: MySchedule },
-    { path: '/profile',  element: MyProfile },
-    { path: '/workout/list', element: WorkoutList },
-    { path: '/workout/form',  element: WorkoutForm },
-    { path: '/exercise/list',  element: ExerciseList },
-    { path: '/exercise/category/List', element: ExerciseCategoryList },
-    { path: '/reports', element: Reports },
-    { path: '/audit', element: Audit },
-    { path: '/loginHistory', element: LoginHistory },
+    { 
+        path: '/', 
+        element: Dashboard, 
+        breadCrumb: ["Dashboard"]
+    },
+    { 
+        path: '/schedule', 
+        element: MySchedule,
+        breadCrumb: ["Schedule"]
+    },
+    { 
+        path: '/profile',  
+        element: MyProfile,
+        breadCrumb: ["Profile"] 
+    },
+    { 
+        path: '/workout/list',
+        element: WorkoutList,
+        breadCrumb: ["Workout", "List"]
+    },
+    { 
+        path: '/workout/form',  
+        element: WorkoutForm,
+        breadCrumb: ["Workout", "Form"] 
+    },
+    { 
+        path: '/exercise/list', 
+        element: ExerciseList,
+        breadCrumb: ["Exercise", "List"] 
+    },
+    { 
+        path: '/exercise/category/list', 
+        element: ExerciseCategoryList,
+        breadCrumb: ["Exercise", "Category", "List"] 
+    },
+    { 
+        path: '/reports', 
+        element: Reports,
+        breadCrumb: ["Others", "Reports"] 
+    },
+    { 
+        path: '/audit', 
+        element: Audit,
+        breadCrumb: ["Others", "Audit Logs"]
+    },
+    { 
+        path: '/loginHistory', 
+        element: LoginHistory,
+        breadCrumb: ["Others", "Login History"]
+    },
 ]
 
 export default routesAuthenticated;

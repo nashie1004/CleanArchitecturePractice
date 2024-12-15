@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useContext } from 'react'
+import { useEffect, useRef, useContext } from 'react'
 import {
     CContainer,
     CDropdown,
@@ -8,17 +8,15 @@ import {
     CHeader,
     CHeaderNav,
     CHeaderToggler,
-    CNavLink,
-    CNavItem,
     useColorModes,
-    CBreadcrumb,
+    CAvatar,
+    CDropdownHeader,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import {
     cilBell,
     cilContrast,
-    cilEnvelopeOpen,
-    cilList,
+    cilLockLocked,
     cilMenu,
     cilMoon,
     cilSun,
@@ -27,13 +25,30 @@ import { sidebarContext } from "../Context/SidebarContext"
 import AppBreadcrumb from './AppBreadcrumb'
 import useTheme from '../Hooks/useTheme'
 import { ThemeColors } from '../Context/ThemeContext'
+import { NavLink } from 'react-router'
+import AuthService from '../Services/AuthService'
+import { toast } from "react-toastify";
+import useAuth from '../Hooks/useAuth'
 
+const authService = new AuthService();
 
 const AppHeader = () => {
     const headerRef = useRef()
     const { colorMode, setColorMode } = useColorModes('coreui-free-react-admin-template-theme')
     const { setVisible } = useContext(sidebarContext);
     const { setTheme } = useTheme();
+    const { logout } = useAuth();
+    
+    async function handleLogout() {
+        const response = await authService.logout();
+
+        if (!response.isOk) {
+            toast(response.message, { type: "error" })
+            return;
+        } 
+
+        logout();
+    }
 
     function handleThemeSync(theme: ThemeColors){
         setTheme(theme)
@@ -56,36 +71,6 @@ const AppHeader = () => {
                 >
                     <CIcon icon={cilMenu} size="lg" />
                 </CHeaderToggler>
-                <CHeaderNav className="d-none d-md-flex">
-                    <CNavItem>
-                        <CNavLink to="/dashboard" >
-                            Dashboard
-                        </CNavLink>
-                    </CNavItem>
-                    <CNavItem>
-                        <CNavLink href="#">Users</CNavLink>
-                    </CNavItem>
-                    <CNavItem>
-                        <CNavLink href="#">Settings</CNavLink>
-                    </CNavItem>
-                </CHeaderNav>
-                <CHeaderNav className="ms-auto">
-                    <CNavItem>
-                        <CNavLink href="#">
-                            <CIcon icon={cilBell} size="lg" />
-                        </CNavLink>
-                    </CNavItem>
-                    <CNavItem>
-                        <CNavLink href="#">
-                            <CIcon icon={cilList} size="lg" />
-                        </CNavLink>
-                    </CNavItem>
-                    <CNavItem>
-                        <CNavLink href="#">
-                            <CIcon icon={cilEnvelopeOpen} size="lg" />
-                        </CNavLink>
-                    </CNavItem>
-                </CHeaderNav>
                 <CHeaderNav>
                     <li className="nav-item py-1">
                         <div className="vr h-100 mx-2 text-body text-opacity-75"></div>
@@ -133,6 +118,24 @@ const AppHeader = () => {
                     <li className="nav-item py-1">
                         <div className="vr h-100 mx-2 text-body text-opacity-75"></div>
                     </li>
+                    <CDropdown variant="nav-item">
+                    <CDropdownToggle placement="bottom-end" className="py-0 pe-0" caret={false}>
+                        <CAvatar color="primary" size='md' textColor="white">CUI</CAvatar>
+                    </CDropdownToggle>
+      <CDropdownMenu className="pt-0" placement="bottom-end">
+        <CDropdownHeader className="bg-body-secondary fw-semibold mb-2">Settings</CDropdownHeader>
+        <CDropdownItem style={{ cursor: "pointer" }}>
+          <NavLink to="/profile" style={{textDecoration: "none", color: "inherit", display: "block" ,width: "100%"}}>
+            <CIcon icon={cilBell} className="me-2" />
+             Profile
+          </NavLink>
+        </CDropdownItem>
+        <CDropdownItem onClick={handleLogout} style={{ cursor: "pointer" }}>
+          <CIcon icon={cilLockLocked} className="me-2" />
+          Log out
+        </CDropdownItem>
+      </CDropdownMenu>
+    </CDropdown>
                 </CHeaderNav>
             </CContainer>
             <CContainer className="px-4" fluid>

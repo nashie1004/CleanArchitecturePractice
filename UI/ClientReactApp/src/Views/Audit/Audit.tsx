@@ -3,9 +3,9 @@ import  { useCallback, useMemo, useRef, useState } from "react";
 import { AgGridReact } from "ag-grid-react";
 import data from "./testData.json"
 import useTheme from "../../Hooks/useTheme";
-import { CButton, CCol, CContainer, CFormSelect, CProgress, CRow } from "@coreui/react";
+import { CButton, CCol, CContainer, CFormInput, CFormSelect, CInputGroup, CInputGroupText, CProgress, CRow } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
-import { cilCaretLeft, cilCaretRight } from "@coreui/icons";
+import { cilCaretLeft, cilCaretRight, cilPlus, cilSearch } from "@coreui/icons";
 
 const rowSelection = {
   mode: "multiRow",
@@ -122,48 +122,58 @@ export default function Audit(){
   return (
     <div style={{ height: 500 }} className={theme === "dark" ? "ag-theme-quartz-dark" : "" }>
       <CContainer className="mb-2">
-        <CRow className="justify-content-end">
-          <CCol xs="auto">
-            <CButton  color="dark"  onClick={addData}>Search / Add Data</CButton>
+        <CRow xs={{ gutterX: 2, gutterY: 2 }}> 
+          <CCol>
+            <CInputGroup>
+              <CInputGroupText id="basic-addon1" onClick={addData}>
+                <CIcon size="lg" icon={cilSearch} />
+              </CInputGroupText>
+              <CFormInput placeholder="Global search..." aria-label="Username" aria-describedby="username"/>
+            </CInputGroup>
           </CCol>
           <CCol xs="auto">
-          <CFormSelect 
-  aria-label="Default select example"
-  options={[
-    '15 rows',
-    { label: '30 rows', value: 30 },
-    { label: '45 rows', value: 45 },
-  ]}
-/>
+            <CFormSelect xs="auto"
+            aria-label="Default select example"
+            options={[
+             { label: '15 rows', value: 15 },
+             { label: '30 rows', value: 30 },
+             { label: '45 rows', value: 45 },
+            ]}
+           />
+          </CCol>
+          <CCol xs="auto" className="">
+            <CButton color="secondary">
+              <CIcon icon={cilCaretLeft} />
+              </CButton>
           </CCol>
           <CCol xs="auto">
-      <CButton color="dark" variant="outline" >
-        <CIcon icon={cilCaretLeft} />
-      </CButton>
-
+            <CButton color="secondary" >
+              <CIcon icon={cilCaretRight} />
+            </CButton>
           </CCol>
           <CCol xs="auto">
-      <CButton color="dark" >
-        <CIcon icon={cilCaretRight} />
-      </CButton>
-
+            <CButton color="secondary" >
+              <span className="">Add Item</span>
+              <CIcon icon={cilPlus} />
+            </CButton>
           </CCol>
         </CRow>
-      </CContainer>
+        </CContainer>
+
       <AgGridReact
         suppressPaginationPanel={true}
         ref={gridRef}
         rowData={rowData}
         columnDefs={columnDefs}
         defaultColDef={defaultColDef}
-        rowSelection={rowSelection}
+        rowSelection={rowSelection}   
         pagination={true}
         paginationPageSize={10}
         paginationPageSizeSelector={[10, 25, 50]}
         onGridReady={onGridReady}
         loadingCellRenderer={loadingCellRenderer}
         loadingCellRendererParams={loadingCellRendererParams}
-      />
+        />
     </div>
   );
 };
