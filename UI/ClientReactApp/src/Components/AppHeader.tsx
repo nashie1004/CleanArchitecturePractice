@@ -25,12 +25,20 @@ import {
 } from '@coreui/icons'
 import { sidebarContext } from "../Context/SidebarContext"
 import AppBreadcrumb from './AppBreadcrumb'
+import useTheme from '../Hooks/useTheme'
+import { ThemeColors } from '../Context/ThemeContext'
 
 
 const AppHeader = () => {
     const headerRef = useRef()
     const { colorMode, setColorMode } = useColorModes('coreui-free-react-admin-template-theme')
-    const { visible, setVisible } = useContext(sidebarContext);
+    const { setVisible } = useContext(sidebarContext);
+    const { setTheme } = useTheme();
+
+    function handleThemeSync(theme: ThemeColors){
+        setTheme(theme)
+        setColorMode(theme);
+    }
 
     useEffect(() => {
         document.addEventListener('scroll', () => {
@@ -98,7 +106,7 @@ const AppHeader = () => {
                                 className="d-flex align-items-center"
                                 as="button"
                                 type="button"
-                                onClick={() => setColorMode('light')}
+                                onClick={() => handleThemeSync('light')}
                             >
                                 <CIcon className="me-2" icon={cilSun} size="lg" /> Light
                             </CDropdownItem>
@@ -107,7 +115,7 @@ const AppHeader = () => {
                                 className="d-flex align-items-center"
                                 as="button"
                                 type="button"
-                                onClick={() => setColorMode('dark')}
+                                onClick={() => handleThemeSync('dark')}
                             >
                                 <CIcon className="me-2" icon={cilMoon} size="lg" /> Dark
                             </CDropdownItem>
@@ -116,7 +124,7 @@ const AppHeader = () => {
                                 className="d-flex align-items-center"
                                 as="button"
                                 type="button"
-                                onClick={() => setColorMode('auto')}
+                                onClick={() => handleThemeSync('auto')}
                             >
                                 <CIcon className="me-2" icon={cilContrast} size="lg" /> Auto
                             </CDropdownItem>

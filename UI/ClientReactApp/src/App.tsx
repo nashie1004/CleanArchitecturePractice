@@ -9,7 +9,8 @@ import routesPages from './routesPages'
 import AuthContext from './Context/AuthContext'
 import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community'; 
 // import "ag-grid-community/styles/ag-grid.css"
-// import "ag-grid-community/styles/ag-theme-quartz.css"
+import "ag-grid-community/styles/ag-theme-quartz.css"
+import ThemeContext from './Context/ThemeContext'
 
 // Register all Community features
 ModuleRegistry.registerModules([AllCommunityModule]);
@@ -18,6 +19,7 @@ function App() {
   return (
       <SidebarContext>
         <AuthContext>
+          <ThemeContext>
             <BrowserRouter>
             <Routes>
                 {routesPages.map((item, idx) => {
@@ -29,6 +31,7 @@ function App() {
                 })}
             </Routes>
         </BrowserRouter>
+          </ThemeContext>
         </AuthContext>
       </SidebarContext>
   )
