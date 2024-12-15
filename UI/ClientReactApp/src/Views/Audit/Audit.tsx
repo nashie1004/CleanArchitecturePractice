@@ -1,10 +1,8 @@
 import  { useMemo, useState } from "react";
 
-import { AllCommunityModule, ModuleRegistry } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
 import data from "./testData.json"
-
-ModuleRegistry.registerModules([AllCommunityModule]);
+import useTheme from "../../Hooks/useTheme";
 
 const rowSelection = {
   mode: "multiRow",
@@ -12,6 +10,8 @@ const rowSelection = {
 };
 
 export default function Audit(){
+  const {theme} = useTheme();
+
   const [rowData, setRowData] = useState(data)
 
   const [columnDefs, setColumnDefs] = useState([
@@ -68,7 +68,7 @@ export default function Audit(){
   }, []);
 
   return (
-    <div style={{ height: 500 }}>
+    <div style={{ height: 500 }} className={theme === "dark" ? "ag-theme-quartz-dark" : "" }>
       <AgGridReact
         rowData={rowData}
         columnDefs={columnDefs}
