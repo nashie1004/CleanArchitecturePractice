@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Audit = Domain.Entities.Audit;
 using Infrastructure.Persistence.Data;
 using System.Linq.Expressions;
+using Application.Contracts.Infrastructure.Identity;
 
 namespace Infra.Repository
 {
@@ -20,10 +21,20 @@ namespace Infra.Repository
      where T : class
     {
         private readonly MainContext _context;
+        private readonly IBaseRepositoryIdentityUserHttpContext _identityUserHttpContext;
 
-        public BaseRepositoryPersistence(MainContext context)
+        public BaseRepositoryPersistence(
+            MainContext context
+        )
         {
             _context = context;
+        }
+        public BaseRepositoryPersistence(
+            MainContext context, IBaseRepositoryIdentityUserHttpContext identityUserHttpContext
+        )
+        {
+            _context = context;
+            _identityUserHttpContext = identityUserHttpContext;
         }
 
         public async Task AddRecordAsync(T record)
@@ -80,12 +91,12 @@ namespace Infra.Repository
                 if (entry.State == EntityState.Added)
                 {
                     entry.Entity.CreatedDate = DateTime.UtcNow;
-                    //entry.Entity.CreatedBy = 0;
+                    entry.Entity.CreatedBy = _identityUserHttpContext.GetUserId();
                 }
                 else if (entry.State == EntityState.Modified)
                 {
                     entry.Entity.LastUpdatedDate = DateTime.UtcNow;
-                    //entry.Entity.LastUpdatedBy = 0;
+                    entry.Entity.LastUpdatedBy = _identityUserHttpContext.GetUserId();
                 }
             }
 

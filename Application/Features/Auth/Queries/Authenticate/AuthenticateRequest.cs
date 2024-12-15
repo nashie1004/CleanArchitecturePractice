@@ -9,6 +9,5 @@ namespace Application.Features.Auth.Queries.Authenticate
 {
     public class AuthenticateRequest : IRequest<AuthenticateResponse>
     {
-        public string? UserIdString { get; set; }
     }
 }
