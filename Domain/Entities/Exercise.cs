@@ -21,5 +21,8 @@ namespace Domain.Entities
 
         [MaxLength(200)]
         public string? ImageUrl { get; set; }
+
+        public long ExerciseCategoryId { get; set; }
+        public ExerciseCategory ExerciseCategory { get; set; }
     }
 }

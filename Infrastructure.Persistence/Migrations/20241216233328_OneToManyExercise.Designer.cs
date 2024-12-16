@@ -3,6 +3,7 @@ using System;
 using Infrastructure.Persistence.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infra.Migrations
 {
     [DbContext(typeof(MainContext))]
-    partial class MainContextModelSnapshot : ModelSnapshot
+    [Migration("20241216233328_OneToManyExercise")]
+    partial class OneToManyExercise
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.20");
@@ -72,7 +75,7 @@ namespace Infra.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<long>("ExerciseCategoryId")
+                    b.Property<long>("ExerciseCategoryIdCategoryId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ImageUrl")
@@ -91,14 +94,14 @@ namespace Infra.Migrations
 
                     b.HasKey("ExerciseId");
 
-                    b.HasIndex("ExerciseCategoryId");
+                    b.HasIndex("ExerciseCategoryIdCategoryId");
 
                     b.ToTable("Exercises");
                 });
 
             modelBuilder.Entity("Domain.Entities.ExerciseCategory", b =>
                 {
-                    b.Property<long>("ExerciseCategoryId")
+                    b.Property<long>("CategoryId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -123,7 +126,7 @@ namespace Infra.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
-                    b.HasKey("ExerciseCategoryId");
+                    b.HasKey("CategoryId");
 
                     b.ToTable("ExerciseCategory");
                 });
@@ -319,13 +322,13 @@ namespace Infra.Migrations
 
             modelBuilder.Entity("Domain.Entities.Exercise", b =>
                 {
-                    b.HasOne("Domain.Entities.ExerciseCategory", "ExerciseCategory")
+                    b.HasOne("Domain.Entities.ExerciseCategory", "ExerciseCategoryId")
                         .WithMany("Exercises")
-                        .HasForeignKey("ExerciseCategoryId")
+                        .HasForeignKey("ExerciseCategoryIdCategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ExerciseCategory");
+                    b.Navigation("ExerciseCategoryId");
                 });
 
             modelBuilder.Entity("Domain.Entities.WorkoutDetail", b =>

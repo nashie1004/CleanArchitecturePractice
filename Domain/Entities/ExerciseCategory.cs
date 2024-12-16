@@ -11,7 +11,7 @@ namespace Domain.Entities
     public class ExerciseCategory : AuditableEntity
     {
         [Key]
-        public long CategoryId { get; set; }
+        public long ExerciseCategoryId { get; set; }
 
         [Required]
         [MaxLength(100)]
@@ -19,5 +19,7 @@ namespace Domain.Entities
 
         [MaxLength(300)]
         public string? Description { get; set; }
+
+        public ICollection<Exercise> Exercises { get; set; } = new List<Exercise>();
     }
 }
