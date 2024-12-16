@@ -1,9 +1,11 @@
-import  { useMemo, useRef, useState } from "react";
+import  { useCallback, useMemo, useRef, useState } from "react";
 
 import { AgGridReact } from "ag-grid-react";
 import data from "./testData.json"
 import useTheme from "../../Hooks/useTheme";
-import { CButton, CProgress } from "@coreui/react";
+import { CButton, CCol, CContainer, CFormSelect, CProgress, CRow } from "@coreui/react";
+import CIcon from "@coreui/icons-react";
+import { cilCaretLeft, cilCaretRight } from "@coreui/icons";
 
 const rowSelection = {
   mode: "multiRow",
@@ -78,12 +80,12 @@ export default function Audit(){
   }, []);
 
   function addData(){
-
-    const res = gridRef.current.api.applyTransaction({
-      add: [oneData],
-      addIndex: 1
-    });
-    console.log(res)
+    setRowData((prev) => [...prev, ...data])
+    // const res = gridRef.current.api.applyTransaction({
+    //   add: [oneData],
+    //   addIndex: 1
+    // });
+    // console.log(res)
   }
 
   function onGridReady(params){
@@ -100,12 +102,56 @@ export default function Audit(){
 
   }
 
+  function previousPage(){
+    // Fetch then gridRef.current.api.paginationGoToNextPage();
+  }
+
+  function nextPage(){
+    // Fetch then gridRef.current.api.paginationGoToNextPage();
+  }
+
+  const loadingCellRenderer = useCallback(() => {
+    return {}
+  }, []);
+  const loadingCellRendererParams = useMemo(() => {
+    return {
+      loadingMessage: "One moment please...",
+    };
+  }, []);
+
   return (
     <div style={{ height: 500 }} className={theme === "dark" ? "ag-theme-quartz-dark" : "" }>
-      <CButton className="mb-2" color="primary" onClick={addData}>Search / Add Data</CButton>
-      
+      <CContainer className="mb-2">
+        <CRow className="justify-content-end">
+          <CCol xs="auto">
+            <CButton  color="dark"  onClick={addData}>Search / Add Data</CButton>
+          </CCol>
+          <CCol xs="auto">
+          <CFormSelect 
+  aria-label="Default select example"
+  options={[
+    '15 rows',
+    { label: '30 rows', value: 30 },
+    { label: '45 rows', value: 45 },
+  ]}
+/>
+          </CCol>
+          <CCol xs="auto">
+      <CButton color="dark" variant="outline" >
+        <CIcon icon={cilCaretLeft} />
+      </CButton>
+
+          </CCol>
+          <CCol xs="auto">
+      <CButton color="dark" >
+        <CIcon icon={cilCaretRight} />
+      </CButton>
+
+          </CCol>
+        </CRow>
+      </CContainer>
       <AgGridReact
-        // rowModelType="infinite"
+        suppressPaginationPanel={true}
         ref={gridRef}
         rowData={rowData}
         columnDefs={columnDefs}
@@ -115,6 +161,8 @@ export default function Audit(){
         paginationPageSize={10}
         paginationPageSizeSelector={[10, 25, 50]}
         onGridReady={onGridReady}
+        loadingCellRenderer={loadingCellRenderer}
+        loadingCellRendererParams={loadingCellRendererParams}
       />
     </div>
   );
