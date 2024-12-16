@@ -49,13 +49,23 @@ const nav = [
     items: [
       {
         component: CNavItem,
-        name: 'Exercise List',
+        name: 'List',
         to: '/exercise/list',
       },
       {
         component: CNavItem,
-        name: 'Exercise Category List',
+        name: 'Form',
+        to: '/exercise/form',
+      },
+      {
+        component: CNavItem,
+        name: 'Category List',
         to: '/exercise/category/list',
+      },
+      {
+        component: CNavItem,
+        name: 'Category Form',
+        to: '/exercise/category/form',
       },
     ],
   },

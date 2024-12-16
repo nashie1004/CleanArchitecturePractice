@@ -6,7 +6,9 @@ const MyProfile = React.lazy(() => import('./views/Profile/Profile'))
 const WorkoutList = React.lazy(() => import('./views/Workout/WorkoutList'))
 const WorkoutForm = React.lazy(() => import('./views/Workout/WorkoutForm'))
 const ExerciseList = React.lazy(() => import('./views/Exercise/ExerciseList'))
+const ExerciseForm = React.lazy(() => import('./views/Exercise/ExerciseForm'))
 const ExerciseCategoryList = React.lazy(() => import('./views/Exercise/ExerciseCategoryList'))
+const ExerciseCategoryForm = React.lazy(() => import('./views/Exercise/ExerciseCategoryForm'))
 const Reports = React.lazy(() => import('./views/Reports/Reports'))
 const Audit = React.lazy(() => import('./views/Audit/Audit'))
 const LoginHistory = React.lazy(() => import('./views/LoginHistory/LoginHistory'))
@@ -42,10 +44,20 @@ const routesAuthenticated = [
         element: ExerciseList,
         breadCrumb: ["Exercise", "List"] 
     },
+    {
+        path: '/exercise/form',
+        element: ExerciseForm,
+        breadCrumb: ["Exercise", "Form"]
+    },
     { 
         path: '/exercise/category/list', 
         element: ExerciseCategoryList,
         breadCrumb: ["Exercise", "Category", "List"] 
+    },
+    { 
+        path: '/exercise/category/form', 
+        element: ExerciseCategoryForm,
+        breadCrumb: ["Exercise", "Category", "Form"] 
     },
     { 
         path: '/reports', 
