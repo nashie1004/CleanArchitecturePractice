@@ -1,18 +1,28 @@
-import  { useMemo, useState } from "react";
+import  { useMemo, useRef, useState } from "react";
 
 import { AgGridReact } from "ag-grid-react";
 import data from "./testData.json"
 import useTheme from "../../Hooks/useTheme";
+import { CButton, CProgress } from "@coreui/react";
 
 const rowSelection = {
   mode: "multiRow",
   headerCheckbox: false,
 };
 
+const oneData = 
+{
+  "make": "Tesla",
+  "model": "Model Y",
+  "price": 64950,
+  "electric": true,
+  "month": "June"
+};
+
 export default function Audit(){
   const {theme} = useTheme();
-
-  const [rowData, setRowData] = useState(data)
+  const gridRef = useRef();
+  const [rowData, setRowData] = useState([])
 
   const [columnDefs, setColumnDefs] = useState([
     {
@@ -67,9 +77,36 @@ export default function Audit(){
     };
   }, []);
 
+  function addData(){
+
+    const res = gridRef.current.api.applyTransaction({
+      add: [oneData],
+      addIndex: 1
+    });
+    console.log(res)
+  }
+
+  function onGridReady(params){
+// console.log(params)
+//     const dataSource = {
+//       rowCount: undefined,
+//       getRows: (params) => {
+
+//         params.successCallback([oneData, oneData, oneData], 991);
+//         console.log("apr")
+//       }
+//     }
+//     params.api.setGridOption("datasource", dataSource);
+
+  }
+
   return (
     <div style={{ height: 500 }} className={theme === "dark" ? "ag-theme-quartz-dark" : "" }>
+      <CButton className="mb-2" color="primary" onClick={addData}>Search / Add Data</CButton>
+      
       <AgGridReact
+        // rowModelType="infinite"
+        ref={gridRef}
         rowData={rowData}
         columnDefs={columnDefs}
         defaultColDef={defaultColDef}
@@ -77,6 +114,7 @@ export default function Audit(){
         pagination={true}
         paginationPageSize={10}
         paginationPageSizeSelector={[10, 25, 50]}
+        onGridReady={onGridReady}
       />
     </div>
   );
