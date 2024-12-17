@@ -1,4 +1,5 @@
 ﻿using Application.Contracts.Infra.Todo;
+using Application.Contracts.Infrastructure.Identity;
 using Application.Contracts.Infrastructure.Persistence.Repository;
 using Infra.Repository;
 using Infrastructure.Persistence.Data;
@@ -12,7 +13,7 @@ namespace Infrastructure.Persistence.Repository.Exercise
 {
     public class ExerciseCategoryRepository : BaseRepositoryPersistence<Domain.Entities.ExerciseCategory>, IExerciseCategoryRepository
     {
-        public ExerciseCategoryRepository(MainContext ctx) : base(ctx) 
+        public ExerciseCategoryRepository(MainContext ctx, IBaseRepositoryIdentityUserHttpContext httpContext) : base(ctx, httpContext) 
         {
             
         }

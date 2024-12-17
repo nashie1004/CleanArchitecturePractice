@@ -1,4 +1,5 @@
 ﻿using Application.Contracts.Infra.Repos;
+using Application.Contracts.Infrastructure.Identity;
 using Domain.Entities;
 using Infrastructure.Persistence.Data;
 using System;
@@ -11,7 +12,7 @@ namespace Infra.Repository.Workout
 {
     public class WorkoutHeaderRepository : BaseRepositoryPersistence<WorkoutHeader>, IWorkoutHeaderRepository
     {
-        public WorkoutHeaderRepository(MainContext ctx) : base(ctx)
+        public WorkoutHeaderRepository(MainContext ctx, IBaseRepositoryIdentityUserHttpContext httpContext) : base(ctx, httpContext)
         {
             
         }

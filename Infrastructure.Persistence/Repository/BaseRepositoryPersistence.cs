@@ -24,12 +24,6 @@ namespace Infra.Repository
         private readonly IBaseRepositoryIdentityUserHttpContext _identityUserHttpContext;
 
         public BaseRepositoryPersistence(
-            MainContext context
-        )
-        {
-            _context = context;
-        }
-        public BaseRepositoryPersistence(
             MainContext context, IBaseRepositoryIdentityUserHttpContext identityUserHttpContext
         )
         {
@@ -116,7 +110,7 @@ namespace Infra.Repository
                 _context.Audits.Add(new Domain.Entities.Audit()
                 {
                     CreatedDate = DateTime.UtcNow
-                    //,CreatedBy = 0
+                    ,CreatedBy = _identityUserHttpContext.GetUserId()
                     ,TableName = entry.Metadata.GetTableName() ?? string.Empty
                     ,TablePrimaryKey = GetPrimaryKey(entry)
                     ,Action = (short)EntityState.Added
@@ -134,7 +128,7 @@ namespace Infra.Repository
                     ,OldData = JsonConvert.SerializeObject(entry.OriginalValues.ToObject(), jsonSettings)
                     ,NewData = JsonConvert.SerializeObject(entry.Entity, jsonSettings)
                     ,LastUpdatedDate = DateTime.UtcNow
-                    //,LastUpdatedBy = 0
+                    ,LastUpdatedBy = _identityUserHttpContext.GetUserId()
                 });
             }
 
@@ -147,7 +141,7 @@ namespace Infra.Repository
                     ,Action = (short)EntityState.Deleted
                     ,OldData = JsonConvert.SerializeObject(entry.Entity, jsonSettings)
                     ,LastUpdatedDate = DateTime.UtcNow
-                    //,LastUpdatedBy = 0
+                    ,LastUpdatedBy = _identityUserHttpContext.GetUserId()
                 });
             }
 
