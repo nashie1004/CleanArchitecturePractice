@@ -15,8 +15,8 @@ namespace Application.Contracts.Infra
         Task<T> GetRecordAsync(long id);
         Task<T> GetRecordByPropertyAsync(Expression<Func<T, bool>> predicate);
         Task<List<T>> GetAllRecordAsync();
-        Task<List<T>> GetAllRecordAsync(int pageSize, int pageNo);
-        Task<int> SaveRecordAsync(CancellationToken ct = default);
+        Task<List<T>> GetAllRecordAsync(int pageSize, int pageNo, Expression<Func<T, bool>> filter = null);
+        Task<int> SaveRecordAsync(CancellationToken ct = default, long suppliedUserId = 0);
         //Task<List<T2>> ExecRawQuery<T2>(string sqlQuery, params object[] parameters);
         Task ExecRawCommand<T2>(string sqlQuery, params object[] parameters);
     }

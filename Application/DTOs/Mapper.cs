@@ -17,6 +17,7 @@ namespace Application.DTOs
                 .ForMember(dest => dest.HeightMeasurementText, opt => opt.MapFrom(src => src.HeightMeasurement.ToString()))
                 .ForMember(dest => dest.GenderText, opt => opt.MapFrom(src => src.Gender.ToString()))
                 ;
+            //CreateMap<Audit, AuditDTO>();
         }
     }
 }

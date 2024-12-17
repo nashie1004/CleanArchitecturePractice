@@ -77,7 +77,7 @@ namespace Infrastructure.Identity.Repository
 
             // 2. Save to Main User Table
             await _userRepository.AddRecordAsync(newBaseUser);
-            await _userRepository.SaveRecordAsync();
+            await _userRepository.SaveRecordAsync(suppliedUserId: newBaseUser.UserId);
 
             // 3. Save to Audit Table
             await _auditRepository.AddRecordAsync(new Domain.Entities.Audit()
@@ -133,7 +133,8 @@ namespace Infrastructure.Identity.Repository
                 Action = UserAuthAction.Login,
                 CreatedBy = baseUser.UserId
             });
-            await _userAuthHistoryRepository.SaveRecordAsync();
+            // Since the user isnt signed in yet, httpcontext userId is 0, so use baseUser.UserId instead
+            await _userAuthHistoryRepository.SaveRecordAsync(suppliedUserId: baseUser.UserId);
 
             return (true, validationMsgs, identityUser.Id);
         }
