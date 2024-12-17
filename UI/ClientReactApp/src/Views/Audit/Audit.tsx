@@ -127,7 +127,7 @@ export default function Audit(){
         </CRow>
         </CContainer>
 
-      <AgGridReact
+      <AgGridReact 
         suppressPaginationPanel={true}
         ref={gridRef}
         rowData={tableState.rowData}

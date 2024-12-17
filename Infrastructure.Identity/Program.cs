@@ -68,6 +68,7 @@ namespace Infrastructure.Identity
                 ;
 
             services.AddScoped(typeof(IBaseRepositoryIdentityUser), typeof(BaseRepositoryIdentityUser));
+            services.AddScoped(typeof(IBaseRepositoryIdentityUserHttpContext), typeof(BaseRepositoryIdentityUserHttpContext));
             services.AddScoped<IBaseRepositoryIdentityToken>(opt =>
             {
                 return new BaseRepositoryIdentityToken(

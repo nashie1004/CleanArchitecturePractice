@@ -1,4 +1,5 @@
 ﻿using Application.Contracts.Infra.Todo;
+using Application.Contracts.Infrastructure.Identity;
 using Infrastructure.Persistence.Data;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace Infra.Repository.Audit
     {
         private readonly MainContext _context;
 
-        public AuditRepository(MainContext ctx) : base(ctx)
+        public AuditRepository(MainContext ctx, IBaseRepositoryIdentityUserHttpContext httpContext) : base(ctx, httpContext)
         {
             _context = ctx;
         }

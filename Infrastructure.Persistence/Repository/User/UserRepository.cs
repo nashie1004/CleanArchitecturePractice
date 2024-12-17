@@ -1,4 +1,5 @@
 ﻿using Application.Contracts.Infra;
+using Application.Contracts.Infrastructure.Identity;
 using Application.Contracts.Infrastructure.Persistence.Repository;
 using Infra.Repository;
 using Infrastructure.Persistence.Data;
@@ -12,7 +13,7 @@ namespace Infrastructure.Persistence.Repository.User
 {
     public class UserRepository : BaseRepositoryPersistence<Domain.Entities.User>, IUserRepository
     {
-        public UserRepository(MainContext ctx) : base(ctx)
+        public UserRepository(MainContext ctx, IBaseRepositoryIdentityUserHttpContext httpContext) : base(ctx, httpContext)
         {
             
         }

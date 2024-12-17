@@ -1,4 +1,5 @@
-﻿using Application.Contracts.Infrastructure.Persistence.Repository;
+﻿using Application.Contracts.Infrastructure.Identity;
+using Application.Contracts.Infrastructure.Persistence.Repository;
 using AutoMapper;
 using MediatR;
 using System;
@@ -13,11 +14,16 @@ namespace Application.Features.Auth.Queries.Authenticate
     {
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
+        private readonly IBaseRepositoryIdentityUserHttpContext _identityUserHttpContext;
 
-        public AuthenticateHandler(IUserRepository userRepository, IMapper mapper)
+        public AuthenticateHandler(
+            IUserRepository userRepository, IMapper mapper
+            ,IBaseRepositoryIdentityUserHttpContext identityUserHttpContext
+            )
         {
             _userRepository = userRepository;
             _mapper = mapper;
+            _identityUserHttpContext = identityUserHttpContext;
         }
 
         public async Task<AuthenticateResponse> Handle(AuthenticateRequest req, CancellationToken ct)
@@ -26,10 +32,9 @@ namespace Application.Features.Auth.Queries.Authenticate
 
             try
             {
-                long userId = 0;
-                bool validId = long.TryParse(req.UserIdString, out userId);
+                long userId = _identityUserHttpContext.GetUserId();
 
-                if (string.IsNullOrEmpty(req.UserIdString) || !validId || userId == 0)
+                if (userId == 0)
                 {
                     retVal.IsSuccess = false;
                     retVal.ValidationErrors.Add("Unauthorized accesss");

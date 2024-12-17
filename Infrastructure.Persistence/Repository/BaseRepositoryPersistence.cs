@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Audit = Domain.Entities.Audit;
 using Infrastructure.Persistence.Data;
 using System.Linq.Expressions;
+using Application.Contracts.Infrastructure.Identity;
 
 namespace Infra.Repository
 {
@@ -20,10 +21,14 @@ namespace Infra.Repository
      where T : class
     {
         private readonly MainContext _context;
+        private readonly IBaseRepositoryIdentityUserHttpContext _identityUserHttpContext;
 
-        public BaseRepositoryPersistence(MainContext context)
+        public BaseRepositoryPersistence(
+            MainContext context, IBaseRepositoryIdentityUserHttpContext identityUserHttpContext
+        )
         {
             _context = context;
+            _identityUserHttpContext = identityUserHttpContext;
         }
 
         public async Task AddRecordAsync(T record)
@@ -59,33 +64,43 @@ namespace Infra.Repository
             return await _context.Set<T>().AsNoTracking().ToListAsync();
         }
 
-        public async Task<List<T>> GetAllRecordAsync(int pageSize = 15, int pageNo = 1)
+        public async Task<List<T>> GetAllRecordAsync(int pageSize = 15, int pageNo = 1, Expression<Func<T, bool>> filter = null)
         {
-            var list = await _context
-                .Set<T>()
-                .AsNoTracking()
+            IQueryable<T> query = _context.Set<T>().AsNoTracking(); 
+
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+
+            var list = await query
                 .Skip((pageNo - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
+            
             return list;
         }
 
-        public async Task<int> SaveRecordAsync(CancellationToken ct = default)
+        public async Task<int> SaveRecordAsync(CancellationToken ct = default, long suppliedUserId = 0)
         {
             int rowsAffected = 0;
             var entries = _context.ChangeTracker.Entries<AuditableEntity>().ToList();
+
+            // If the user isnt signed in yet httpcontext is 0 so use supplied userId
+            long httpContextUserId = _identityUserHttpContext.GetUserId();
+            long userId = httpContextUserId == 0 ? suppliedUserId : httpContextUserId;
 
             foreach (var entry in entries)
             {
                 if (entry.State == EntityState.Added)
                 {
                     entry.Entity.CreatedDate = DateTime.UtcNow;
-                    //entry.Entity.CreatedBy = 0;
+                    entry.Entity.CreatedBy = userId;
                 }
                 else if (entry.State == EntityState.Modified)
                 {
                     entry.Entity.LastUpdatedDate = DateTime.UtcNow;
-                    //entry.Entity.LastUpdatedBy = 0;
+                    entry.Entity.LastUpdatedBy = userId;
                 }
             }
 
@@ -105,7 +120,7 @@ namespace Infra.Repository
                 _context.Audits.Add(new Domain.Entities.Audit()
                 {
                     CreatedDate = DateTime.UtcNow
-                    //,CreatedBy = 0
+                    ,CreatedBy = userId
                     ,TableName = entry.Metadata.GetTableName() ?? string.Empty
                     ,TablePrimaryKey = GetPrimaryKey(entry)
                     ,Action = (short)EntityState.Added
@@ -123,7 +138,7 @@ namespace Infra.Repository
                     ,OldData = JsonConvert.SerializeObject(entry.OriginalValues.ToObject(), jsonSettings)
                     ,NewData = JsonConvert.SerializeObject(entry.Entity, jsonSettings)
                     ,LastUpdatedDate = DateTime.UtcNow
-                    //,LastUpdatedBy = 0
+                    ,LastUpdatedBy = userId
                 });
             }
 
@@ -136,7 +151,7 @@ namespace Infra.Repository
                     ,Action = (short)EntityState.Deleted
                     ,OldData = JsonConvert.SerializeObject(entry.Entity, jsonSettings)
                     ,LastUpdatedDate = DateTime.UtcNow
-                    //,LastUpdatedBy = 0
+                    ,LastUpdatedBy = userId
                 });
             }
 

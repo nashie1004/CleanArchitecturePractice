@@ -59,9 +59,7 @@ namespace API.Controllers
         [HttpGet("authenticate")]
         public async Task<IActionResult> Authenticate()
         {
-            var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            return Ok(await _mediator.Send(new AuthenticateRequest() { UserIdString = userIdString }));
+            return Ok(await _mediator.Send(new AuthenticateRequest()));
         }
 
         // TO TEST
