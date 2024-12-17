@@ -1,4 +1,5 @@
 ﻿using Domain.Common;
+using Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -21,6 +22,8 @@ namespace Domain.Entities
 
         [MaxLength(200)]
         public string? ImageUrl { get; set; }
+
+        public GeneratedBy GeneratedBy { get; set; }
 
         public long ExerciseCategoryId { get; set; }
         public ExerciseCategory ExerciseCategory { get; set; }

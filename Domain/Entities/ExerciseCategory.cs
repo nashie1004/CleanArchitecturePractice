@@ -1,4 +1,5 @@
 ﻿using Domain.Common;
+using Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -19,6 +20,8 @@ namespace Domain.Entities
 
         [MaxLength(300)]
         public string? Description { get; set; }
+
+        public GeneratedBy GeneratedBy { get; set; }
 
         public ICollection<Exercise> Exercises { get; set; } = new List<Exercise>();
     }
