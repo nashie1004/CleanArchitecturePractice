@@ -54,7 +54,10 @@ const Register = () => {
         formState: { errors, isSubmitting }
     } = useForm<FormFields>({
         defaultValues: {
-
+            username: "testOnlySir4",
+            email: "test@gmail.com",
+            password: "A@@__!!!aazz00_asd",
+            repeatPassword: "A@@__!!!aazz00_asd",
         },
         resolver: zodResolver(schema)
     })

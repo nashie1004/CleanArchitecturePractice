@@ -98,7 +98,7 @@ namespace Infrastructure.Identity.Repository
                 Action = UserAuthAction.Register,
                 CreatedBy = newBaseUser.UserId
             });
-            await _userAuthHistoryRepository.SaveRecordAsync();
+            await _userAuthHistoryRepository.SaveRecordAsync(suppliedUserId: newBaseUser.UserId);
 
             return (true, new List<string>(), newIdentityUser.Id);
         }
