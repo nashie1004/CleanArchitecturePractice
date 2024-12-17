@@ -1,49 +1,93 @@
 import { cilInfo, cilWarning } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
-import { CForm, CCol, CFormInput, CFormSelect, CFormCheck, CButton, CCard, CCardBody, CRow, CAlert } from "@coreui/react";
+import { CForm, CCol, CFormInput, CFormSelect, CFormCheck, CButton, CCard, CCardBody, CRow, CAlert, CFormTextarea } from "@coreui/react";
+import { z } from "zod";
+import ExerciseCategoryService from "../../Services/ExerciseCategoryService";
+import { toast, ToastContainer } from "react-toastify";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from 'react-hook-form';
+import useFirstRender from "../../Hooks/useFirstRender";
+import { useNavigate } from "react-router";
+
+const schema = z.object({
+    name: z.string().min(1, "Name must not be empty"),
+    description: z.string().min(1, "Description must not be empty")
+});
+
+type FormFields = z.infer<typeof schema>;
+
+const exerciseCategoryService = new ExerciseCategoryService();
 
 function ExerciseCategoryForm() {
+    const firstRender = useFirstRender();
+    const navigate = useNavigate();
+
+    const {
+        register, handleSubmit, setError,
+        formState: { errors, isSubmitting }
+    } = useForm<FormFields>({
+        defaultValues: {
+           
+        },
+        resolver: zodResolver(schema)
+    })
+
+    async function submitForm(data: FormFields) {
+        const response = await exerciseCategoryService.submitForm({
+            name: data.name
+            , description: data.description
+        });
+
+        if (!response.isOk) {
+            toast(response.message, { type: "error" })
+            return;
+        }
+
+        toast("Successfully created. Redirecting to Exercise Category List...", { type: "success" })
+        setTimeout(() => {
+            navigate("/exercise/category/list")
+        }, 3000)
+    }
+
     return (
         <CRow>
             <CCol xs={12}>
                 <CCard>
                     <CCardBody>
-                        <CForm className="row g-3">
+                        <ToastContainer theme="dark" autoClose={3000} />
+                        <CForm className="row g-3" onSubmit={handleSubmit(submitForm)}>
                             <CCol xs={12}>
                                 <CAlert color="warning" className="d-flex align-items-center">
                                     <CIcon icon={cilInfo} className="flex-shrink-0 me-2" width={24} height={24} />
-                                    <div>Exercice categories will be marked as non-system generated</div>
+                                    <div>Exercise categories created will be marked as user-generated.</div>
                                 </CAlert>
                             </CCol>
-                            <CCol md={6}>
-                                <CFormInput type="email" id="inputEmail4" label="Email" />
+                            <CCol md={12}>
+                                <CFormInput
+                                    type="name"
+                                    id="name"
+                                    label="Name"
+                                    feedbackInvalid={errors.name ? errors.name.message : ""}
+                                    invalid={errors.name ? true : false}
+                                    valid={!errors.name && !firstRender ? true : false}
+                                    {...register("name")}
+                                />
                             </CCol>
-                            <CCol md={6}>
-                                <CFormInput type="password" id="inputPassword4" label="Password" />
-                            </CCol>
+                           
                             <CCol xs={12}>
-                                <CFormInput id="inputAddress" label="Address" placeholder="1234 Main St" />
+                                <CFormTextarea
+                                    label="Description"
+                                    id="description"
+                                    style={{ height: '100px' }}
+                                    feedbackInvalid={errors.description ? errors.description.message : ""}
+                                    invalid={errors.description ? true : false}
+                                    valid={!errors.description && !firstRender ? true : false}
+                                    {...register("description")}
+                                ></CFormTextarea>
                             </CCol>
-                            <CCol xs={12}>
-                                <CFormInput id="inputAddress2" label="Address 2" placeholder="Apartment, studio, or floor" />
-                            </CCol>
-                            <CCol md={6}>
-                                <CFormInput id="inputCity" label="City" />
-                            </CCol>
-                            <CCol md={4}>
-                                <CFormSelect id="inputState" label="State">
-                                    <option>Choose...</option>
-                                    <option>...</option>
-                                </CFormSelect>
-                            </CCol>
-                            <CCol md={2}>
-                                <CFormInput id="inputZip" label="Zip" />
-                            </CCol>
-                            <CCol xs={12}>
-                                <CFormCheck type="checkbox" id="gridCheck" label="Check me out" />
-                            </CCol>
-                            <CCol xs={12}>
-                                <CButton color="primary" type="submit">Sign in</CButton>
+                           
+                            <CCol xs={12} className="">
+                                <CButton color="primary" type="submit">Submit</CButton>
                             </CCol>
                         </CForm>
                     </CCardBody>

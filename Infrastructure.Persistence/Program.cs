@@ -10,6 +10,7 @@ using Infra.Repository.Workout;
 using Infrastructure.Persistence.Data;
 using Application.Contracts.Infrastructure.Persistence.Repository;
 using Infrastructure.Persistence.Repository.User;
+using Infrastructure.Persistence.Repository.Exercise;
 
 namespace Infra
 {
@@ -27,6 +28,7 @@ namespace Infra
             services.AddScoped(typeof(IWorkoutDetailRepository), typeof(WorkoutDetailRepository));
             services.AddScoped(typeof(IUserRepository), typeof(UserRepository));
             services.AddScoped(typeof(IUserAuthHistoryRepository), typeof(UserAuthHistoryRepository));
+            services.AddScoped(typeof(IExerciseCategoryRepository), typeof(ExerciseCategoryRepository));
 
             return services;
         }
