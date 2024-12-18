@@ -9,6 +9,7 @@ import { useForm } from 'react-hook-form';
 import useFirstRender from "../../Hooks/useFirstRender";
 import { useNavigate } from "react-router";
 import { useEffect, useState } from "react";
+import ExerciseService from "../../Services/ExerciseService";
 
 const schema = z.object({
     name: z.string().min(1, "Name must not be empty"),
@@ -19,6 +20,7 @@ const schema = z.object({
 type FormFields = z.infer<typeof schema>;
 
 const exerciseCategoryService = new ExerciseCategoryService();
+const exerciseService = new ExerciseService();
 
 
 export default function ExerciseForm() {
@@ -41,11 +43,12 @@ export default function ExerciseForm() {
 
     async function submitForm(data: FormFields) {
         console.log(data)
-        return;
 
-        const response = await exerciseCategoryService.submitForm({
+        const response = await exerciseService.submitForm({
             name: data.name
             , description: data.description
+            , exerciseCategoryId: Number(data.category)
+            , imageUrl: ""
         });
 
         if (!response.isOk) {
@@ -53,10 +56,7 @@ export default function ExerciseForm() {
             return;
         }
 
-        toast("Successfully created. Redirecting to Exercise Category List...", { type: "success" })
-        setTimeout(() => {
-            navigate("/exercise/category/list")
-        }, 3000)
+        toast("Successfully created. Go to Exercise list to see newly created record.", { type: "success" })
     }
 
     async function categoryDropdown() {

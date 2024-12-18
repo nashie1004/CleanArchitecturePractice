@@ -1,4 +1,6 @@
 ﻿using Application.Contracts.Infra.Todo;
+using Domain.Entities;
+using Domain.Enums;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -28,6 +30,8 @@ namespace Application.Features.Exercise.Exercise.Commands.AddExercise
                     Description = req.Description,
                     Name = req.Name,
                     ImageUrl = req.ImageUrl,
+                    ExerciseCategoryId = req.ExerciseCategoryId,
+                    GeneratedBy = GeneratedBy.User
                 });
 
                 retVal.RowsAffected = await _exerciseRepository.SaveRecordAsync(ct);

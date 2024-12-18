@@ -1,6 +1,6 @@
 import { cilInfo, cilWarning } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
-import { CForm, CCol, CFormInput, CFormSelect, CFormCheck, CButton, CCard, CCardBody, CRow, CAlert, CFormTextarea } from "@coreui/react";
+import { CForm, CCol, CFormInput, CFormSelect, CFormCheck, CButton, CCard, CCardBody, CRow, CAlert, CFormTextarea, CSpinner } from "@coreui/react";
 import { z } from "zod";
 import ExerciseCategoryService from "../../Services/ExerciseCategoryService";
 import { toast, ToastContainer } from "react-toastify";
@@ -43,11 +43,10 @@ function ExerciseCategoryForm() {
             return;
         }
 
-        toast("Successfully created. Redirecting to Exercise Category List...", { type: "success" })
-        setTimeout(() => {
-            navigate("/exercise/category/list")
-        }, 3000)
+        toast("Successfully created. Go to category list to see newly added category.", { type: "success" })
     }
+
+    const loading = isSubmitting;
 
     return (
         <CRow>
@@ -87,7 +86,13 @@ function ExerciseCategoryForm() {
                             </CCol>
                            
                             <CCol xs={12} className="">
-                                <CButton color="primary" type="submit">Submit</CButton>
+                                <CButton
+                                    color="primary"
+                                    type="submit"
+                                    disabled={loading}
+                                >
+                                    {loading ? <CSpinner /> : "Create Submit"}
+                                </CButton>
                             </CCol>
                         </CForm>
                     </CCardBody>

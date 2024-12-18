@@ -12,5 +12,6 @@ namespace Application.Features.Exercise.Exercise.Commands.AddExercise
         public string Name { get; set; }
         public string Description { get; set; }
         public string ImageUrl { get; set; }
+        public long ExerciseCategoryId { get; set; }
     }
 }
