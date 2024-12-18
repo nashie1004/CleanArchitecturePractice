@@ -119,12 +119,12 @@ namespace Infra.Repository
             {
                 _context.Audits.Add(new Domain.Entities.Audit()
                 {
-                    CreatedDate = DateTime.UtcNow
-                    ,CreatedBy = userId
-                    ,TableName = entry.Metadata.GetTableName() ?? string.Empty
+                    TableName = entry.Metadata.GetTableName() ?? string.Empty
                     ,TablePrimaryKey = GetPrimaryKey(entry)
                     ,Action = (short)EntityState.Added
                     ,NewData = JsonConvert.SerializeObject(entry.Entity, jsonSettings)
+                    ,CreatedDate = DateTime.UtcNow
+                    ,CreatedBy = userId
                 });
             }
 
@@ -137,8 +137,8 @@ namespace Infra.Repository
                     ,Action = (short)EntityState.Modified
                     ,OldData = JsonConvert.SerializeObject(entry.OriginalValues.ToObject(), jsonSettings)
                     ,NewData = JsonConvert.SerializeObject(entry.Entity, jsonSettings)
-                    ,LastUpdatedDate = DateTime.UtcNow
-                    ,LastUpdatedBy = userId
+                    ,CreatedDate = DateTime.UtcNow
+                    ,CreatedBy = userId
                 });
             }
 
@@ -150,8 +150,8 @@ namespace Infra.Repository
                     ,TablePrimaryKey = GetPrimaryKey(entry)
                     ,Action = (short)EntityState.Deleted
                     ,OldData = JsonConvert.SerializeObject(entry.Entity, jsonSettings)
-                    ,LastUpdatedDate = DateTime.UtcNow
-                    ,LastUpdatedBy = userId
+                    ,CreatedDate = DateTime.UtcNow
+                    ,CreatedBy = userId
                 });
             }
 

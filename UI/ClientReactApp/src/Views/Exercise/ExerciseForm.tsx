@@ -8,10 +8,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from 'react-hook-form';
 import useFirstRender from "../../Hooks/useFirstRender";
 import { useNavigate } from "react-router";
+import { useEffect, useState } from "react";
 
 const schema = z.object({
     name: z.string().min(1, "Name must not be empty"),
-    description: z.string().min(1, "Description must not be empty")
+    description: z.string().min(1, "Description must not be empty"),
+    category: z.string().min(1, "Category must not be empty")
 });
 
 type FormFields = z.infer<typeof schema>;
@@ -21,6 +23,10 @@ const exerciseCategoryService = new ExerciseCategoryService();
 export default function ExerciseForm() {
     const firstRender = useFirstRender();
     const navigate = useNavigate();
+    const [category, setCategory] = useState({
+        isLoading: false,
+        rowData: [""]
+    })
 
     const {
         register, handleSubmit, setError,
@@ -33,7 +39,7 @@ export default function ExerciseForm() {
     })
 
     async function submitForm(data: FormFields) {
-        alert("todo")
+        console.log(data)
         return;
 
         const response = await exerciseCategoryService.submitForm({
@@ -51,6 +57,19 @@ export default function ExerciseForm() {
             navigate("/exercise/category/list")
         }, 3000)
     }
+
+    async function categoryDropdown() {
+        const res = await exerciseCategoryService.getMany({
+            pageSize: ,
+            pageNumber: number,
+            sortBy: string,
+            filters: string
+        });
+    }
+
+    useEffect(() => {
+        categoryDropdown();
+    }, [])
 
     return (
         <CRow>
@@ -77,7 +96,14 @@ export default function ExerciseForm() {
                                 />
                             </CCol>
                             <CCol md={6}>
-                                <CFormSelect id="inputState" label="Category">
+                                <CFormSelect
+                                    id="category"
+                                    label="Category"
+                                    feedbackInvalid={errors.category ? errors.category.message : ""}
+                                    invalid={errors.category ? true : false}
+                                    valid={!errors.category && !firstRender ? true : false}
+                                    {...register("category") }
+                                >
                                     <option>Choose...</option>
                                     <option>...</option>
                                 </CFormSelect>

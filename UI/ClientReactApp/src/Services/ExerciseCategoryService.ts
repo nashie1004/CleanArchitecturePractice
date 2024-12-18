@@ -1,4 +1,4 @@
-import BaseService from "./BaseService";
+import BaseService, { GenericListRequest } from "./BaseService";
 
 export default class ExerciseCategoryService extends BaseService {
     constructor() {
@@ -7,6 +7,11 @@ export default class ExerciseCategoryService extends BaseService {
 
     async submitForm(data: any) {
         const response = await this.basePost("/api/ExerciseCategory/addExerciseCategory", data);
+        return response;
+    }
+
+    async getMany(listParams: GenericListRequest) {
+        const response = await this.baseGetList("/api/ExerciseCategory/getMany", listParams);
         return response;
     }
 }
