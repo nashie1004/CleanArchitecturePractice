@@ -77,6 +77,10 @@ namespace Infrastructure.Identity.Repository
 
             // 2. Save to Main User Table
             await _userRepository.AddRecordAsync(newBaseUser);
+            await _userRepository.SaveRecordAsync();
+
+            newBaseUser.CreatedBy = newBaseUser.UserId;
+
             await _userRepository.SaveRecordAsync(suppliedUserId: newBaseUser.UserId);
 
             // 3. Save to Audit Table
@@ -98,7 +102,7 @@ namespace Infrastructure.Identity.Repository
                 Action = UserAuthAction.Register,
                 CreatedBy = newBaseUser.UserId
             });
-            await _userAuthHistoryRepository.SaveRecordAsync();
+            await _userAuthHistoryRepository.SaveRecordAsync(suppliedUserId: newBaseUser.UserId);
 
             return (true, new List<string>(), newIdentityUser.Id);
         }
