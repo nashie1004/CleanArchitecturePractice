@@ -1,12 +1,15 @@
 ﻿using Application.Features.Exercise.Exercise.Commands.AddExercise;
 using Application.Features.Exercise.ExerciseCategory.Commands.Add;
+using Application.Features.Exercise.ExerciseCategory.Queries.GetDropdown;
 using Application.Features.Exercise.ExerciseCategory.Queries.GetMany;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ExerciseCategoryController : ControllerBase
@@ -34,7 +37,7 @@ namespace API.Controllers
 
         [Route("getDropdown")]
         [HttpGet]
-        public async Task<IActionResult> GetDropdown([FromQuery] GetManyExerciseCategoryRequest req)
+        public async Task<IActionResult> GetDropdown([FromQuery] GetDropdownExerciseCategoryRequest req)
         {
             return Ok(await mediator_.Send(req));
         }

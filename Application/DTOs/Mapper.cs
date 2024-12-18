@@ -20,6 +20,7 @@ namespace Application.DTOs
             CreateMap<ExerciseCategory, ExerciseCategoryDTO>()
                 .ForMember(dest => dest.GeneratedBy, opt => opt.MapFrom(src => src.GeneratedBy.ToString()))
                 ;
+            CreateMap<ExerciseCategory, ExerciseCategoryDropdownDTO>();
         }
     }
 }

@@ -14,4 +14,14 @@ export default class ExerciseCategoryService extends BaseService {
         const response = await this.baseGetList("/api/ExerciseCategory/getMany", listParams);
         return response;
     }
+
+    async getDropdown() {
+        const response = await this.baseGetList("/api/ExerciseCategory/getDropdown", {
+            pageSize: 1,
+            pageNumber: 15,
+            sortBy: "",
+            filters: ""
+        });
+        return response;
+    }
 }

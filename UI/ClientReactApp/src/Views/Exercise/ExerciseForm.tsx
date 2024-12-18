@@ -1,6 +1,6 @@
 import { cilInfo, cilWarning } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
-import { CForm, CCol, CFormInput, CFormSelect, CFormCheck, CButton, CCard, CCardBody, CRow, CAlert, CFormTextarea } from "@coreui/react";
+import { CForm, CCol, CFormInput, CFormSelect, CFormCheck, CButton, CCard, CCardBody, CRow, CAlert, CFormTextarea, CSpinner } from "@coreui/react";
 import { z } from "zod";
 import ExerciseCategoryService from "../../Services/ExerciseCategoryService";
 import { toast, ToastContainer } from "react-toastify";
@@ -20,12 +20,13 @@ type FormFields = z.infer<typeof schema>;
 
 const exerciseCategoryService = new ExerciseCategoryService();
 
+
 export default function ExerciseForm() {
     const firstRender = useFirstRender();
     const navigate = useNavigate();
     const [category, setCategory] = useState({
         isLoading: false,
-        rowData: [""]
+        rowData: [{ exerciseCategoryId: 0, name: "" }]
     })
 
     const {
@@ -59,17 +60,24 @@ export default function ExerciseForm() {
     }
 
     async function categoryDropdown() {
-        const res = await exerciseCategoryService.getMany({
-            pageSize: ,
-            pageNumber: number,
-            sortBy: string,
-            filters: string
-        });
+        setCategory(prev => ({...prev, isLoading: true}))
+
+        const res = await exerciseCategoryService.getDropdown();
+
+        if (!res.isOk) {
+            toast(res.message, { type: "error" })
+            setCategory(prev => ({...prev, isLoading: false }))
+            return;
+        }
+
+        setCategory({ rowData: res.data.items, isLoading: false })
     }
 
     useEffect(() => {
         categoryDropdown();
     }, [])
+
+    const loading = category.isLoading;
 
     return (
         <CRow>
@@ -102,10 +110,11 @@ export default function ExerciseForm() {
                                     feedbackInvalid={errors.category ? errors.category.message : ""}
                                     invalid={errors.category ? true : false}
                                     valid={!errors.category && !firstRender ? true : false}
-                                    {...register("category") }
+                                    {...register("category")}
                                 >
-                                    <option>Choose...</option>
-                                    <option>...</option>
+                                    {category.rowData.map((item, idx) => {
+                                        return <option key={idx} value={item.exerciseCategoryId}>{item.name}</option>
+                                    })}
                                 </CFormSelect>
                             </CCol>
 
@@ -122,7 +131,13 @@ export default function ExerciseForm() {
                             </CCol>
 
                             <CCol xs={12} className="">
-                                <CButton color="primary" type="submit">Submit</CButton>
+                                <CButton
+                                    color="primary"
+                                    type="submit"
+                                    disabled={loading}
+                                >
+                                    {loading ? <CSpinner /> : "Create Submit"}
+                                </CButton>
                             </CCol>
                         </CForm>
                     </CCardBody>
