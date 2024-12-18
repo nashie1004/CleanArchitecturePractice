@@ -88,6 +88,9 @@ export default function ExerciseCategoryList() {
                             }}
                         />
                     </CCol>
+                    <CCol xs="auto" className="d-flex align-items-center">
+                        <CInputGroupText >Page: {tableState.pageNumber}</CInputGroupText>
+                    </CCol>
                     <CCol xs="auto" className="">
                         <CButton
                             color="secondary"

@@ -91,6 +91,9 @@ export default function Audit(){
                 }))
             }}
            />
+        </CCol>
+          <CCol xs="auto" className="d-flex align-items-center">
+            <CInputGroupText >Page: {tableState.pageNumber}</CInputGroupText>
           </CCol>
           <CCol xs="auto" className="">
             <CButton 
@@ -116,12 +119,6 @@ export default function Audit(){
               }}  
              >
               <CIcon icon={cilCaretRight} />
-            </CButton>
-          </CCol>
-          <CCol xs="auto">
-            <CButton color="secondary" >
-              <span className="">Add Item</span>
-              <CIcon icon={cilPlus} />
             </CButton>
           </CCol>
         </CRow>

@@ -37,7 +37,7 @@ const AppHeader = () => {
     const { colorMode, setColorMode } = useColorModes('coreui-free-react-admin-template-theme')
     const { setVisible } = useContext(sidebarContext);
     const { setTheme } = useTheme();
-    const { logout } = useAuth();
+    const { logout, user } = useAuth();
     
     async function handleLogout() {
         const response = await authService.logout();
@@ -120,22 +120,24 @@ const AppHeader = () => {
                     </li>
                     <CDropdown variant="nav-item">
                     <CDropdownToggle placement="bottom-end" className="py-0 pe-0" caret={false}>
-                        <CAvatar color="primary" size='md' textColor="white">CUI</CAvatar>
+                        <CAvatar color="primary" size='md' textColor="white">
+                            {user?.username[0].toUpperCase() }    
+                        </CAvatar>
                     </CDropdownToggle>
-      <CDropdownMenu className="pt-0" placement="bottom-end">
-        <CDropdownHeader className="bg-body-secondary fw-semibold mb-2">Settings</CDropdownHeader>
-        <CDropdownItem style={{ cursor: "pointer" }}>
-          <NavLink to="/profile" style={{textDecoration: "none", color: "inherit", display: "block" ,width: "100%"}}>
-            <CIcon icon={cilBell} className="me-2" />
-             Profile
-          </NavLink>
-        </CDropdownItem>
-        <CDropdownItem onClick={handleLogout} style={{ cursor: "pointer" }}>
-          <CIcon icon={cilLockLocked} className="me-2" />
-          Log out
-        </CDropdownItem>
-      </CDropdownMenu>
-    </CDropdown>
+                      <CDropdownMenu className="pt-0" placement="bottom-end">
+                        <CDropdownHeader className="bg-body-secondary fw-semibold mb-2">Settings</CDropdownHeader>
+                        <CDropdownItem style={{ cursor: "pointer" }}>
+                          <NavLink to="/profile" style={{textDecoration: "none", color: "inherit", display: "block" ,width: "100%"}}>
+                            <CIcon icon={cilBell} className="me-2" />
+                             Profile
+                          </NavLink>
+                        </CDropdownItem>
+                        <CDropdownItem onClick={handleLogout} style={{ cursor: "pointer" }}>
+                          <CIcon icon={cilLockLocked} className="me-2" />
+                          Log out
+                        </CDropdownItem>
+                      </CDropdownMenu>
+                    </CDropdown>
                 </CHeaderNav>
             </CContainer>
             <CContainer className="px-4" fluid>
