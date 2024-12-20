@@ -20,7 +20,6 @@ namespace Domain.Entities
         public string? Notes { get; set; }
         public DateTime StartDateTime { get; set; }
         public DateTime EndDateTime { get; set; }
-        public DurationMeasurement DurationMeasurement { get; set; } = DurationMeasurement.Minutes;
         public ICollection<WorkoutDetail> WorkoutDetails { get; set; } = new List<WorkoutDetail>(); 
     }
 }

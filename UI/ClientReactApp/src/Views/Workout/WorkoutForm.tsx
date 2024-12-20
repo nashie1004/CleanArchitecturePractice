@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { act, useEffect, useReducer, useState } from 'react'
 import {
   CButton,
   CCard,
@@ -15,6 +15,7 @@ import {
   CModalFooter,
   CModalHeader,
   CModalTitle,
+  CProgress,
   CRow,
   CTable,
   CTableBody,
@@ -27,29 +28,83 @@ import Datetime from "react-datetime";
 import { cilInput, cilPencil, cilPlus, cilTrash } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
 import { WeightMeasurement } from '../../Utils/enums';
+import ExerciseService from '../../Services/ExerciseService';
+import { toast } from 'react-toastify';
+
+interface IFormState{
+  workoutHeaderId: number
+  title: string
+  notes: string
+  startDateTime: Date
+  endDateTime: Date
+  workoutDetails: IDetail[]
+}
 
 interface IDetail{
   tempRowId: number
+  workoutDetailId: number
+  exerciseId: number
   sets: number
   reps: number
   weight: number
   weightMeasurementId: number
   remarks: string
-  exerciseId: number
-  workoutHeaderId: number
-  workoutDetailId: number
 }
+
+type IAction = { type: "setDetails", payload: IDetail[] } 
+
+function formReducer(state: IFormState, action: IAction){
+  switch(action.type){
+    case "setDetails":
+      return { ...state, workoutDetails: [] }
+    default:
+      return state;
+  }
+}
+
+const exerciseService = new ExerciseService();
 
 export default function WorkoutForm(){
   const [modalState, setModalState] = useState({
     show: false
   })
-  const [details, setDetails] = useState<IDetail[]>([
-    { tempRowId: 1, sets: 3, reps: 30, weight: 40, weightMeasurementId: 1, remarks: "remarks 1", exerciseId: 0, workoutDetailId: 0, workoutHeaderId: 0 }
-    ,{ tempRowId: 2, sets: 3, reps: 30, weight: 40, weightMeasurementId: 2, remarks: "remarks 2", exerciseId: 0, workoutDetailId: 0, workoutHeaderId: 0 }
-    ,{ tempRowId: 3, sets: 3, reps: 30, weight: 40, weightMeasurementId: 2, remarks: "remarks 2", exerciseId: 0, workoutDetailId: 0, workoutHeaderId: 0 }
-    ,{ tempRowId: 4, sets: 3, reps: 30, weight: 40, weightMeasurementId: 1, remarks: "remarks 2", exerciseId: 0, workoutDetailId: 0, workoutHeaderId: 0 }
-  ]);
+
+  const [exerciseDropdown, setExerciseDropdown] = useState({
+    isLoading: false,
+    items: [{ exerciseId: 0, name: "" }]
+  });
+
+  const [formState, formDispatch] = useReducer(formReducer, {
+    workoutHeaderId: 0,
+    title: "",
+    notes: "",
+    startDateTime: new Date(),
+    endDateTime: new Date(),
+    workoutDetails: [
+      { tempRowId: 1, sets: 3, reps: 30, weight: 40, weightMeasurementId: 1, remarks: "remarks 1", exerciseId: 0, workoutDetailId: 0 }
+      ,{ tempRowId: 2, sets: 3, reps: 30, weight: 40, weightMeasurementId: 2, remarks: "remarks 2", exerciseId: 0, workoutDetailId: 0,  }
+      ,{ tempRowId: 3, sets: 3, reps: 30, weight: 40, weightMeasurementId: 2, remarks: "remarks 2", exerciseId: 0, workoutDetailId: 0,  }
+      ,{ tempRowId: 4, sets: 3, reps: 30, weight: 40, weightMeasurementId: 1, remarks: "remarks 2", exerciseId: 0, workoutDetailId: 0, }
+    ]
+  })
+
+  async function getExerciseDropdown(){
+    setExerciseDropdown(prev => ({ ...prev, isLoading: true }))
+    const res = await exerciseService.getDropdown();
+    
+    if (!res.isOk){
+      toast(res.message, { type: "error" })
+      return;
+    }
+
+    setExerciseDropdown({ isLoading: false, items: res.data.items })
+  }
+
+  useEffect(() => {
+    getExerciseDropdown();
+  }, [])
+
+  const loading = false;
 
   return (
     <CRow>
@@ -107,7 +162,7 @@ export default function WorkoutForm(){
                       </CTableRow>
                     </CTableHead>
                     <CTableBody>
-                      {details.map((item, idx) => {
+                      {formState.workoutDetails.map((item, idx) => {
                         return <CTableRow key={idx}>
                             <CTableHeaderCell className='d-flex justify-content-center' scope='row'>
                               <div 
@@ -118,7 +173,12 @@ export default function WorkoutForm(){
                               </div>
                               <div 
                                 style={{ cursor: "pointer"}}
-                                onClick={() => setDetails(prev => (prev.filter(i => i.tempRowId !== item.tempRowId)))}
+                                onClick={() => {
+                                  formDispatch({ 
+                                    type: "setDetails", 
+                                    payload: formState.workoutDetails.filter(i => i.tempRowId !== item.tempRowId) 
+                                  })
+                                }}
                               >
                                 <CIcon className="text-danger" icon={cilTrash} size="lg"/>
                               </div>
@@ -150,8 +210,9 @@ export default function WorkoutForm(){
                 <CForm className="row g-3">
                   <CCol md={8}>
                     <CFormSelect label="Exercise">
-                      <option>Choose...</option>
-                      <option>...</option>
+                      {exerciseDropdown.items.map((item, idx) => {
+                        return <option key={idx} value={item.exerciseId}>{item.name}</option>
+                      })}
                     </CFormSelect>
                   </CCol>
                   <CCol md={4}>

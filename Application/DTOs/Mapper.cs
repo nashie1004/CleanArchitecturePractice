@@ -21,6 +21,7 @@ namespace Application.DTOs
                 .ForMember(dest => dest.GeneratedBy, opt => opt.MapFrom(src => src.GeneratedBy.ToString()))
                 ;
             CreateMap<ExerciseCategory, ExerciseCategoryDropdownDTO>();
+            CreateMap<Exercise, ExerciseDTO>();
         }
     }
 }

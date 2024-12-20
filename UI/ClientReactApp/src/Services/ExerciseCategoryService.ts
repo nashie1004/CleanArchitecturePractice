@@ -17,8 +17,8 @@ export default class ExerciseCategoryService extends BaseService {
 
     async getDropdown() {
         const response = await this.baseGetList("/api/ExerciseCategory/getDropdown", {
-            pageSize: 1,
-            pageNumber: 15,
+            pageSize: 0,
+            pageNumber: 0,
             sortBy: "",
             filters: ""
         });
