@@ -39,7 +39,6 @@ namespace Application.Features.Workout.WorkoutHeader.Commands.AddWorkoutHeader
                 await _workoutHeaderRepository.AddRecordAsync(new Domain.Entities.WorkoutHeader()
                 {
                     Title = req.WorkoutHeader.Title,
-                    Duration = req.WorkoutHeader.Duration,
                     WorkoutDetails = workoutDetails,
                 });
                 await _workoutHeaderRepository.SaveRecordAsync(ct);

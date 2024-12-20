@@ -11,6 +11,7 @@ import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community';
 import "ag-grid-community/styles/ag-theme-quartz.css"
 import ThemeContext from './Context/ThemeContext'
 import "react-big-calendar/lib/css/react-big-calendar.css"
+import "react-datetime/css/react-datetime.css";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 

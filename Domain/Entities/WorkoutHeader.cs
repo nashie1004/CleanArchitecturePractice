@@ -18,7 +18,8 @@ namespace Domain.Entities
         [Required]
         public string Title { get; set; }
         public string? Notes { get; set; }
-        public decimal? Duration { get; set; }
+        public DateTime StartDateTime { get; set; }
+        public DateTime EndDateTime { get; set; }
         public DurationMeasurement DurationMeasurement { get; set; } = DurationMeasurement.Minutes;
         public ICollection<WorkoutDetail> WorkoutDetails { get; set; } = new List<WorkoutDetail>(); 
     }

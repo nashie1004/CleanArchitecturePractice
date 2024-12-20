@@ -10,10 +10,18 @@ import {
   CFormInput,
   CFormLabel,
   CFormSelect,
+  CFormTextarea,
   CInputGroup,
   CInputGroupText,
   CRow,
+  CTable,
+  CTableBody,
+  CTableDataCell,
+  CTableHead,
+  CTableHeaderCell,
+  CTableRow,
 } from '@coreui/react'
+import Datetime from "react-datetime";
 
 export default function WorkoutForm(){
   return (
@@ -21,47 +29,69 @@ export default function WorkoutForm(){
       <CCol xs={12}>
         <CCard>
             <CCardBody>
-            <p className="text-body-secondary small">
-              More complex layouts can also be created with the grid system.
-            </p>
+              <CCol xs={12}>
+                <p className="text-body-secondary small">Workout Header</p>
+              </CCol>
               <CForm className="row g-3">
-                <CCol md={6}>
-                  <CFormLabel htmlFor="inputEmail4">Email</CFormLabel>
-                  <CFormInput type="email" id="inputEmail4" />
+                <CCol xs={6}>
+                  <CFormLabel htmlFor="title">Name or Title</CFormLabel>
+                  <CFormInput id="title" placeholder="" />
                 </CCol>
-                <CCol md={6}>
-                  <CFormLabel htmlFor="inputPassword4">Password</CFormLabel>
-                  <CFormInput type="password" id="inputPassword4" />
+                <CCol md={3}>
+                  <CFormLabel>Start Date Time</CFormLabel>
+                  <Datetime inputProps={{ placeholder: "MM/DD/YYYY HH:MM" }} />
                 </CCol>
-                <CCol xs={12}>
-                  <CFormLabel htmlFor="inputAddress">Address</CFormLabel>
-                  <CFormInput id="inputAddress" placeholder="1234 Main St" />
-                </CCol>
-                <CCol xs={12}>
-                  <CFormLabel htmlFor="inputAddress2">Address 2</CFormLabel>
-                  <CFormInput id="inputAddress2" placeholder="Apartment, studio, or floor" />
-                </CCol>
-                <CCol md={6}>
-                  <CFormLabel htmlFor="inputCity">City</CFormLabel>
-                  <CFormInput id="inputCity" />
-                </CCol>
-                <CCol md={4}>
-                  <CFormLabel htmlFor="inputState">State</CFormLabel>
-                  <CFormSelect id="inputState">
-                    <option>Choose...</option>
-                    <option>...</option>
-                  </CFormSelect>
-                </CCol>
-                <CCol md={2}>
-                  <CFormLabel htmlFor="inputZip">Zip</CFormLabel>
-                  <CFormInput id="inputZip" />
+                <CCol md={3}>
+                  <CFormLabel>End Date Time</CFormLabel>
+                  <Datetime inputProps={{ placeholder: "MM/DD/YYYY HH:MM" }} />
                 </CCol>
                 <CCol xs={12}>
-                  <CFormCheck type="checkbox" id="gridCheck" label="Check me out" />
+                  <CFormTextarea
+                    id="notes"
+                    label="Notes"
+                    rows={2}
+                  ></CFormTextarea>
+                </CCol>
+                <CCol xs={12}>
+                  <p className="text-body-secondary small">Workout Details</p>
+                </CCol>
+                <CCol xs={12}>
+                  <CTable>
+                    <CTableHead>
+                      <CTableRow>
+                        <CTableHeaderCell scope="col">#</CTableHeaderCell>
+                        <CTableHeaderCell scope="col">Exercise</CTableHeaderCell>
+                        <CTableHeaderCell scope="col">Sets</CTableHeaderCell>
+                        <CTableHeaderCell scope="col">Reps</CTableHeaderCell>
+                        <CTableHeaderCell scope="col">Weight</CTableHeaderCell>
+                        <CTableHeaderCell scope="col">Measurement</CTableHeaderCell>
+                        <CTableHeaderCell scope="col">Remarks</CTableHeaderCell>
+                      </CTableRow>
+                    </CTableHead>
+                    <CTableBody>
+                      <CTableRow>
+                        <CTableHeaderCell scope="row">1</CTableHeaderCell>
+                        <CTableDataCell>Mark</CTableDataCell>
+                        <CTableDataCell>Otto</CTableDataCell>
+                        <CTableDataCell>@mdo</CTableDataCell>
+                      </CTableRow>
+                      <CTableRow>
+                        <CTableHeaderCell scope="row">2</CTableHeaderCell>
+                        <CTableDataCell>Jacob</CTableDataCell>
+                        <CTableDataCell>Thornton</CTableDataCell>
+                        <CTableDataCell>@fat</CTableDataCell>
+                      </CTableRow>
+                      <CTableRow>
+                        <CTableHeaderCell scope="row">3</CTableHeaderCell>
+                        <CTableDataCell colSpan={2}>Larry the Bird</CTableDataCell>
+                        <CTableDataCell>@twitter</CTableDataCell>
+                      </CTableRow>
+                    </CTableBody>
+                  </CTable>
                 </CCol>
                 <CCol xs={12}>
                   <CButton color="primary" type="submit">
-                    Sign in
+                    Create
                   </CButton>
                 </CCol>
               </CForm>

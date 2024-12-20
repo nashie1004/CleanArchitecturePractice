@@ -20,6 +20,7 @@ namespace Domain.Entities
         public int Reps { get; set; }
 
         public decimal? Weight { get; set; }
+        public string? Remarks { get; set; }
         public WeightMeasurement WeightMeasurement { get; set; } = WeightMeasurement.Kilogram;
 
         [ForeignKey("WorkoutHeader")]
