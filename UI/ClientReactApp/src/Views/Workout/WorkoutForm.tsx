@@ -17,6 +17,7 @@ import {
   CModalTitle,
   CProgress,
   CRow,
+  CSpinner,
   CTable,
   CTableBody,
   CTableDataCell,
@@ -33,22 +34,23 @@ import { toast } from 'react-toastify';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+import useFirstRender from '../../Hooks/useFirstRender';
 
 const detailSchema = z.object({
-  tempRowId: z.number(),
-  workoutDetailId: z.number(),
-  exerciseId: z.number(),
-  sets: z.number(),
-  reps: z.number(),
-  weight: z.number(),
-  weightMeasurementId: z.number(),
+  tempRowId: z.number().optional(),
+  workoutDetailId: z.number().optional(),
+  exerciseId: z.string(),
+  sets: z.coerce.number(),
+  reps: z.coerce.number(),
+  weight: z.coerce.number(),
+  weightMeasurementId: z.string(),
   remarks: z.string(),
 });
 
 const headerSchema = z.object({
-  workoutHeaderId: z.number(),
-  title: z.string(),
-  notes: z.string(),
+  workoutHeaderId: z.number().optional(),
+  title: z.string().min(5),
+  notes: z.string().min(10),
   startDateTime: z.date(),
   endDateTime: z.date(),
   workoutDetails: z.array(detailSchema)
@@ -60,13 +62,14 @@ type DetailFormFields = z.infer<typeof detailSchema>;
 const exerciseService = new ExerciseService();
 
 export default function WorkoutForm(){
+  const firstRender = useFirstRender();
   const [modalState, setModalState] = useState({
     show: false
   })
   
   const {
     register: registerHeader, handleSubmit: handleSubmitHeader
-    ,reset: resetHeader, formState: { isSubmitting }
+    ,reset: resetHeader, formState: { errors: errorsHeader, isSubmitting: isSubmittingHeader }
     ,setValue: setValueHeader, watch: watchHeader
   } = useForm<HeaderFormFields>({
     defaultValues: { 
@@ -82,6 +85,7 @@ export default function WorkoutForm(){
   
   const {
     register: registerDetail, handleSubmit: handleSubmitDetail
+    ,formState: { errors: errorsDetails, isSubmitting: isSubmittingDetail  }
   } = useForm<DetailFormFields>({
     defaultValues: {},
     resolver: zodResolver(detailSchema)
@@ -92,20 +96,20 @@ export default function WorkoutForm(){
     items: [{ exerciseId: 0, name: "" }]
   });
 
-  async function getExerciseDropdown(){
-    setExerciseDropdown(prev => ({ ...prev, isLoading: true }))
-    const res = await exerciseService.getDropdown();
-    
-    if (!res.isOk){
-      toast(res.message, { type: "error" })
-      return;
+  useEffect(() => {
+    async function form(){
+      setExerciseDropdown(prev => ({ ...prev, isLoading: true }))
+      const res = await exerciseService.getDropdown();
+      
+      if (!res.isOk){
+        toast(res.message, { type: "error" })
+        return;
+      }
+  
+      setExerciseDropdown({ isLoading: false, items: res.data.items })
     }
 
-    setExerciseDropdown({ isLoading: false, items: res.data.items })
-  }
-
-  useEffect(() => {
-    getExerciseDropdown();
+    form();
   }, [])
 
   const header = watchHeader();
@@ -115,10 +119,10 @@ export default function WorkoutForm(){
   }
 
   async function submitDetail(data: DetailFormFields){
-    console.log(data)
+    setValueHeader("workoutDetails", [...header.workoutDetails, data])
   }
 
-  const loading = isSubmitting || exerciseDropdown.isLoading;
+  const loading = isSubmittingDetail || isSubmittingHeader || exerciseDropdown.isLoading;
 
   return (
     <CRow>
@@ -128,34 +132,61 @@ export default function WorkoutForm(){
               <CForm className="row g-3" onSubmit={handleSubmitHeader(submitHeader)}>
                 <CCol xs={12} className='d-flex justify-content-between align-items-center'>
                   <p className="text-body-secondary small">Workout Header</p>
-                  <CButton color="primary" type="submit" className='d-flex align-items-center'>
-                    <span style={{ paddingRight: ".5rem"}}>Submit</span>
-                    <CIcon icon={cilInput} size="xl"/>
+                  <CButton 
+                    color="primary" 
+                    type="submit" 
+                    className='d-flex align-items-center'
+                    disabled={loading}
+                    >
+                    {loading ? <CSpinner /> : <>
+                      <span style={{ paddingRight: ".5rem"}}>Submit</span>
+                      <CIcon icon={cilInput} size="xl"/>
+                    </> }
                   </CButton>
                 </CCol>
                 <CCol xs={6}>
                   <CFormLabel htmlFor="title">Name or Title</CFormLabel>
                   <CFormInput 
                     {...registerHeader("title")}
+                    feedbackInvalid={errorsHeader.title ? errorsHeader.title.message : ""}
+                    invalid={errorsHeader.title ? true : false}
+                    valid={!errorsHeader.title && !firstRender ? true : false}
                     placeholder="" />
                 </CCol>
                 <CCol md={3}>
                   <CFormLabel>Start Date Time</CFormLabel>
                   <Datetime 
-                    inputProps={{ placeholder: "mm/dd/yyyy hh:mm", ...registerHeader("startDateTime") }} 
+                    inputProps={{ 
+                      placeholder: "mm/dd/yyyy hh:mm"
+                      , ...registerHeader("startDateTime") 
+                    }} 
+                    className={errorsHeader.startDateTime ? "is-invalid" : ""}
                     />
+                    {errorsHeader.startDateTime ? <div 
+                  style={{ display: 'block'}}
+                  className='invalid-feedback'>{errorsHeader.startDateTime.message}</div> : ""}
                 </CCol>
                 <CCol md={3}>
                   <CFormLabel>End Date Time</CFormLabel>
                   <Datetime 
-                    inputProps={{ placeholder: "mm/dd/yyyy hh:mm", ...registerHeader("endDateTime") }} />
+                    inputProps={{ 
+                      placeholder: "mm/dd/yyyy hh:mm"
+                      , ...registerHeader("endDateTime") 
+                    }} 
+                    className="is-invalid"
+                      />
+                  {errorsHeader.endDateTime ? <div 
+                  style={{ display: 'block'}}
+                  className='invalid-feedback'>{errorsHeader.endDateTime.message}</div> : ""}
                 </CCol>
                 <CCol xs={12}>
                   <CFormTextarea
-                    id="notes"
                     label="Notes"
                     rows={2}
                     {...registerHeader("notes")}
+                    feedbackInvalid={errorsHeader.notes ? errorsHeader.notes.message : ""}
+                    invalid={errorsHeader.notes ? true : false}
+                    valid={!errorsHeader.notes && !firstRender ? true : false}
                   ></CFormTextarea>
                 </CCol>
                 <CCol xs={12} className='d-flex justify-content-between align-items-center'>
@@ -163,9 +194,10 @@ export default function WorkoutForm(){
                   <CButton 
                     color="primary" 
                     className='d-flex align-items-center' 
+                    disabled={loading}
                     onClick={() => setModalState(prev => ({ ...prev, show: true}))}
                     >
-                    <CIcon icon={cilPlus} size="xl"/>
+                    {loading ? <CSpinner /> : <CIcon icon={cilPlus} size="xl"/>}
                   </CButton>
                 </CCol>
                 <CCol xs={12}>
@@ -226,9 +258,13 @@ export default function WorkoutForm(){
                 <CModalBody>
                 <CForm className="row g-3" onSubmit={handleSubmitDetail(submitDetail)}>
                   <CCol md={8}>
-                    <CFormSelect 
+                    <CFormSelect  
                       {...registerDetail("exerciseId")} 
                       label="Exercise"
+                      autoComplete='exercise'
+                      feedbackInvalid={errorsDetails.exerciseId ? errorsDetails.exerciseId.message : "" }
+                      invalid={errorsDetails.exerciseId ? true : false}
+                      valid={!errorsDetails.exerciseId && !firstRender ? true : false}
                     >
                       {exerciseDropdown.items.map((item, idx) => {
                         return <option key={idx} value={item.exerciseId}>{item.name}</option>
@@ -237,7 +273,10 @@ export default function WorkoutForm(){
                   </CCol>
                   <CCol md={4}>
                     <CFormSelect
-                      {...registerDetail("weightMeasurementId")} 
+                      {...registerDetail("weightMeasurementId")}
+                      feedbackInvalid={errorsDetails.weightMeasurementId ? errorsDetails.weightMeasurementId.message : "" }
+                      invalid={errorsDetails.weightMeasurementId ? true : false}
+                      valid={!errorsDetails.weightMeasurementId && !firstRender ? true : false} 
                       label="Measurement">
                       {
                         [
@@ -254,6 +293,9 @@ export default function WorkoutForm(){
                       {...registerDetail("weight")} 
                       label="Weight" 
                       type='number'
+                      feedbackInvalid={errorsDetails.weight ? errorsDetails.weight.message : "" }
+                      invalid={errorsDetails.weight ? true : false}
+                      valid={!errorsDetails.weight && !firstRender ? true : false} 
                        />
                   </CCol>
                   <CCol md={4}>
@@ -261,6 +303,9 @@ export default function WorkoutForm(){
                       {...registerDetail("sets")}
                       label="Sets" 
                       type="number" 
+                      feedbackInvalid={errorsDetails.sets ? errorsDetails.sets.message : "" }
+                      invalid={errorsDetails.sets ? true : false}
+                      valid={!errorsDetails.sets && !firstRender ? true : false} 
                       />
                   </CCol>
                   <CCol md={4}>
@@ -268,6 +313,9 @@ export default function WorkoutForm(){
                       {...registerDetail("reps")}
                       label="Reps" 
                       type="number"
+                      feedbackInvalid={errorsDetails.reps ? errorsDetails.reps.message : "" }
+                      invalid={errorsDetails.reps ? true : false}
+                      valid={!errorsDetails.reps && !firstRender ? true : false} 
                        />
                   </CCol>
                   <CCol xs={12}>
@@ -275,10 +323,20 @@ export default function WorkoutForm(){
                       {...registerDetail("remarks")}
                       label="Remarks"
                       rows={2}
+                      feedbackInvalid={errorsDetails.remarks ? errorsDetails.remarks.message : "" }
+                      invalid={errorsDetails.remarks ? true : false}
+                      valid={!errorsDetails.remarks && !firstRender ? true : false} 
                     ></CFormTextarea>
+                    {errorsDetails.remarks?.message}
                   </CCol>
                   <CCol xs={12} className='d-flex justify-content-end'>
-                    <CButton color="primary" onClick={() => setModalState(prev => ({ ...prev, show: false}))}>Save</CButton>
+                    <CButton 
+                      color="primary" 
+                      disabled={loading}
+                      type="submit"
+                     >
+                        {loading ? <CSpinner /> : "Save"}
+                    </CButton>
                   </CCol>
                 </CForm>
                 </CModalBody>
