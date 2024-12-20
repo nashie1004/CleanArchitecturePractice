@@ -64,6 +64,12 @@ export default function Audit(){
     };
   }, []);
 
+// Gets filter model via the grid API
+// const model = gridRef.current.api.getFilterModel(); 
+
+// Sets the filter model via the grid API
+// gridApi.setFilterModel(model);
+
   return (
     <div style={{ height: 500 }} className={theme === "dark" ? "ag-theme-quartz-dark" : "" }>
       <CContainer className="mb-2">

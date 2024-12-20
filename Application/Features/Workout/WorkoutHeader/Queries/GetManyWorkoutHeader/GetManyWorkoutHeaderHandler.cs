@@ -1,4 +1,6 @@
 ﻿using Application.Contracts.Infra.Repos;
+using Application.DTOs;
+using AutoMapper;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -11,10 +13,14 @@ namespace Application.Features.Workout.WorkoutHeader.Queries.GetManyWorkoutHeade
     public class GetManyWorkoutHeaderHandler : IRequestHandler<GetManyWorkoutHeaderRequest, GetManyWorkoutHeaderResponse>
     {
         private readonly IWorkoutHeaderRepository _workoutHeaderRepository;
+        private readonly IMapper _mapper;
 
-        public GetManyWorkoutHeaderHandler(IWorkoutHeaderRepository workoutHeaderRepository)
+        public GetManyWorkoutHeaderHandler(
+            IMapper mapper,
+            IWorkoutHeaderRepository workoutHeaderRepository)
         {
             _workoutHeaderRepository = workoutHeaderRepository;
+            _mapper = mapper;
         }
 
         public async Task<GetManyWorkoutHeaderResponse> Handle(GetManyWorkoutHeaderRequest req, CancellationToken ct)
@@ -23,7 +29,8 @@ namespace Application.Features.Workout.WorkoutHeader.Queries.GetManyWorkoutHeade
 
             try
             {
-                retVal.Items = await _workoutHeaderRepository.GetAllRecordAsync(req.PageSize, req.PageNumber);
+                var rawItems = await _workoutHeaderRepository.GetAllRecordAsync(req.PageSize, req.PageNumber);
+                retVal.Items = _mapper.Map<List<WorkoutHeaderDTO>>(rawItems);
             } 
             catch (Exception ex)
             {

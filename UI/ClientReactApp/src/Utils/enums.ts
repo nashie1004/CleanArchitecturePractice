@@ -1,4 +1,5 @@
 export enum WeightMeasurement{
+    None = 0,
     Kilogram = 1,
     Pounds = 2
 }

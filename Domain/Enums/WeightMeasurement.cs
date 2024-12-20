@@ -8,7 +8,8 @@ namespace Domain.Enums
 {
     public enum WeightMeasurement : short
     {
-        Kilogram = 1
+        None = 0
+        ,Kilogram = 1
         ,Pounds = 2
     }
 }

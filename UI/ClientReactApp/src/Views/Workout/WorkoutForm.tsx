@@ -63,6 +63,10 @@ type DetailFormFields = z.infer<typeof detailSchema>;
 const exerciseService = new ExerciseService();
 const workoutService = new WorkoutService();
 
+const emptyDetail: DetailFormFields = {
+  tempRowId: 0, workoutDetailId: 0, exerciseId: 0, sets: 0, reps: 0, weight: 0, weightMeasurementId: 0, remarks: "",
+}
+
 export default function WorkoutForm(){
   const firstRender = useFirstRender();
   const [modalState, setModalState] = useState({ show: false })
@@ -82,7 +86,7 @@ export default function WorkoutForm(){
     ,formState: { errors: errorsDetails, isSubmitting: isSubmittingDetail  }
     ,reset: resetDetail
   } = useForm<DetailFormFields>({
-    defaultValues: {},
+    defaultValues: emptyDetail,
     resolver: zodResolver(detailSchema)
   })
 
@@ -118,7 +122,7 @@ export default function WorkoutForm(){
   async function submitDetail(data: DetailFormFields){
     data.tempRowId = header.workoutDetails.length + 1;
     setValueHeader("workoutDetails", [...header.workoutDetails, data]);
-    resetDetail();
+    resetDetail(emptyDetail);
     setModalState({ show: false })
   }
 
@@ -145,7 +149,7 @@ export default function WorkoutForm(){
                     </> }
                   </CButton>
                 </CCol>
-                <CCol xs={5}>
+                <CCol xs={6}>
                   <CFormLabel htmlFor="title">Name or Title</CFormLabel>
                   <CFormInput 
                     {...registerHeader("title")}
@@ -201,7 +205,10 @@ export default function WorkoutForm(){
                     color="primary" 
                     className='d-flex align-items-center' 
                     disabled={loading}
-                    onClick={() => setModalState(prev => ({ ...prev, show: true}))}
+                    onClick={() => {
+                      resetDetail(emptyDetail);
+                      setModalState(prev => ({ ...prev, show: true}));
+                    }}
                     >
                     {loading ? <CSpinner /> : <CIcon icon={cilPlus} size="xl"/>}
                   </CButton>
@@ -225,7 +232,10 @@ export default function WorkoutForm(){
                             <CTableHeaderCell className='d-flex justify-content-center' scope='row'>
                               <div 
                                 style={{paddingRight: '.6rem', cursor: "pointer"}}
-                                onClick={() => setModalState(prev => ({ ...prev, show: true}))}
+                                onClick={() => {
+                                  resetDetail(item);
+                                  setModalState(prev => ({ ...prev, show: true}))
+                                }}
                               >
                                 <CIcon className="text-secondary" icon={cilPencil} size="lg"/>
                               </div>
@@ -255,6 +265,7 @@ export default function WorkoutForm(){
                 </CCol>
               </CForm>
               <CModal
+                size="xl"
                 alignment="center"
                 visible={modalState.show}
                 onClose={() => setModalState(prev => ({ ...prev, show: false}))}
@@ -290,7 +301,8 @@ export default function WorkoutForm(){
                       <option value={0}>Select...</option>
                       {
                         [
-                          { value: WeightMeasurement.Kilogram, label: "Kilogram" }
+                          { value: WeightMeasurement.None, label: "None" }
+                          ,{ value: WeightMeasurement.Kilogram, label: "Kilogram" }
                           ,{ value: WeightMeasurement.Pounds, label: "Pounds" }
                         ].map((item, idx) => {
                           return <option key={idx} value={item.value}>{item.label}</option>

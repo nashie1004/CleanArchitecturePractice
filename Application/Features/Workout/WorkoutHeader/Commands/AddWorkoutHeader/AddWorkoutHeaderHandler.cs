@@ -30,6 +30,16 @@ namespace Application.Features.Workout.WorkoutHeader.Commands.AddWorkoutHeader
             var retVal = new AddWorkoutHeaderResponse();
             try
             {
+                if (!string.IsNullOrEmpty(req.WorkoutHeader.Title)){
+                    var existing = await _workoutHeaderRepository
+                    .GetRecordByPropertyAsync(i => i.Title == req.WorkoutHeader.Title);
+
+                    if (existing != null){
+                        retVal.ValidationErrors.Add("Existing workout title/name");
+                        return retVal;
+                    }
+                }
+
                 var workout = _mapper.Map<Domain.Entities.WorkoutHeader>(req.WorkoutHeader);
                 await _workoutHeaderRepository.AddRecordAsync(workout);
                 retVal.RowsAffected = await _workoutHeaderRepository.SaveRecordAsync(ct);
@@ -37,12 +47,6 @@ namespace Application.Features.Workout.WorkoutHeader.Commands.AddWorkoutHeader
             catch (Exception ex)
             {
                 retVal.ValidationErrors.Add(ex.Message);
-                var innerEx = ex.InnerException;
-                while (innerEx != null)
-                {
-                    retVal.ValidationErrors.Add(innerEx.Message);
-                    innerEx = innerEx.InnerException;
-                }
             }
 
             return retVal;
