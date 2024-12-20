@@ -3,11 +3,13 @@ using Application.Features.Exercise.Exercise.Queries.GetAllExercise;
 using Application.Features.Exercise.Queries.GetManyExercise;
 using Application.Features.Todo.Commands.AddTodo;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ExerciseController : ControllerBase

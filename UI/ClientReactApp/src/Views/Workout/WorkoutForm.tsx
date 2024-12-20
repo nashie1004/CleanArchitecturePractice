@@ -39,7 +39,7 @@ import WorkoutService from '../../Services/WorkoutService';
 
 const detailSchema = z.object({
   tempRowId: z.number().optional(),
-  workoutDetailId: z.number().optional(),
+  workoutDetailId: z.number().optional().default(0),
   exerciseId: z.coerce.number().gt(0, "Please select an option"),
   sets: z.coerce.number().gt(0),
   reps: z.coerce.number().gt(0),
@@ -49,7 +49,7 @@ const detailSchema = z.object({
 });
 
 const headerSchema = z.object({
-  workoutHeaderId: z.number().optional(),
+  workoutHeaderId: z.number().optional().default(0),
   title: z.string().min(5),
   notes: z.string().optional(),
   startDateTime: z.coerce.date(),
@@ -87,7 +87,7 @@ export default function WorkoutForm(){
   })
 
   useEffect(() => {
-    async function form(){
+    async function init(){
       setExerciseDropdown(prev => ({ ...prev, isLoading: true }))
       const res = await exerciseService.getDropdown();
       
@@ -99,14 +99,14 @@ export default function WorkoutForm(){
       setExerciseDropdown({ isLoading: false, items: res.data.items })
     }
 
-    form();
+    init();
   }, [])
 
   const header = watchHeader();
 
   async function submitHeader(data: HeaderFormFields){
-    const res = await workoutService.submitForm(data);
-    console.log(res, data)    
+    const res = await workoutService.submitForm({ workoutHeader: data });
+      
     if (!res.isOk) {
       toast(res.message, { type: "error" })
       return;
@@ -118,6 +118,7 @@ export default function WorkoutForm(){
   async function submitDetail(data: DetailFormFields){
     data.tempRowId = header.workoutDetails.length + 1;
     setValueHeader("workoutDetails", [...header.workoutDetails, data]);
+    resetDetail();
     setModalState({ show: false })
   }
 

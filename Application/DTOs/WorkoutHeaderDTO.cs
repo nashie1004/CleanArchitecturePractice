@@ -9,7 +9,7 @@ namespace Application.DTOs
 {
     public class WorkoutHeaderDTO
     {
-        public long WorkoutHeaderId { get; set; }
+        public long? WorkoutHeaderId { get; set; }
         public string Title { get; set; }
         public string Notes { get; set; }
         public DateTime StartDateTime { get; set; }

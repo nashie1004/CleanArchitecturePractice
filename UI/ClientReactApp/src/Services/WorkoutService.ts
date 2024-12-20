@@ -6,6 +6,6 @@ export default class WorkoutService extends BaseService{
     }
 
     async submitForm(data: any){
-        return await this.basePost("/api/WorkoutHeader/addWorkoutHeader", data);
+        return await this.basePost("/api/Workout/addWorkoutHeader", data);
     }
 }

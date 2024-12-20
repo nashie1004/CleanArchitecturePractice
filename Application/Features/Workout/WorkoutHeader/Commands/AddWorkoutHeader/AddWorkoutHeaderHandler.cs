@@ -1,4 +1,6 @@
 ﻿using Application.Contracts.Infra.Repos;
+using Application.DTOs;
+using AutoMapper;
 using Domain.Entities;
 using MediatR;
 using System;
@@ -12,40 +14,35 @@ namespace Application.Features.Workout.WorkoutHeader.Commands.AddWorkoutHeader
     public class AddWorkoutHeaderHandler : IRequestHandler<AddWorkoutHeaderRequest, AddWorkoutHeaderResponse>
     {
         private readonly IWorkoutHeaderRepository _workoutHeaderRepository;
+        private readonly IMapper _mapper;
 
-        public AddWorkoutHeaderHandler(IWorkoutHeaderRepository workoutHeaderRepository)
+        public AddWorkoutHeaderHandler(
+            IMapper mapper,
+            IWorkoutHeaderRepository workoutHeaderRepository
+            )
         {
+            _mapper = mapper;
             _workoutHeaderRepository = workoutHeaderRepository;
         }
 
         public async Task<AddWorkoutHeaderResponse> Handle(AddWorkoutHeaderRequest req, CancellationToken ct)
         {
             var retVal = new AddWorkoutHeaderResponse();
-
             try
             {
-                var workoutDetails = new List<Domain.Entities.WorkoutDetail>();
-                foreach (var item in req.WorkoutHeader.WorkoutDetails)
-                {
-                    workoutDetails.Add(new Domain.Entities.WorkoutDetail()
-                    {
-                        Sets = item.Sets
-                        ,Reps = item.Reps
-                        ,ExerciseId = item.ExerciseId
-                        ,Weight = item.Weight
-                    });
-                }
-
-                await _workoutHeaderRepository.AddRecordAsync(new Domain.Entities.WorkoutHeader()
-                {
-                    Title = req.WorkoutHeader.Title,
-                    WorkoutDetails = workoutDetails,
-                });
-                await _workoutHeaderRepository.SaveRecordAsync(ct);
+                var workout = _mapper.Map<Domain.Entities.WorkoutHeader>(req.WorkoutHeader);
+                await _workoutHeaderRepository.AddRecordAsync(workout);
+                retVal.RowsAffected = await _workoutHeaderRepository.SaveRecordAsync(ct);
             } 
             catch (Exception ex)
             {
                 retVal.ValidationErrors.Add(ex.Message);
+                var innerEx = ex.InnerException;
+                while (innerEx != null)
+                {
+                    retVal.ValidationErrors.Add(innerEx.Message);
+                    innerEx = innerEx.InnerException;
+                }
             }
 
             return retVal;
