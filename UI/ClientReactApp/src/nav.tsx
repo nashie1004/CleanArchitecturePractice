@@ -85,12 +85,12 @@ const nav = [
     to: '/audit',
     icon: <CIcon icon={cilStorage} customClassName="nav-icon" />,
   },
-  {
-    component: CNavItem,
-    name: 'Login History',
-    to: '/loginHistory',
-    icon: <CIcon icon={cilAirplay} customClassName="nav-icon" />,
-  },
+  // {
+  //   component: CNavItem,
+  //   name: 'Login History',
+  //   to: '/loginHistory',
+  //   icon: <CIcon icon={cilAirplay} customClassName="nav-icon" />,
+  // },
 ]
 
 export default nav;

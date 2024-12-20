@@ -21,7 +21,9 @@ namespace Application.DTOs
                 .ForMember(dest => dest.GeneratedBy, opt => opt.MapFrom(src => src.GeneratedBy.ToString()))
                 ;
             CreateMap<ExerciseCategory, ExerciseCategoryDropdownDTO>();
-            CreateMap<Exercise, ExerciseDTO>();
+            CreateMap<Exercise, ExerciseDTO>()
+                .ForMember(dest => dest.GeneratedBy, opt => opt.MapFrom(src => src.GeneratedBy.ToString()))
+            ;
             CreateMap<WorkoutHeader, WorkoutHeaderDTO>().ReverseMap();
             CreateMap<WorkoutDetail, WorkoutDetailDTO>().ReverseMap();
             CreateMap<Audit, AuditDTO>().ReverseMap();

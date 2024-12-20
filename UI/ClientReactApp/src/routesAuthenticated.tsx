@@ -69,11 +69,11 @@ const routesAuthenticated = [
         element: Audit,
         breadCrumb: ["Others", "Audit Logs"]
     },
-    { 
-        path: '/loginHistory', 
-        element: LoginHistory,
-        breadCrumb: ["Others", "Login History"]
-    },
+    // { 
+    //     path: '/loginHistory', 
+    //     element: LoginHistory,
+    //     breadCrumb: ["Others", "Login History"]
+    // },
 ]
 
 export default routesAuthenticated;
