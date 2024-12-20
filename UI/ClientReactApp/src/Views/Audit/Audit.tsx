@@ -6,19 +6,19 @@ import CIcon from "@coreui/icons-react";
 import { cilCaretLeft, cilCaretRight, cilPlus, cilSearch } from "@coreui/icons";
 import AuditService from "../../Services/AuditService";
 import { toast } from "react-toastify";
+import { ColDef } from "ag-grid-community"
+import { tableActionFormat, toDateTimeFormat } from "../../Utils/formatters";
 
 const auditService = new AuditService();
-const columns = [
+const columns: ColDef[] = [
   { field: "auditId" },
-  { field: "oldData" },
+  { field: "action", valueFormatter: (p) => tableActionFormat(p.value)},
+  { field: "createdDate", valueFormatter: (p) => toDateTimeFormat(p.value) },
+  { field: "tableName" },
   { field: "newData" },
   { field: "tablePrimaryKey" },
-  { field: "tableName" },
-  { field: "action" },
-  { field: "createdBy" },
-  { field: "createdDate" },
-  { field: "lastUpdatedBy" },
-  { field: "lastUpdatedDate" }
+  { field: "lastUpdatedDate", valueFormatter: (p) => toDateTimeFormat(p.value) },
+  { field: "oldData" },
 ]
 
 export default function Audit(){

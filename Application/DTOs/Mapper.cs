@@ -24,6 +24,7 @@ namespace Application.DTOs
             CreateMap<Exercise, ExerciseDTO>();
             CreateMap<WorkoutHeader, WorkoutHeaderDTO>().ReverseMap();
             CreateMap<WorkoutDetail, WorkoutDetailDTO>().ReverseMap();
+            CreateMap<Audit, AuditDTO>().ReverseMap();
         }
     }
 }

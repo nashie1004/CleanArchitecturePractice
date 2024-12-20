@@ -1,11 +1,14 @@
 ﻿using Application.Contracts.Infra.Todo;
 using Application.Contracts.Infrastructure.Identity;
+using Application.DTOs;
+using AutoMapper;
 using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace Application.Features.Audit.Queries.GetAllAudit
 {
@@ -13,9 +16,14 @@ namespace Application.Features.Audit.Queries.GetAllAudit
     {
         private readonly IAuditRepository _auditRepository;
         private readonly IBaseRepositoryIdentityUserHttpContext _userHttpContext;
+        private readonly IMapper _mapper;
 
-        public GetAllAuditHandler(IAuditRepository auditRepository, IBaseRepositoryIdentityUserHttpContext userHttpContext)
+        public GetAllAuditHandler(
+            IMapper mapper
+            , IAuditRepository auditRepository
+            , IBaseRepositoryIdentityUserHttpContext userHttpContext)
         {
+            _mapper = mapper;
             _auditRepository = auditRepository;
             _userHttpContext = userHttpContext;
         }
@@ -27,12 +35,11 @@ namespace Application.Features.Audit.Queries.GetAllAudit
             try
             {
                 long userId = _userHttpContext.GetUserId();
-                retVal.Items = await _auditRepository
+                var rawItems = await _auditRepository
                     .GetAllRecordAsync(
-                        req.PageSize
-                        , req.PageNumber 
-                        //, i => i.CreatedBy == userId
+                        req.PageSize, req.PageNumber, i => i.CreatedBy == userId
                     );
+                retVal.Items = _mapper.Map<List<AuditDTO>>(rawItems);
             } 
             catch (Exception ex)
             {

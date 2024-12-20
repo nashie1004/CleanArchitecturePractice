@@ -15,9 +15,7 @@ namespace Application.DTOs
         public long TablePrimaryKey { get; set; }
         public string TableName { get; set; }
         public short Action { get; set; }
-        public long CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }
-        public long? LastUpdatedBy { get; set; }
         public DateTime? LastUpdatedDate { get; set; }
     }
 }
