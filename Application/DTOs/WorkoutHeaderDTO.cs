@@ -9,8 +9,11 @@ namespace Application.DTOs
 {
     public class WorkoutHeaderDTO
     {
+        public long WorkoutHeaderId { get; set; }
         public string Title { get; set; }
-        public decimal Duration { get; set; }
+        public string Notes { get; set; }
+        public DateTime StartDateTime { get; set; }
+        public DateTime EndDateTime { get; set; }
         public List<WorkoutDetailDTO> WorkoutDetails { get; set; }
     }
 }

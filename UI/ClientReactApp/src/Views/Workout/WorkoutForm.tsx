@@ -30,29 +30,30 @@ import { cilInput, cilPencil, cilPlus, cilTrash } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
 import { WeightMeasurement } from '../../Utils/enums';
 import ExerciseService from '../../Services/ExerciseService';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import useFirstRender from '../../Hooks/useFirstRender';
+import WorkoutService from '../../Services/WorkoutService';
 
 const detailSchema = z.object({
   tempRowId: z.number().optional(),
   workoutDetailId: z.number().optional(),
-  exerciseId: z.string(),
-  sets: z.coerce.number(),
-  reps: z.coerce.number(),
-  weight: z.coerce.number(),
-  weightMeasurementId: z.string(),
-  remarks: z.string(),
+  exerciseId: z.coerce.number().gt(0, "Please select an option"),
+  sets: z.coerce.number().gt(0),
+  reps: z.coerce.number().gt(0),
+  weight: z.coerce.number().gte(0),
+  weightMeasurementId: z.coerce.number().gt(0, "Please select an option"),
+  remarks: z.string().optional(),
 });
 
 const headerSchema = z.object({
   workoutHeaderId: z.number().optional(),
   title: z.string().min(5),
-  notes: z.string().min(10),
-  startDateTime: z.date(),
-  endDateTime: z.date(),
+  notes: z.string().optional(),
+  startDateTime: z.coerce.date(),
+  endDateTime: z.coerce.date(),
   workoutDetails: z.array(detailSchema)
 })
 
@@ -60,41 +61,30 @@ type HeaderFormFields = z.infer<typeof headerSchema>;
 type DetailFormFields = z.infer<typeof detailSchema>;
 
 const exerciseService = new ExerciseService();
+const workoutService = new WorkoutService();
 
 export default function WorkoutForm(){
   const firstRender = useFirstRender();
-  const [modalState, setModalState] = useState({
-    show: false
-  })
-  
+  const [modalState, setModalState] = useState({ show: false })
+  const [exerciseDropdown, setExerciseDropdown] = useState({ isLoading: false, items: [{ exerciseId: 0, name: "" }] });
+
   const {
     register: registerHeader, handleSubmit: handleSubmitHeader
-    ,reset: resetHeader, formState: { errors: errorsHeader, isSubmitting: isSubmittingHeader }
+    ,formState: { errors: errorsHeader, isSubmitting: isSubmittingHeader }
     ,setValue: setValueHeader, watch: watchHeader
   } = useForm<HeaderFormFields>({
-    defaultValues: { 
-      workoutDetails: [
-        { tempRowId: 1, sets: 3, reps: 30, weight: 40, weightMeasurementId: 1, remarks: "remarks 1", exerciseId: 0, workoutDetailId: 0 }
-        ,{ tempRowId: 2, sets: 3, reps: 30, weight: 40, weightMeasurementId: 2, remarks: "remarks 2", exerciseId: 0, workoutDetailId: 0,  }
-        ,{ tempRowId: 3, sets: 3, reps: 30, weight: 40, weightMeasurementId: 2, remarks: "remarks 2", exerciseId: 0, workoutDetailId: 0,  }
-        ,{ tempRowId: 4, sets: 3, reps: 30, weight: 40, weightMeasurementId: 1, remarks: "remarks 2", exerciseId: 0, workoutDetailId: 0, }
-      ]
-    },
+    defaultValues: { workoutDetails: [] },
     resolver: zodResolver(headerSchema)
   })
   
   const {
     register: registerDetail, handleSubmit: handleSubmitDetail
     ,formState: { errors: errorsDetails, isSubmitting: isSubmittingDetail  }
+    ,reset: resetDetail
   } = useForm<DetailFormFields>({
     defaultValues: {},
     resolver: zodResolver(detailSchema)
   })
-
-  const [exerciseDropdown, setExerciseDropdown] = useState({
-    isLoading: false,
-    items: [{ exerciseId: 0, name: "" }]
-  });
 
   useEffect(() => {
     async function form(){
@@ -115,11 +105,20 @@ export default function WorkoutForm(){
   const header = watchHeader();
 
   async function submitHeader(data: HeaderFormFields){
-    console.log(data)
+    const res = await workoutService.submitForm(data);
+    console.log(res, data)    
+    if (!res.isOk) {
+      toast(res.message, { type: "error" })
+      return;
+    } 
+
+    toast("Successfully created workout record. Go to workout list to view newly added record.", {type: "success"})
   }
 
   async function submitDetail(data: DetailFormFields){
-    setValueHeader("workoutDetails", [...header.workoutDetails, data])
+    data.tempRowId = header.workoutDetails.length + 1;
+    setValueHeader("workoutDetails", [...header.workoutDetails, data]);
+    setModalState({ show: false })
   }
 
   const loading = isSubmittingDetail || isSubmittingHeader || exerciseDropdown.isLoading;
@@ -129,6 +128,7 @@ export default function WorkoutForm(){
       <CCol xs={12}>
         <CCard>
             <CCardBody>
+              <ToastContainer autoClose={4000} />
               <CForm className="row g-3" onSubmit={handleSubmitHeader(submitHeader)}>
                 <CCol xs={12} className='d-flex justify-content-between align-items-center'>
                   <p className="text-body-secondary small">Workout Header</p>
@@ -144,7 +144,7 @@ export default function WorkoutForm(){
                     </> }
                   </CButton>
                 </CCol>
-                <CCol xs={6}>
+                <CCol xs={5}>
                   <CFormLabel htmlFor="title">Name or Title</CFormLabel>
                   <CFormInput 
                     {...registerHeader("title")}
@@ -156,11 +156,14 @@ export default function WorkoutForm(){
                 <CCol md={3}>
                   <CFormLabel>Start Date Time</CFormLabel>
                   <Datetime 
-                    inputProps={{ 
-                      placeholder: "mm/dd/yyyy hh:mm"
-                      , ...registerHeader("startDateTime") 
-                    }} 
-                    className={errorsHeader.startDateTime ? "is-invalid" : ""}
+                    inputProps={
+                      errorsHeader.startDateTime ? { 
+                      ...registerHeader("startDateTime") 
+                      , className: "is-invalid form-control" 
+                    } : {
+                      ...registerHeader("startDateTime") 
+                    }
+                  } 
                     />
                     {errorsHeader.startDateTime ? <div 
                   style={{ display: 'block'}}
@@ -169,11 +172,13 @@ export default function WorkoutForm(){
                 <CCol md={3}>
                   <CFormLabel>End Date Time</CFormLabel>
                   <Datetime 
-                    inputProps={{ 
-                      placeholder: "mm/dd/yyyy hh:mm"
-                      , ...registerHeader("endDateTime") 
-                    }} 
-                    className="is-invalid"
+                    inputProps={
+                      errorsHeader.startDateTime ? { 
+                      ...registerHeader("endDateTime") 
+                      , className: "is-invalid form-control" 
+                    } : {
+                      ...registerHeader("endDateTime") 
+                    }}
                       />
                   {errorsHeader.endDateTime ? <div 
                   style={{ display: 'block'}}
@@ -232,7 +237,9 @@ export default function WorkoutForm(){
                                 <CIcon className="text-danger" icon={cilTrash} size="lg"/>
                               </div>
                             </CTableHeaderCell>
-                            <CTableDataCell>{item.exerciseId}</CTableDataCell>
+                            <CTableDataCell>
+                              {exerciseDropdown.items.find(i => i.exerciseId == item.exerciseId)?.name}
+                            </CTableDataCell>
                             <CTableDataCell>{item.weight}</CTableDataCell>
                             <CTableDataCell>
                               {item.weightMeasurementId === WeightMeasurement.Kilogram ? "Kilogram" : "Pounds"}
@@ -266,6 +273,7 @@ export default function WorkoutForm(){
                       invalid={errorsDetails.exerciseId ? true : false}
                       valid={!errorsDetails.exerciseId && !firstRender ? true : false}
                     >
+                      <option value={0}>Select...</option>
                       {exerciseDropdown.items.map((item, idx) => {
                         return <option key={idx} value={item.exerciseId}>{item.name}</option>
                       })}
@@ -278,6 +286,7 @@ export default function WorkoutForm(){
                       invalid={errorsDetails.weightMeasurementId ? true : false}
                       valid={!errorsDetails.weightMeasurementId && !firstRender ? true : false} 
                       label="Measurement">
+                      <option value={0}>Select...</option>
                       {
                         [
                           { value: WeightMeasurement.Kilogram, label: "Kilogram" }

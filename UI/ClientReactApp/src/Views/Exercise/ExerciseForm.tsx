@@ -84,7 +84,7 @@ export default function ExerciseForm() {
             <CCol xs={12}>
                 <CCard>
                     <CCardBody>
-                        <ToastContainer theme="dark" autoClose={3000} />
+                        <ToastContainer autoClose={4000} />
                         <CForm className="row g-3" onSubmit={handleSubmit(submitForm)}>
                             <CCol xs={12}>
                                 <CAlert color="warning" className="d-flex align-items-center">
