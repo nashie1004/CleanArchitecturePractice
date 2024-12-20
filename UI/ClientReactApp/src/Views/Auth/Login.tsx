@@ -84,7 +84,7 @@ const Login = () => {
     const loading = isSubmitting || isAuthenticating;
 
     return (
-        <div className="bg-body-tertiary min-vh-100 d-flex flex-row align-items-center">
+        <div id="login" className="bg-body-tertiary min-vh-100 d-flex flex-row align-items-center">
             <CContainer>
                 <ToastContainer autoClose={4000} />
                 <CRow className="justify-content-center">

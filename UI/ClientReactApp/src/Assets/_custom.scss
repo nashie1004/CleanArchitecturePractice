@@ -1,1 +1,20 @@
 // Here you can add other styles
+#register, #login{
+    position: relative;
+    isolation: isolate;
+}
+#register::after, #login::after{
+    content: '';
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    opacity: .4;
+    background-size: cover;
+    background-position: cover;
+}
+#register::after{
+    background-image: url('./registerBg.jpg');
+}
+#login::after{
+    background-image: url('./loginBg.jpg');
+}
