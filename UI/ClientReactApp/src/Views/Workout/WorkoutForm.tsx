@@ -1,18 +1,13 @@
-import React from 'react'
+import { useState } from 'react'
 import {
   CButton,
   CCard,
   CCardBody,
-  CCardHeader,
   CCol,
   CForm,
-  CFormCheck,
   CFormInput,
   CFormLabel,
-  CFormSelect,
   CFormTextarea,
-  CInputGroup,
-  CInputGroupText,
   CRow,
   CTable,
   CTableBody,
@@ -22,17 +17,39 @@ import {
   CTableRow,
 } from '@coreui/react'
 import Datetime from "react-datetime";
+import { cilInput, cilPencil, cilPlus, cilTrash } from '@coreui/icons';
+import CIcon from '@coreui/icons-react';
+
+interface IDetail{
+  sets: number
+  reps: number
+  weight: number
+  weightMeasurementId: number
+  remarks: string
+  exerciseId: number
+  workoutHeaderId: number
+  workoutDetailId: number
+}
 
 export default function WorkoutForm(){
+  const [details, setDetails] = useState<IDetail[]>([
+    { sets: 3, reps: 30, weight: 40, weightMeasurementId: 1, remarks: "remarks 1", exerciseId: 0, workoutDetailId: 0, workoutHeaderId: 0 }
+    ,{ sets: 3, reps: 30, weight: 40, weightMeasurementId: 1, remarks: "remarks 2", exerciseId: 0, workoutDetailId: 0, workoutHeaderId: 0 }
+  ]);
+
   return (
     <CRow>
       <CCol xs={12}>
         <CCard>
             <CCardBody>
-              <CCol xs={12}>
-                <p className="text-body-secondary small">Workout Header</p>
-              </CCol>
               <CForm className="row g-3">
+                <CCol xs={12} className='d-flex justify-content-between align-items-center'>
+                  <p className="text-body-secondary small">Workout Header</p>
+                  <CButton color="primary" type="submit" className='d-flex align-items-center'>
+                    <span style={{ paddingRight: ".5rem"}}>Submit</span>
+                    <CIcon icon={cilInput} size="xl"/>
+                  </CButton>
+                </CCol>
                 <CCol xs={6}>
                   <CFormLabel htmlFor="title">Name or Title</CFormLabel>
                   <CFormInput id="title" placeholder="" />
@@ -52,47 +69,46 @@ export default function WorkoutForm(){
                     rows={2}
                   ></CFormTextarea>
                 </CCol>
-                <CCol xs={12}>
-                  <p className="text-body-secondary small">Workout Details</p>
+                <CCol xs={12} className='d-flex justify-content-between align-items-center'>
+                  <p className="text-body-secondary small" >Workout Details</p>
+                  <CButton color="primary" className='d-flex align-items-center'>
+                    <CIcon icon={cilPlus} size="xl"/>
+                  </CButton>
                 </CCol>
                 <CCol xs={12}>
                   <CTable>
                     <CTableHead>
                       <CTableRow>
-                        <CTableHeaderCell scope="col">#</CTableHeaderCell>
+                        <CTableHeaderCell scope="col"></CTableHeaderCell>
                         <CTableHeaderCell scope="col">Exercise</CTableHeaderCell>
-                        <CTableHeaderCell scope="col">Sets</CTableHeaderCell>
-                        <CTableHeaderCell scope="col">Reps</CTableHeaderCell>
                         <CTableHeaderCell scope="col">Weight</CTableHeaderCell>
                         <CTableHeaderCell scope="col">Measurement</CTableHeaderCell>
+                        <CTableHeaderCell scope="col">Sets</CTableHeaderCell>
+                        <CTableHeaderCell scope="col">Reps</CTableHeaderCell>
                         <CTableHeaderCell scope="col">Remarks</CTableHeaderCell>
                       </CTableRow>
                     </CTableHead>
                     <CTableBody>
-                      <CTableRow>
-                        <CTableHeaderCell scope="row">1</CTableHeaderCell>
-                        <CTableDataCell>Mark</CTableDataCell>
-                        <CTableDataCell>Otto</CTableDataCell>
-                        <CTableDataCell>@mdo</CTableDataCell>
-                      </CTableRow>
-                      <CTableRow>
-                        <CTableHeaderCell scope="row">2</CTableHeaderCell>
-                        <CTableDataCell>Jacob</CTableDataCell>
-                        <CTableDataCell>Thornton</CTableDataCell>
-                        <CTableDataCell>@fat</CTableDataCell>
-                      </CTableRow>
-                      <CTableRow>
-                        <CTableHeaderCell scope="row">3</CTableHeaderCell>
-                        <CTableDataCell colSpan={2}>Larry the Bird</CTableDataCell>
-                        <CTableDataCell>@twitter</CTableDataCell>
-                      </CTableRow>
+                      {details.map((item, idx) => {
+                        return <CTableRow key={idx}>
+                            <CTableHeaderCell className='d-flex justify-content-center' scope='row'>
+                              <div style={{paddingRight: '.6rem', cursor: "pointer"}}>
+                                <CIcon className="text-secondary" icon={cilPencil} size="lg"/>
+                              </div>
+                              <div style={{ cursor: "pointer"}}>
+                                <CIcon className="text-danger" icon={cilTrash} size="lg"/>
+                              </div>
+                            </CTableHeaderCell>
+                            <CTableDataCell>{item.exerciseId}</CTableDataCell>
+                            <CTableDataCell>{item.weight}</CTableDataCell>
+                            <CTableDataCell>{item.weightMeasurementId}</CTableDataCell>
+                            <CTableDataCell>{item.sets}</CTableDataCell>
+                            <CTableDataCell>{item.reps}</CTableDataCell>
+                            <CTableDataCell>{item.remarks}</CTableDataCell>
+                        </CTableRow>
+                      })} 
                     </CTableBody>
                   </CTable>
-                </CCol>
-                <CCol xs={12}>
-                  <CButton color="primary" type="submit">
-                    Create
-                  </CButton>
                 </CCol>
               </CForm>
           </CCardBody>
