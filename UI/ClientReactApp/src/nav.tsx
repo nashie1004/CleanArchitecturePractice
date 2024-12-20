@@ -1,4 +1,4 @@
-import { cilSpeedometer, cilDrop, cilPencil, cilStar } from "@coreui/icons";
+import { cilSpeedometer, cilDrop, cilPencil, cilStar, cilCalendarCheck, cilAirplay, cilBarChart, cilHappy, cilNoteAdd, cilNotes, cilPrint, cilStorage } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
 import { CNavGroup, CNavItem, CNavTitle } from "@coreui/react";
 
@@ -7,13 +7,13 @@ const nav = [
     component: CNavItem,
     name: 'Dashboard',
     to: '/',
-    icon: <CIcon icon={cilSpeedometer} customClassName="nav-icon" />,
+    icon: <CIcon icon={cilBarChart} customClassName="nav-icon" />,
   },
   {
     component: CNavItem,
     name: 'Profile',
     to: '/profile',
-    icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
+    icon: <CIcon icon={cilHappy} customClassName="nav-icon" />,
   },
   {
     component: CNavTitle,
@@ -23,12 +23,12 @@ const nav = [
     component: CNavItem,
     name: 'Schedule',
     to: '/schedule',
-    icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
+    icon: <CIcon icon={cilCalendarCheck} customClassName="nav-icon" />,
   },
   {
     component: CNavGroup,
     name: 'Workout',
-    icon: <CIcon icon={cilStar} customClassName="nav-icon" />,
+    icon: <CIcon icon={cilNoteAdd} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,
@@ -45,7 +45,7 @@ const nav = [
   {
     component: CNavGroup,
     name: 'Exercise',
-    icon: <CIcon icon={cilStar} customClassName="nav-icon" />,
+    icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,
@@ -77,19 +77,19 @@ const nav = [
     component: CNavItem,
     name: 'Reports',
     to: '/reports',
-    icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
+    icon: <CIcon icon={cilPrint} customClassName="nav-icon" />,
   },
   {
     component: CNavItem,
     name: 'Audit Logs',
     to: '/audit',
-    icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
+    icon: <CIcon icon={cilStorage} customClassName="nav-icon" />,
   },
   {
     component: CNavItem,
     name: 'Login History',
     to: '/loginHistory',
-    icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
+    icon: <CIcon icon={cilAirplay} customClassName="nav-icon" />,
   },
 ]
 

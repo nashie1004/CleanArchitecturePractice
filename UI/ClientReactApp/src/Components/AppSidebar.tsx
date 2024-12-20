@@ -16,7 +16,7 @@ export default function AppSidebar() {
             visible={visible}
             position="fixed"
         >
-            <CSidebarHeader className="border-bottom d-flex align-items-center justify-content-center">
+            <CSidebarHeader className="border-bottom d-flex align-items-center justify-content-start">
                 <CIcon icon={cilBurn} size="xl"/>
                 <h5 style={{ letterSpacing: ".1px", paddingLeft: "5px" }} className="mt-2">
                     TheStrength
