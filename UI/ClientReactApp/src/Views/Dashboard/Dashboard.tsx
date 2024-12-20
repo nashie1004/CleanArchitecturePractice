@@ -8,7 +8,7 @@ import {
   CChartPolarArea,
   CChartRadar,
 } from '@coreui/react-chartjs'
-import { cibFacebook, cibTwitter, cilChartPie } from '@coreui/icons'
+import { cibFacebook, cibGoogle, cibTwitter, cilCalendar, cilChartPie, cilSpeedometer, cilUserFollow } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
 
 const Dashboard = () => {
@@ -20,7 +20,7 @@ const Dashboard = () => {
         <CCol xs={3}>
             <CWidgetStatsD
             className="mb-3"
-            icon={<CIcon className="my-4 text-white" icon={cibFacebook} height={52} />}
+            icon={<CIcon className="my-4 text-white" icon={cilCalendar} height={52} />}
             chart={
                 <CChartLine
                 className="position-absolute w-100 h-100"
@@ -71,12 +71,15 @@ const Dashboard = () => {
                 { title: 'friends', value: '89K' },
                 { title: 'feeds', value: '459' },
             ]}
+             color="warning"
+
             />
         </CCol>
         <CCol xs={3}>
             <CWidgetStatsD
             className="mb-3"
-            icon={<CIcon className="my-4 text-white" icon={cibTwitter} height={52} />}
+            color="primary"
+            icon={<CIcon className="my-4 text-white" icon={cilChartPie} height={52} />}
             chart={
                 <CChartLine
                 className="position-absolute w-100 h-100"
@@ -131,26 +134,25 @@ const Dashboard = () => {
         </CCol>
        
         <CCol xs={3}>
+            
             <CWidgetStatsC
-            className="mb-3"
-            icon={<CIcon icon={cilChartPie} height={36} />}
-            progress={{ color: 'success', value: 75 }}
-            text="Widget helper text"
-            title="Widget title"
-            value="89.9%"
-            />
+                color="danger"
+                icon={<CIcon icon={cilSpeedometer} height={36} />}
+                value="5:34:11"
+                title="Avg. Time"
+                inverse
+                progress={{ value: 75 }}
+              />
         </CCol>
         <CCol xs={3}>
             <CWidgetStatsC
-            className="mb-3"
-            icon={<CIcon icon={cilChartPie} height={36} />}
-            color="primary"
-            inverse
-            progress={{ value: 75 }}
-            text="Widget helper text"
-            title="Widget title"
-            value="89.9%"
-            />
+                color="success"
+                icon={<CIcon icon={cilUserFollow} height={36} />}
+                value="385"
+                title="New Clients"
+                inverse
+                progress={{ value: 75 }}
+              />
         </CCol>
         <CCol xs={6}>
             <CCard className="mb-4">

@@ -19,7 +19,7 @@ export default function AppSidebar() {
             <CSidebarHeader className="border-bottom d-flex align-items-center justify-content-start">
                 <CIcon icon={cilBurn} size="xl"/>
                 <h5 style={{ letterSpacing: ".1px", paddingLeft: "5px" }} className="mt-2">
-                    TheStrength
+                    The Strength
                     <span style={{ color: "#39f"}}> Logs</span>
                 </h5>
             </CSidebarHeader>
