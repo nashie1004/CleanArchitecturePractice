@@ -72,12 +72,15 @@ export default function WorkoutForm(){
   const { workoutHeaderId } = useParams()
   const firstRender = useFirstRender();
   const [modalState, setModalState] = useState({ show: false })
-  const [exerciseDropdown, setExerciseDropdown] = useState({ isLoading: false, items: [{ exerciseId: 0, name: "" }] });
+  const [formState, setFormState] = useState({
+    workoutHeader: { isLoading: false },
+    exerciseDropdown: { isLoading: false, items: [{ exerciseId: 0, name: "" }] }
+  });
 
   const {
     register: registerHeader, handleSubmit: handleSubmitHeader
     ,formState: { errors: errorsHeader, isSubmitting: isSubmittingHeader }
-    ,setValue: setValueHeader, watch: watchHeader
+    ,setValue: setValueHeader, watch: watchHeader, reset: resetHeader
   } = useForm<HeaderFormFields>({
     defaultValues: { workoutDetails: [] },
     resolver: zodResolver(headerSchema)
@@ -95,28 +98,33 @@ export default function WorkoutForm(){
   useEffect(() => {
     async function init(){
 
+      setFormState({ 
+        workoutHeader: { isLoading: true },
+        exerciseDropdown: { isLoading: true, items: [] },
+      })
+
       if (workoutHeaderId){
         const res = await workoutService.getOne(Number(workoutHeaderId));
-
-        console.log(res)
 
         if (!res.isOk){
           toast(res.message, { type: "error" })
           return;
         }
 
-        return;
+        resetHeader(res.data.workoutHeader);
       }
 
-      setExerciseDropdown(prev => ({ ...prev, isLoading: true }))
       const res = await exerciseService.getDropdown();
       
       if (!res.isOk){
         toast(res.message, { type: "error" })
         return;
       }
-  
-      setExerciseDropdown({ isLoading: false, items: res.data.items })
+
+      setFormState({ 
+        workoutHeader: { isLoading: false },
+        exerciseDropdown: { items: res.data.items, isLoading: false },
+       })
     }
 
     init();
@@ -142,7 +150,12 @@ export default function WorkoutForm(){
     setModalState({ show: false })
   }
 
-  const loading = isSubmittingDetail || isSubmittingHeader || exerciseDropdown.isLoading;
+  const loading = isSubmittingDetail 
+  || isSubmittingHeader 
+  || formState.exerciseDropdown.isLoading 
+  || formState.workoutHeader.isLoading;
+
+  console.log(errorsDetails, errorsHeader)
 
   return (
     <CRow>
@@ -265,7 +278,7 @@ export default function WorkoutForm(){
                               </div>
                             </CTableHeaderCell>
                             <CTableDataCell>
-                              {exerciseDropdown.items.find(i => i.exerciseId == item.exerciseId)?.name}
+                              {formState.exerciseDropdown.items.find(i => i.exerciseId == item.exerciseId)?.name}
                             </CTableDataCell>
                             <CTableDataCell>{item.weight}</CTableDataCell>
                             <CTableDataCell>
@@ -302,7 +315,7 @@ export default function WorkoutForm(){
                       valid={!errorsDetails.exerciseId && !firstRender ? true : false}
                     >
                       <option value={0}>Select...</option>
-                      {exerciseDropdown.items.map((item, idx) => {
+                      {formState.exerciseDropdown.items.map((item, idx) => {
                         return <option key={idx} value={item.exerciseId}>{item.name}</option>
                       })}
                     </CFormSelect>

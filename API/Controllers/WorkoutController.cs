@@ -22,7 +22,7 @@ namespace API.Controllers
             _mediator = mediator;
         }
 
-        [Route("addWorkoutHeader")]
+        [Route("submitForm")]
         [HttpPost]
         public async Task<IActionResult> AddWorkoutHeader([FromBody] AddWorkoutHeaderRequest req)
         {
