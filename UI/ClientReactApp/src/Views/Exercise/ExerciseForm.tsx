@@ -23,13 +23,19 @@ type FormFields = z.infer<typeof schema>;
 const exerciseCategoryService = new ExerciseCategoryService();
 const exerciseService = new ExerciseService();
 
-
 export default function ExerciseForm() {
   const { exerciseId } = useParams()
     const firstRender = useFirstRender();
     const [category, setCategory] = useState({
         isLoading: false,
         rowData: [{ exerciseCategoryId: 0, name: "" }]
+    })
+    const [formState, setFormState] = useState({
+        exercise: { isLoading: false },
+        exerciseCategoryDropdown: {
+            isLoading: false,
+            rowData: [{ exerciseCategoryId: 0, name: "" }]
+        }
     })
 
     const {

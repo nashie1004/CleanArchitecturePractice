@@ -8,7 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from 'react-hook-form';
 import useFirstRender from "../../Hooks/useFirstRender";
 import { useNavigate, useParams } from "react-router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const schema = z.object({
     exerciseCategoryId: z.number().optional().default(0),
@@ -23,6 +23,9 @@ const exerciseCategoryService = new ExerciseCategoryService();
 function ExerciseCategoryForm() {
     const firstRender = useFirstRender();
     const { exerciseCategoryId } = useParams()
+    const [formState, setFormState] = useState({
+        exerciseCategory: { isLoading: false }
+    });
 
     const {
         register, handleSubmit,
@@ -50,6 +53,8 @@ function ExerciseCategoryForm() {
 
     useEffect(() => {
         async function init(){
+            setFormState({ exerciseCategory: { isLoading: true } })
+
             if (exerciseCategoryId){
                 const res = await exerciseCategoryService.getOne(exerciseCategoryId);
                 
@@ -58,15 +63,16 @@ function ExerciseCategoryForm() {
                     return;
                 }
                 
-                console.log(res)
                 reset(res.data.exerciseCategory)
             }
+
+            setFormState({ exerciseCategory: { isLoading: false } })
         }
 
         init();
     }, [])
 
-    const loading = isSubmitting;
+    const loading = isSubmitting || formState.exerciseCategory.isLoading;
 
     return (
         <CRow>

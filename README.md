@@ -1,10 +1,20 @@
 # Workout Tracker Web App
 
+## To do
+- [ ] Dashboard page
+- [ ] Profile page
+- [ ] Schedule page 
+- [ ] Editable workout form
+- [ ] Editable exercise form
+- [ ] Editable exercise category form
+- [ ] All list global search 
+- [ ] All list delete
+- [ ] Report page
+
 ## Features
 
 - Register
 - Login
-
 - Dashboard
 - Profile
 - My Schedule
