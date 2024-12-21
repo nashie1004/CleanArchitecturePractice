@@ -13,7 +13,6 @@
   <ItemGroup>
     <Folder Include="Features\Audit\Commands\" />
     <Folder Include="Features\Exercise\Exercise\Commands\UpdateExercise\" />
-    <Folder Include="Features\Exercise\Exercise\Queries\GetExercise\" />
     <Folder Include="Features\Todo\Commands\DeleteTodo\" />
   </ItemGroup>
 

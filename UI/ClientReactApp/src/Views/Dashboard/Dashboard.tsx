@@ -149,7 +149,7 @@ const Dashboard = () => {
                 color="success"
                 icon={<CIcon icon={cilUserFollow} height={36} />}
                 value="385"
-                title="New Clients"
+                title="Your BMI"
                 inverse
                 progress={{ value: 75 }}
               />

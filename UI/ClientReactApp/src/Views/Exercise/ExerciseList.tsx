@@ -61,7 +61,7 @@ export default function ExerciseList(){
       toast(data.message, { type: "error" })
       return;
     }
-      console.log(data.data.items)
+      
     setTableState(prev => ({
       ...prev,
       isLoading: false,

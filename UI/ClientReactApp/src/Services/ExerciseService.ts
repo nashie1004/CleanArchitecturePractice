@@ -14,6 +14,11 @@ export default class ExerciseService extends BaseService {
         const response = await this.baseGetList("/api/Exercise/getManyExercise", listParams);
         return response;
     }
+    
+    async getOne(exerciseId: string) {
+        const response = await this.baseGet(`/api/Exercise/getOne?exerciseId=${exerciseId}`);
+        return response;
+    }
 
     async getDropdown(){
         const response = await this.baseGetList("/api/Exercise/getDropdown", {

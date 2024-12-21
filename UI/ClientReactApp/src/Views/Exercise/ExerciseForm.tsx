@@ -7,11 +7,12 @@ import { toast, ToastContainer } from "react-toastify";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from 'react-hook-form';
 import useFirstRender from "../../Hooks/useFirstRender";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { useEffect, useState } from "react";
 import ExerciseService from "../../Services/ExerciseService";
 
 const schema = z.object({
+    exerciseId: z.number().optional().default(0),
     name: z.string().min(1, "Name must not be empty"),
     description: z.string().min(1, "Description must not be empty"),
     category: z.string().min(1, "Category must not be empty")
@@ -24,15 +25,15 @@ const exerciseService = new ExerciseService();
 
 
 export default function ExerciseForm() {
+  const { exerciseId } = useParams()
     const firstRender = useFirstRender();
-    const navigate = useNavigate();
     const [category, setCategory] = useState({
         isLoading: false,
         rowData: [{ exerciseCategoryId: 0, name: "" }]
     })
 
     const {
-        register, handleSubmit, setError,
+        register, handleSubmit, reset,
         formState: { errors, isSubmitting }
     } = useForm<FormFields>({
         defaultValues: {
@@ -42,8 +43,6 @@ export default function ExerciseForm() {
     })
 
     async function submitForm(data: FormFields) {
-        console.log(data)
-
         const response = await exerciseService.submitForm({
             name: data.name
             , description: data.description
@@ -59,25 +58,39 @@ export default function ExerciseForm() {
         toast("Successfully created. Go to Exercise list to see newly created record.", { type: "success" })
     }
 
-    async function categoryDropdown() {
-        setCategory(prev => ({...prev, isLoading: true}))
-
-        const res = await exerciseCategoryService.getDropdown();
-
-        if (!res.isOk) {
-            toast(res.message, { type: "error" })
-            setCategory(prev => ({...prev, isLoading: false }))
-            return;
-        }
-
-        setCategory({ rowData: res.data.items, isLoading: false })
-    }
 
     useEffect(() => {
-        categoryDropdown();
+        
+        async function init() {
+
+            if (exerciseId){
+                const res = await exerciseService.getOne(exerciseId);
+                
+                if (!res.isOk) {
+                    toast(res.message, { type: "error" })
+                    return;
+                }
+
+                reset(res.data.exercise);
+            }
+
+            setCategory(prev => ({...prev, isLoading: true}))
+
+            const res = await exerciseCategoryService.getDropdown();
+
+            if (!res.isOk) {
+                toast(res.message, { type: "error" })
+                setCategory(prev => ({...prev, isLoading: false }))
+                return;
+            }
+
+            setCategory({ rowData: res.data.items, isLoading: false })
+        }
+
+        init();
     }, [])
 
-    const loading = category.isLoading;
+    const loading = category.isLoading || isSubmitting;
 
     return (
         <CRow>

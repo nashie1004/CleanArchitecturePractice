@@ -1,5 +1,6 @@
 ﻿using Application.Features.Exercise.Exercise.Commands.AddExercise;
 using Application.Features.Exercise.Exercise.Queries.GetAllExercise;
+using Application.Features.Exercise.Exercise.Queries.GetOneExercise;
 using Application.Features.Exercise.Queries.GetManyExercise;
 using Application.Features.Todo.Commands.AddTodo;
 using MediatR;
@@ -31,6 +32,13 @@ namespace API.Controllers
         [Route("getManyExercise")]
         [HttpGet]
         public async Task<IActionResult> GetManyExercise([FromQuery] GetManyExerciseRequest req)
+        {
+            return Ok(await mediator_.Send(req));
+        }
+        
+        [Route("getOne")]
+        [HttpGet]
+        public async Task<IActionResult> GetOne([FromQuery] GetOneExerciseRequest req)
         {
             return Ok(await mediator_.Send(req));
         }

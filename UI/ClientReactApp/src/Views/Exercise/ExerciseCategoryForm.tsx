@@ -11,7 +11,7 @@ import { useNavigate, useParams } from "react-router";
 import { useEffect } from "react";
 
 const schema = z.object({
-    exerciseCategoryId: z.number().optional(),
+    exerciseCategoryId: z.number().optional().default(0),
     name: z.string().min(1, "Name must not be empty"),
     description: z.string().min(1, "Description must not be empty")
 });
