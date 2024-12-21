@@ -36,6 +36,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import useFirstRender from '../../Hooks/useFirstRender';
 import WorkoutService from '../../Services/WorkoutService';
+import { useParams } from 'react-router';
 
 const detailSchema = z.object({
   tempRowId: z.number().optional(),
@@ -68,6 +69,7 @@ const emptyDetail: DetailFormFields = {
 }
 
 export default function WorkoutForm(){
+  const { workoutHeaderId } = useParams()
   const firstRender = useFirstRender();
   const [modalState, setModalState] = useState({ show: false })
   const [exerciseDropdown, setExerciseDropdown] = useState({ isLoading: false, items: [{ exerciseId: 0, name: "" }] });
@@ -92,6 +94,20 @@ export default function WorkoutForm(){
 
   useEffect(() => {
     async function init(){
+
+      if (workoutHeaderId){
+        const res = await workoutService.getOne(Number(workoutHeaderId));
+
+        console.log(res)
+
+        if (!res.isOk){
+          toast(res.message, { type: "error" })
+          return;
+        }
+
+        return;
+      }
+
       setExerciseDropdown(prev => ({ ...prev, isLoading: true }))
       const res = await exerciseService.getDropdown();
       

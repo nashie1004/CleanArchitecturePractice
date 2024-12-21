@@ -14,6 +14,7 @@ namespace Application.Contracts.Infra
         Task<bool> DeleteRecordAsync(long id);
         Task<T> GetRecordAsync(long id);
         Task<T> GetRecordByPropertyAsync(Expression<Func<T, bool>> predicate);
+        Task<List<T>> GetListByPropertyAsync(Expression<Func<T, bool>> predicate);
         Task<List<T>> GetAllRecordAsync();
         Task<List<T>> GetAllRecordAsync(int pageSize, int pageNo, Expression<Func<T, bool>> filter = null);
         Task<int> SaveRecordAsync(CancellationToken ct = default, long suppliedUserId = 0);

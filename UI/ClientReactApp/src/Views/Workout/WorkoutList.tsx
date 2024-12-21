@@ -8,20 +8,26 @@ import { toast } from "react-toastify";
 import { ColDef } from "ag-grid-community"
 import { toDateTimeFormat } from "../../Utils/formatters";
 import WorkoutService from "../../Services/WorkoutService";
+import { NavLink } from "react-router";
 
 const workoutService = new WorkoutService();
 
 const columns: ColDef[] = [
   { field: "", maxWidth: 100, cellRenderer: (p) => {
-    // console.log(p.data, p.data.workoutHeaderId)
+    const formUrl = `/workout/form/${p.data.workoutHeaderId}`;
+
     return <div 
       style={{ width: "100%", height: "100%"}}
       className="d-flex justify-content-center align-items-center">
-        <CIcon 
-          icon={cilPencil} 
-          className="text-dark" 
-          style={{ marginRight: "4px", cursor: "pointer" }} 
-          size="xl" />
+        <NavLink to={formUrl} style={{marginRight: "4px",}} 
+        className="d-flex justify-content-center align-items-center"
+        >
+          <CIcon 
+            icon={cilPencil} 
+            className="text-dark" 
+            style={{  cursor: "pointer" }} 
+            size="xl" />
+        </NavLink>
         <CIcon 
           icon={cilTrash} 
           className="text-danger" 

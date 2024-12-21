@@ -40,12 +40,22 @@ const routesAuthenticated = [
         breadCrumb: ["Workout", "Form"] 
     },
     { 
+        path: '/workout/form/:workoutHeaderId',  
+        element: WorkoutForm,
+        breadCrumb: ["Workout", "Form"] 
+    },
+    { 
         path: '/exercise/list', 
         element: ExerciseList,
         breadCrumb: ["Exercise", "List"] 
     },
     {
         path: '/exercise/form',
+        element: ExerciseForm,
+        breadCrumb: ["Exercise", "Form"]
+    },
+    {
+        path: '/exercise/form/:exerciseId',
         element: ExerciseForm,
         breadCrumb: ["Exercise", "Form"]
     },
@@ -56,6 +66,11 @@ const routesAuthenticated = [
     },
     { 
         path: '/exercise/category/form', 
+        element: ExerciseCategoryForm,
+        breadCrumb: ["Exercise", "Category", "Form"] 
+    },
+    { 
+        path: '/exercise/category/form/:exerciseCategoryId', 
         element: ExerciseCategoryForm,
         breadCrumb: ["Exercise", "Category", "Form"] 
     },

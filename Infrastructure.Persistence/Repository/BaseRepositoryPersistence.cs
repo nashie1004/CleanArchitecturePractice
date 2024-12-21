@@ -59,6 +59,11 @@ namespace Infra.Repository
             return await _context.Set<T>().FirstOrDefaultAsync(predicate);
         }
         
+        public async Task<List<T>> GetListByPropertyAsync(Expression<Func<T, bool>> predicate)
+        {
+            return await _context.Set<T>().AsNoTracking().Where(predicate).ToListAsync();
+        }
+
         public async Task<List<T>> GetAllRecordAsync()
         {
             return await _context.Set<T>().AsNoTracking().ToListAsync();
