@@ -3,7 +3,7 @@ import { AgGridReact } from "ag-grid-react";
 import useTheme from "../../Hooks/useTheme";
 import { CButton, CCol, CContainer, CFormInput, CFormSelect, CInputGroup, CInputGroupText, CProgress, CRow, CSpinner } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
-import { cilCaretLeft, cilCaretRight, cilPlus, cilSearch } from "@coreui/icons";
+import { cilCaretLeft, cilCaretRight, cilPencil, cilPlus, cilSearch, cilTrash } from "@coreui/icons";
 import { toast } from "react-toastify";
 import { ColDef } from "ag-grid-community"
 import { toDateTimeFormat } from "../../Utils/formatters";
@@ -12,7 +12,24 @@ import WorkoutService from "../../Services/WorkoutService";
 const workoutService = new WorkoutService();
 
 const columns: ColDef[] = [
-  { field: "workoutHeaderId" },
+  { field: "", maxWidth: 100, cellRenderer: (p) => {
+    // console.log(p.data, p.data.workoutHeaderId)
+    return <div 
+      style={{ width: "100%", height: "100%"}}
+      className="d-flex justify-content-center align-items-center">
+        <CIcon 
+          icon={cilPencil} 
+          className="text-dark" 
+          style={{ marginRight: "4px", cursor: "pointer" }} 
+          size="xl" />
+        <CIcon 
+          icon={cilTrash} 
+          className="text-danger" 
+          style={{  cursor: "pointer" }}
+          size="xl"  />
+      </div>
+  } },
+  { field: "workoutHeaderId" ,type: ["centerAligned"]},
   { field: "title" },
   { field: "notes" },
   { field: "startDateTime", valueFormatter: (p) => toDateTimeFormat(p.value) },

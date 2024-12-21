@@ -22,7 +22,7 @@ namespace Application.DTOs
                 ;
             CreateMap<ExerciseCategory, ExerciseCategoryDropdownDTO>();
             CreateMap<Exercise, ExerciseDTO>()
-                .ForMember(dest => dest.GeneratedBy, opt => opt.MapFrom(src => src.GeneratedBy.ToString()))
+                .ForMember(dest => dest.GeneratedByUser, opt => opt.MapFrom(src => src.GeneratedBy == Domain.Enums.GeneratedBy.User ? true : false))
             ;
             CreateMap<WorkoutHeader, WorkoutHeaderDTO>().ReverseMap();
             CreateMap<WorkoutDetail, WorkoutDetailDTO>().ReverseMap();

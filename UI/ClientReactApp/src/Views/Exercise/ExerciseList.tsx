@@ -14,7 +14,7 @@ const columns: ColDef[] = [
   { field: "exerciseId" },
   { field: "name" },
   { field: "description" },
-  { field: "generatedBy", },
+  { field: "generatedByUser", headerClass: "text-center", cellStyle: { textAlign: "center" }  },
 ]
 
 export default function ExerciseList(){
@@ -38,7 +38,7 @@ export default function ExerciseList(){
       toast(data.message, { type: "error" })
       return;
     }
-
+      console.log(data.data.items)
     setTableState(prev => ({
       ...prev,
       isLoading: false,
