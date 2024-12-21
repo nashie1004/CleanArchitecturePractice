@@ -155,7 +155,7 @@ export default function WorkoutForm(){
   || formState.exerciseDropdown.isLoading 
   || formState.workoutHeader.isLoading;
 
-  console.log(errorsDetails, errorsHeader)
+  console.log(errorsHeader.workoutDetails)
 
   return (
     <CRow>
@@ -229,7 +229,23 @@ export default function WorkoutForm(){
                   ></CFormTextarea>
                 </CCol>
                 <CCol xs={12} className='d-flex justify-content-between align-items-center'>
-                  <p className="text-body-secondary small" >Workout Details</p>
+                  <div>
+                    <p className="text-body-secondary small" >Workout Details</p>
+                    {
+                      (errorsHeader.workoutDetails ? errorsHeader.workoutDetails : []).map((i1, idx1) => {
+                        return Object.entries(i1).map((i2, idx2) => {
+                          console.log(i2)
+
+                          return <div 
+                          key={idx2}
+                          className='invalid-feedback' 
+                          style={{display: "block"}}>
+                            {i2[1]?.message}
+                        </div>
+                        })
+                      }) 
+                    }
+                  </div>
                   <CButton 
                     color="primary" 
                     className='d-flex align-items-center' 

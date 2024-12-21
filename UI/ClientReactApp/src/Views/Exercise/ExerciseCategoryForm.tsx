@@ -7,9 +7,11 @@ import { toast, ToastContainer } from "react-toastify";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from 'react-hook-form';
 import useFirstRender from "../../Hooks/useFirstRender";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
+import { useEffect } from "react";
 
 const schema = z.object({
+    exerciseCategoryId: z.number().optional(),
     name: z.string().min(1, "Name must not be empty"),
     description: z.string().min(1, "Description must not be empty")
 });
@@ -20,11 +22,11 @@ const exerciseCategoryService = new ExerciseCategoryService();
 
 function ExerciseCategoryForm() {
     const firstRender = useFirstRender();
-    const navigate = useNavigate();
+    const { exerciseCategoryId } = useParams()
 
     const {
-        register, handleSubmit, setError,
-        formState: { errors, isSubmitting }
+        register, handleSubmit,
+        formState: { errors, isSubmitting }, reset
     } = useForm<FormFields>({
         defaultValues: {
            
@@ -45,6 +47,24 @@ function ExerciseCategoryForm() {
 
         toast("Successfully created. Go to category list to see newly added category.", { type: "success" })
     }
+
+    useEffect(() => {
+        async function init(){
+            if (exerciseCategoryId){
+                const res = await exerciseCategoryService.getOne(exerciseCategoryId);
+                
+                if (!res.isOk) {
+                    toast(res.message, { type: "error" })
+                    return;
+                }
+                
+                console.log(res)
+                reset(res.data.exerciseCategory)
+            }
+        }
+
+        init();
+    }, [])
 
     const loading = isSubmitting;
 
@@ -91,7 +111,7 @@ function ExerciseCategoryForm() {
                                     type="submit"
                                     disabled={loading}
                                 >
-                                    {loading ? <CSpinner /> : "Create Submit"}
+                                    {loading ? <CSpinner /> : "Submit"}
                                 </CButton>
                             </CCol>
                         </CForm>

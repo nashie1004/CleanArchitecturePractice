@@ -2,6 +2,7 @@
 using Application.Features.Exercise.ExerciseCategory.Commands.Add;
 using Application.Features.Exercise.ExerciseCategory.Queries.GetDropdown;
 using Application.Features.Exercise.ExerciseCategory.Queries.GetMany;
+using Application.Features.Exercise.ExerciseCategory.Queries.GetOne;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -31,6 +32,13 @@ namespace API.Controllers
         [Route("getMany")]
         [HttpGet]
         public async Task<IActionResult> GetMany([FromQuery] GetManyExerciseCategoryRequest req)
+        {
+            return Ok(await mediator_.Send(req));
+        }
+        
+        [Route("getOne")]
+        [HttpGet]
+        public async Task<IActionResult> GetOne([FromQuery] GetOneExerciseCategoryRequest req)
         {
             return Ok(await mediator_.Send(req));
         }

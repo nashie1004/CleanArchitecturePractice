@@ -14,6 +14,12 @@ export default class ExerciseCategoryService extends BaseService {
         const response = await this.baseGetList("/api/ExerciseCategory/getMany", listParams);
         return response;
     }
+    
+    async getOne(exerciseCategoryId: string) {
+        const response = await this.baseGet(`/api/ExerciseCategory/getOne?exerciseCategoryId=${exerciseCategoryId}`);
+        return response;
+    }
+
 
     async getDropdown() {
         const response = await this.baseGetList("/api/ExerciseCategory/getDropdown", {

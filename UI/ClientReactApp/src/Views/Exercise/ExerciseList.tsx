@@ -3,14 +3,37 @@ import { AgGridReact } from "ag-grid-react";
 import useTheme from "../../Hooks/useTheme";
 import { CButton, CCol, CContainer, CFormInput, CFormSelect, CInputGroup, CInputGroupText, CProgress, CRow, CSpinner } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
-import { cilCaretLeft, cilCaretRight, cilPlus, cilSearch } from "@coreui/icons";
+import { cilCaretLeft, cilCaretRight, cilPencil, cilPlus, cilSearch, cilTrash } from "@coreui/icons";
 import { toast } from "react-toastify";
 import { ColDef } from "ag-grid-community"
 import ExerciseService from "../../Services/ExerciseService";
+import { NavLink } from "react-router";
 
 const exerciseService = new ExerciseService();
 
 const columns: ColDef[] = [
+  { field: "", maxWidth: 100, cellRenderer: (p) => {
+    const formUrl = `/exercise/form/${p.data.exerciseId}`;
+
+    return <div 
+      style={{ width: "100%", height: "100%"}}
+      className="d-flex justify-content-center align-items-center">
+        <NavLink to={formUrl} style={{marginRight: "4px",}} 
+        className="d-flex justify-content-center align-items-center"
+        >
+          <CIcon 
+            icon={cilPencil} 
+            className="text-dark" 
+            style={{  cursor: "pointer" }} 
+            size="xl" />
+        </NavLink>
+        <CIcon 
+          icon={cilTrash} 
+          className="text-danger" 
+          style={{  cursor: "pointer" }}
+          size="xl"  />
+      </div>
+  } },
   { field: "exerciseId" },
   { field: "name" },
   { field: "description" },
