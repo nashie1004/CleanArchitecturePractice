@@ -15,10 +15,10 @@ const columns: ColDef[] = [
   { field: "action", maxWidth: 110, valueFormatter: (p) => tableActionFormat(p.value)},
   { field: "createdDate", valueFormatter: (p) => toDateTimeFormat(p.value) },
   { field: "tableName" },
+  { field: "tablePrimaryKey", maxWidth: 165 },
   { field: "newData" },
-  { field: "tablePrimaryKey", maxWidth: 100 },
-  { field: "lastUpdatedDate", valueFormatter: (p) => toDateTimeFormat(p.value) },
   { field: "oldData" },
+  { field: "lastUpdatedDate", valueFormatter: (p) => toDateTimeFormat(p.value) },
 ]
 
 export default function Audit(){
@@ -34,7 +34,7 @@ export default function Audit(){
     isLoading: false
   })
 
-  async function getData(){
+  async function refresh(){
     setTableState(prev => ({ ...prev, isLoading: true}))
     const data = await auditService.getMany(tableState);
     
@@ -51,7 +51,7 @@ export default function Audit(){
   }
 
   useEffect(() => {
-    getData();
+    refresh();
   }, [
     tableState.pageSize, tableState.pageNumber,
     tableState.sortBy, tableState.filters,
@@ -70,6 +70,8 @@ export default function Audit(){
 // Sets the filter model via the grid API
 // gridApi.setFilterModel(model);
 
+  const loading = tableState.isLoading;
+
   return (
     <div style={{ height: 500 }} className={theme === "dark" ? "ag-theme-quartz-dark" : "" }>
       <CContainer className="mb-2">
@@ -77,25 +79,28 @@ export default function Audit(){
           <CCol>
             <CInputGroup>
               <CInputGroupText id="basic-addon1">
-                <CIcon size="lg" icon={cilSearch} />
+                {loading ? <CSpinner size="sm" /> : <CIcon  icon={cilSearch} />}
               </CInputGroupText>
-              <CFormInput placeholder="Global search..." aria-label="Username" aria-describedby="username"/>
+              <CFormInput 
+                placeholder="Global search..." 
+                aria-label="Username" 
+                aria-describedby="username"/>
             </CInputGroup>
           </CCol>
           <CCol xs="auto">
             <CFormSelect
-            aria-label="Default select example"
-            options={[
-             { label: '15 rows', value: "15" },
-             { label: '30 rows', value: "30" },
-             { label: '45 rows', value: "45" },
-            ]}
-            onChange={(e : React.ChangeEvent<HTMLSelectElement>) => {
-                setTableState(prev => ({
-                  ...prev,
-                  pageSize: Number(e.target.value)
-                }))
-            }}
+                aria-label="Default select example"
+                options={[
+                { label: '15 rows', value: "15" },
+                { label: '30 rows', value: "30" },
+                { label: '45 rows', value: "45" },
+                ]}
+                onChange={(e : React.ChangeEvent<HTMLSelectElement>) => {
+                    setTableState(prev => ({
+                      ...prev,
+                      pageSize: Number(e.target.value)
+                    }))
+                }}
            />
         </CCol>
           <CCol xs="auto" className="d-flex align-items-center">
@@ -139,7 +144,7 @@ export default function Audit(){
         pagination={true}
         paginationPageSize={tableState.pageSize}
         paginationPageSizeSelector={[15, 30, 45]}
-        onGridReady={getData}
+        onGridReady={refresh}
         />
     </div>
   );

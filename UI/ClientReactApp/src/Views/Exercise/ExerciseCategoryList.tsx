@@ -102,7 +102,6 @@ export default function ExerciseCategoryList() {
                     </CCol>
                     <CCol xs="auto">
                         <CFormSelect
-                            disabled={loading}
                             aria-label="Default select example"
                             options={[
                                 { label: '15 rows', value: "15" },
@@ -122,7 +121,6 @@ export default function ExerciseCategoryList() {
                     </CCol>
                     <CCol xs="auto" className="">
                         <CButton
-                            disabled={loading}
                             color="secondary"
                             onClick={() => {
                                 setTableState(prev => ({
@@ -136,7 +134,6 @@ export default function ExerciseCategoryList() {
                     </CCol>
                     <CCol xs="auto">
                         <CButton
-                            disabled={loading}
                             color="secondary"
                             onClick={() => {
                                 setTableState(prev => ({
@@ -149,7 +146,7 @@ export default function ExerciseCategoryList() {
                         </CButton>
                     </CCol>
                     <CCol xs="auto">
-                        <CButton color="secondary" disabled={loading}>
+                        <CButton color="secondary">
                             <NavLink to="/exercise/category/form" style={{ textDecoration: "none", color: "inherit"} }>
                                 <span className="">Add Item </span>
                                 <CIcon icon={cilPlus} />
