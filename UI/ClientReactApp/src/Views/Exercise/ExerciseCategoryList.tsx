@@ -6,43 +6,21 @@ import CIcon from "@coreui/icons-react";
 import { cilCaretLeft, cilCaretRight, cilPencil, cilPlus, cilSearch, cilTrash } from "@coreui/icons";
 import { toast } from "react-toastify";
 import ExerciseCategoryService from "../../Services/ExerciseCategoryService";
-import { NavLink } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 import { toTwentyChars } from "../../Utils/formatters";
+import { ColDef } from "ag-grid-community"
 
 const exerciseCategoryService = new ExerciseCategoryService();
-const columns = [
-    { field: "", maxWidth: 100, cellRenderer: (p) => {
-        const formUrl = `/exercise/category/form/${p.data.exerciseCategoryId}`;
-    
-        return <div 
-          style={{ width: "100%", height: "100%"}}
-          className="d-flex justify-content-center align-items-center">
-            <NavLink to={formUrl} style={{marginRight: "4px",}} 
-            className="d-flex justify-content-center align-items-center"
-            >
-              <CIcon 
-                icon={cilPencil} 
-                className="text-dark" 
-                style={{  cursor: "pointer" }} 
-                size="xl" />
-            </NavLink>
-            <CIcon 
-              icon={cilTrash} 
-              className="text-danger" 
-              style={{  cursor: "pointer" }}
-              size="xl"  />
-          </div>
-      } },
-    { field: "exerciseCategoryId", maxWidth: 180 },
-    { field: "name" },
-    { field: "description" , valueFormatter: (p) => toTwentyChars(p.value) },
-    { field: "generatedByUser" },
-]
 
 export default function ExerciseCategoryList() {
     const { theme } = useTheme();
     const gridRef = useRef();
-    const [columnDefs] = useState(columns);
+    const navigate = useNavigate();
+    const [modalState, setModalState] = useState({
+      show: false,
+      exerciseCategoryId: 0,
+      isSubmitting: false
+    });
     const [tableState, setTableState] = useState({
         pageSize: 15,
         pageNumber: 1,
@@ -52,25 +30,46 @@ export default function ExerciseCategoryList() {
         isLoading: false
     })
 
-    async function getData() {
+    const columnDefs = useMemo(() => {
+        const columns: ColDef[] = [
+            { field: "", maxWidth: 100, cellRenderer: (p:any) => {
+                return <div style={{ width: "100%", height: "100%"}} className="d-flex justify-content-center align-items-center">
+                    <CIcon 
+                        icon={cilPencil} 
+                        className="text-dark" 
+                        style={{  cursor: "pointer", marginRight: "4px"  }} 
+                        onClick={() => navigate(`/exercise/category/form/${p.data.exerciseCategoryId}`)}
+                        size="xl" />
+                    <CIcon 
+                      icon={cilTrash} 
+                      className="text-danger" 
+                      style={{  cursor: "pointer" }}
+                      onClick={() => setModalState({ show: true, exerciseCategoryId: p.data.exerciseId, isSubmitting: false })}
+                      size="xl"  />
+                  </div>
+              } },
+            { field: "exerciseCategoryId", maxWidth: 180 },
+            { field: "name" },
+            { field: "description" , valueFormatter: (p) => toTwentyChars(p.value) },
+            { field: "generatedByUser" },
+        ]
+        return columns;
+    }, [])
+
+    async function refresh() {
         setTableState(prev => ({ ...prev, isLoading: true }))
         const data = await exerciseCategoryService.getMany(tableState);
-
         if (!data.isOk) {
             toast(data.message, { type: "error" })
             setTableState(prev => ({ ...prev, isLoading: false }))
             return;
         }
 
-        setTableState(prev => ({
-            ...prev,
-            isLoading: false,
-            rowData: data.data.items
-        }));
+        setTableState(prev => ({ ...prev, isLoading: false, rowData: data.data.items }));
     }
 
     useEffect(() => {
-        getData();
+        refresh();
     }, [
         tableState.pageSize, tableState.pageNumber,
         tableState.sortBy, tableState.filters,
@@ -83,6 +82,8 @@ export default function ExerciseCategoryList() {
         };
     }, []);
 
+  const loading = false || modalState.isSubmitting || tableState.isLoading;
+
     return (
         <div style={{ height: 500 }} className={theme === "dark" ? "ag-theme-quartz-dark" : ""}>
             <CContainer className="mb-2">
@@ -90,13 +91,18 @@ export default function ExerciseCategoryList() {
                     <CCol>
                         <CInputGroup>
                             <CInputGroupText id="basic-addon1">
-                                <CIcon size="lg" icon={cilSearch} />
+                                {loading ? <CSpinner size="sm" /> : <CIcon  icon={cilSearch} />}
                             </CInputGroupText>
-                            <CFormInput placeholder="Global search..." aria-label="Username" aria-describedby="username" />
+                            <CFormInput 
+                                disabled={loading}
+                                placeholder="Global search..." 
+                                aria-label="Username" 
+                                aria-describedby="username" />
                         </CInputGroup>
                     </CCol>
                     <CCol xs="auto">
                         <CFormSelect
+                            disabled={loading}
                             aria-label="Default select example"
                             options={[
                                 { label: '15 rows', value: "15" },
@@ -112,10 +118,11 @@ export default function ExerciseCategoryList() {
                         />
                     </CCol>
                     <CCol xs="auto" className="d-flex align-items-center">
-                        <CInputGroupText >Page: {tableState.pageNumber}</CInputGroupText>
+                        <CInputGroupText>Page: {tableState.pageNumber}</CInputGroupText>
                     </CCol>
                     <CCol xs="auto" className="">
                         <CButton
+                            disabled={loading}
                             color="secondary"
                             onClick={() => {
                                 setTableState(prev => ({
@@ -129,6 +136,7 @@ export default function ExerciseCategoryList() {
                     </CCol>
                     <CCol xs="auto">
                         <CButton
+                            disabled={loading}
                             color="secondary"
                             onClick={() => {
                                 setTableState(prev => ({
@@ -141,9 +149,9 @@ export default function ExerciseCategoryList() {
                         </CButton>
                     </CCol>
                     <CCol xs="auto">
-                        <CButton color="secondary" >
+                        <CButton color="secondary" disabled={loading}>
                             <NavLink to="/exercise/category/form" style={{ textDecoration: "none", color: "inherit"} }>
-                                <span className="">Add Item</span>
+                                <span className="">Add Item </span>
                                 <CIcon icon={cilPlus} />
                             </NavLink>
                         </CButton>
@@ -160,7 +168,7 @@ export default function ExerciseCategoryList() {
                 pagination={true}
                 paginationPageSize={tableState.pageSize}
                 paginationPageSizeSelector={[15, 30, 45]}
-                onGridReady={getData}
+                onGridReady={refresh}
             />
         </div>
     );

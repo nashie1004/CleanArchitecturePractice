@@ -2,17 +2,14 @@ import moment from "moment";
 import { TableAction } from "./enums";
 
 export function toTwentyChars(val: string){
-  return `${val.substring(0, 20)}...`
+  if (!val) return "";
+  return val.length > 20 ? `${val.substring(0, 20)}...` : val;
 }
 
 export function toDateTimeFormat(val: string){
-    let retVal = "";
+  if (!moment(val).isValid()) return "";
 
-    if (!moment(val).isValid()) return retVal;
-
-    retVal = moment(val).format("MM/DD/YYYY hh:mm A")
-
-    return retVal;
+  return moment(val).format("MM/DD/YYYY hh:mm A")
 }
 
 export function tableActionFormat(val: any){

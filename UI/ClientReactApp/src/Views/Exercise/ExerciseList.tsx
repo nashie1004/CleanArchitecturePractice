@@ -3,11 +3,11 @@ import { AgGridReact } from "ag-grid-react";
 import useTheme from "../../Hooks/useTheme";
 import { CButton, CCol, CContainer, CFormInput, CFormSelect, CInputGroup, CInputGroupText, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CProgress, CRow, CSpinner } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
-import { cilCaretLeft, cilCaretRight, cilPencil, cilSearch, cilTrash } from "@coreui/icons";
+import { cilCaretLeft, cilCaretRight, cilPencil, cilPlus, cilSearch, cilTrash } from "@coreui/icons";
 import { toast } from "react-toastify";
 import { ColDef } from "ag-grid-community"
 import ExerciseService from "../../Services/ExerciseService";
-import { useNavigate } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 import { toTwentyChars } from "../../Utils/formatters";
 import CustomToaster from "../../Components/UI/CustomToaster";
 
@@ -59,7 +59,7 @@ export default function ExerciseList(){
     return columns;
   }, [])
 
-  async function getData(){
+  async function refresh(){
     setTableState(prev => ({ ...prev, isLoading: true}))
     const data = await exerciseService.getMany(tableState);
     if (!data.isOk){
@@ -76,10 +76,11 @@ export default function ExerciseList(){
     const res = await exerciseService.deleteOne(modalState.exerciseId.toString());
     toast(res.message, { type: res.isOk ? "success" : "error" })
     setModalState({ exerciseId: 0, show: false, isSubmitting: false })
+    refresh();
   }
 
   useEffect(() => {
-    getData();
+    refresh();
   }, [
     tableState.pageSize, tableState.pageNumber,
     tableState.sortBy, tableState.filters,
@@ -92,7 +93,7 @@ export default function ExerciseList(){
     };
   }, []);
 
-  const loading = modalState.isSubmitting;
+  const loading = modalState.isSubmitting || tableState.isLoading;
 
   return (
     <div style={{ height: 500 }} className={theme === "dark" ? "ag-theme-quartz-dark" : "" }>
@@ -102,13 +103,18 @@ export default function ExerciseList(){
           <CCol>
             <CInputGroup>
               <CInputGroupText id="basic-addon1">
-                <CIcon size="lg" icon={cilSearch} />
+                {loading ? <CSpinner size="sm" /> : <CIcon size="lg" icon={cilSearch} />}
               </CInputGroupText>
-              <CFormInput placeholder="Global search..." aria-label="Username" aria-describedby="username"/>
+              <CFormInput 
+                disabled={loading}
+                placeholder="Global search..." 
+                aria-label="Username" 
+                aria-describedby="username"/>
             </CInputGroup>
           </CCol>
           <CCol xs="auto">
             <CFormSelect
+              disabled={loading}
             aria-label="Default select example"
             options={[
              { label: '15 rows', value: "15" },
@@ -128,6 +134,7 @@ export default function ExerciseList(){
           </CCol>
           <CCol xs="auto" className="">
             <CButton 
+              disabled={loading}
               color="secondary"
               onClick={() => {
                 setTableState(prev => ({
@@ -141,6 +148,7 @@ export default function ExerciseList(){
           </CCol>
           <CCol xs="auto">
             <CButton 
+              disabled={loading}
               color="secondary"
               onClick={() => {
                 setTableState(prev => ({
@@ -151,6 +159,14 @@ export default function ExerciseList(){
              >
               <CIcon icon={cilCaretRight} />
             </CButton>
+          </CCol>
+          <CCol xs="auto">
+              <CButton color="secondary" disabled={loading}>
+                  <NavLink to="/exercise/form" style={{ textDecoration: "none", color: "inherit"} }>
+                    <span className="">Add Item </span>
+                    <CIcon icon={cilPlus} />
+                  </NavLink>
+              </CButton>
           </CCol>
         </CRow>
         </CContainer>
@@ -164,7 +180,7 @@ export default function ExerciseList(){
         pagination={true}
         paginationPageSize={tableState.pageSize}
         paginationPageSizeSelector={[15, 30, 45]}
-        onGridReady={getData}
+        onGridReady={refresh}
         />
 
     <CModal
