@@ -35,7 +35,7 @@ const columns = [
     { field: "exerciseCategoryId" },
     { field: "name" },
     { field: "description" },
-    { field: "generatedBy" },
+    { field: "generatedByUser" },
 ]
 
 export default function ExerciseCategoryList() {
@@ -57,6 +57,7 @@ export default function ExerciseCategoryList() {
 
         if (!data.isOk) {
             toast(data.message, { type: "error" })
+            setTableState(prev => ({ ...prev, isLoading: false }))
             return;
         }
 

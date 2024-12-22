@@ -61,17 +61,31 @@ namespace Infra.Repository
         
         public async Task<List<T>> GetListByPropertyAsync(Expression<Func<T, bool>> predicate)
         {
-            return await _context.Set<T>().AsNoTracking().Where(predicate).ToListAsync();
+            var query = _context.Set<T>().AsNoTracking();
+            
+            query = ApplyScope(query);
+
+            if (predicate != null){
+                query = query.Where(predicate);
+            }
+
+            return await query.ToListAsync();
         }
 
         public async Task<List<T>> GetAllRecordAsync()
         {
-            return await _context.Set<T>().AsNoTracking().ToListAsync();
+            var query = _context.Set<T>().AsNoTracking();
+
+            query = ApplyScope(query);
+
+            return await query.ToListAsync();
         }
 
         public async Task<List<T>> GetAllRecordAsync(int pageSize = 15, int pageNo = 1, Expression<Func<T, bool>> filter = null)
         {
-            IQueryable<T> query = _context.Set<T>().AsNoTracking(); 
+            var query = _context.Set<T>().AsNoTracking(); 
+
+            query = ApplyScope(query);
 
             if (filter != null)
             {
@@ -99,12 +113,12 @@ namespace Infra.Repository
             {
                 if (entry.State == EntityState.Added)
                 {
-                    entry.Entity.CreatedDate = DateTime.UtcNow;
+                    entry.Entity.CreatedDate = DateTime.Now;
                     entry.Entity.CreatedBy = userId;
                 }
                 else if (entry.State == EntityState.Modified)
                 {
-                    entry.Entity.LastUpdatedDate = DateTime.UtcNow;
+                    entry.Entity.LastUpdatedDate = DateTime.Now;
                     entry.Entity.LastUpdatedBy = userId;
                 }
             }
@@ -128,7 +142,7 @@ namespace Infra.Repository
                     ,TablePrimaryKey = GetPrimaryKey(entry)
                     ,Action = (short)EntityState.Added
                     ,NewData = JsonConvert.SerializeObject(entry.Entity, jsonSettings)
-                    ,CreatedDate = DateTime.UtcNow
+                    ,CreatedDate = DateTime.Now
                     ,CreatedBy = userId
                 });
             }
@@ -142,7 +156,7 @@ namespace Infra.Repository
                     ,Action = (short)EntityState.Modified
                     ,OldData = JsonConvert.SerializeObject(entry.OriginalValues.ToObject(), jsonSettings)
                     ,NewData = JsonConvert.SerializeObject(entry.Entity, jsonSettings)
-                    ,CreatedDate = DateTime.UtcNow
+                    ,CreatedDate = DateTime.Now
                     ,CreatedBy = userId
                 });
             }
@@ -155,7 +169,7 @@ namespace Infra.Repository
                     ,TablePrimaryKey = GetPrimaryKey(entry)
                     ,Action = (short)EntityState.Deleted
                     ,OldData = JsonConvert.SerializeObject(entry.Entity, jsonSettings)
-                    ,CreatedDate = DateTime.UtcNow
+                    ,CreatedDate = DateTime.Now
                     ,CreatedBy = userId
                 });
             }
@@ -196,6 +210,20 @@ namespace Infra.Repository
                 return 0;
             }
         }
+
+        private IQueryable<T> ApplyScope(IQueryable<T> query){
+            var createdBy = typeof(T).GetProperty("CreatedBy");
+            
+            if (createdBy != null && createdBy.PropertyType == typeof(long)){
+                Expression<Func<T, bool>> createdByFilter = x => 
+                    EF.Property<long>(x, "CreatedBy") == _identityUserHttpContext.GetUserId();
+
+                query = query.Where(createdByFilter);
+            }
+
+            return query;
+        }
+
     }
 
 }

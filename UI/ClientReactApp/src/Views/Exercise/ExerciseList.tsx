@@ -37,7 +37,7 @@ const columns: ColDef[] = [
   { field: "exerciseId" },
   { field: "name" },
   { field: "description" },
-  { field: "generatedByUser", headerClass: "text-center", cellStyle: { textAlign: "center" }  },
+  { field: "generatedByUser"  },
 ]
 
 export default function ExerciseList(){

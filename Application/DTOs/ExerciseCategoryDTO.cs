@@ -16,6 +16,6 @@ namespace Application.DTOs
 
         public string Description { get; set; }
 
-        public string GeneratedBy { get; set; }
+        public bool GeneratedByUser { get; set; }
     }
 }
