@@ -1,6 +1,7 @@
 using System;
 using Application.Contracts.Infra.Todo;
 using AutoMapper;
+using Domain.Enums;
 using MediatR;
 
 namespace Application.Features.Exercise.Exercise.Commands.DeleteExercise;
@@ -23,6 +24,13 @@ public class DeleteExerciseHandler : IRequestHandler<DeleteExerciseRequest, Dele
         var retVal = new DeleteExerciseResponse();
         
         try{
+            var record = await _exerciseRepository.GetRecordByPropertyAsync(i => i.ExerciseId == req.ExerciseId);
+
+            if (record.GeneratedBy == GeneratedBy.System){
+                retVal.ValidationErrors.Add("Record can't be deleted as it is system-generated");
+                return retVal;
+            }
+
             await _exerciseRepository.DeleteRecordAsync(req.ExerciseId);
             retVal.RowsAffected = await _exerciseRepository.SaveRecordAsync(ct);
             retVal.SuccessMessage = "Successfully deleted record";

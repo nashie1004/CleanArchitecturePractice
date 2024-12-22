@@ -121,7 +121,7 @@ function ExerciseCategoryForm() {
                                     type="submit"
                                     disabled={loading}
                                 >
-                                    {loading ? <CSpinner /> : "Submit"}
+                                    {loading ? <CSpinner size="sm" /> : "Submit"}
                                 </CButton>
                             </CCol>
                         </CForm>

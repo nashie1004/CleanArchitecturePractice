@@ -1,6 +1,8 @@
 using System;
 using Application.Contracts.Infra.Todo;
 using Application.Contracts.Infrastructure.Persistence.Repository;
+using Application.DTOs;
+using Domain.Enums;
 using MediatR;
 
 namespace Application.Features.Exercise.ExerciseCategory.Commands.DeleteExerciseCategory;
@@ -26,6 +28,12 @@ public class DeleteExerciseCategoryHandler : IRequestHandler<DeleteExerciseCateg
             var used = await _exerciseRepository.GetRecordByPropertyAsync(i => i.ExerciseCategoryId == req.ExerciseCategoryId);
 
             if (used != null){
+
+                if (used.GeneratedBy == GeneratedBy.System){
+                    retVal.ValidationErrors.Add("Record can't be deleted as it is system-generated");
+                    return retVal;
+                }
+
                 retVal.ValidationErrors.Add("Record can't be deleted as it is used");
                 return retVal;
             }
