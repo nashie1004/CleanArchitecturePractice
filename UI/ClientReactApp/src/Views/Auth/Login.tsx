@@ -24,6 +24,7 @@ import { useForm } from 'react-hook-form';
 import { NavLink, useNavigate } from 'react-router';
 import useFirstRender from '../../Hooks/useFirstRender';
 import useAuth from '../../Hooks/useAuth';
+import CustomToaster from '../../Components/UI/CustomToaster';
 
 const schema = z.object({
     username: z.string().min(8, "Username must contain at least 8 character(s)"),
@@ -86,7 +87,7 @@ const Login = () => {
     return (
         <div id="login" className="bg-body-tertiary min-vh-100 d-flex flex-row align-items-center">
             <CContainer>
-                <ToastContainer autoClose={4000} />
+                <CustomToaster />
                 <CRow className="justify-content-center">
                     <CCol md={9} lg={7} xl={6}>
                         <CCard className="mx-4">

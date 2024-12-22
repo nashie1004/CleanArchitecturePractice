@@ -37,6 +37,7 @@ import { useForm } from 'react-hook-form';
 import useFirstRender from '../../Hooks/useFirstRender';
 import WorkoutService from '../../Services/WorkoutService';
 import { useParams } from 'react-router';
+import CustomToaster from '../../Components/UI/CustomToaster';
 
 const detailSchema = z.object({
   tempRowId: z.number().optional(),
@@ -162,7 +163,7 @@ export default function WorkoutForm(){
       <CCol xs={12}>
         <CCard>
             <CCardBody>
-              <ToastContainer autoClose={4000} />
+              <CustomToaster />
               <CForm className="row g-3" onSubmit={handleSubmitHeader(submitHeader)}>
                 <CCol xs={12} className='d-flex justify-content-between align-items-center'>
                   <p className="text-body-secondary small">Workout Header</p>

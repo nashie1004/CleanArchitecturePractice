@@ -25,6 +25,7 @@ import { NavLink, useNavigate } from 'react-router';
 import useFirstRender from '../../Hooks/useFirstRender';
 import useAuth from '../../Hooks/useAuth';
 import registerBg from "../../Assets/registerBg.jpg"
+import CustomToaster from '../../Components/UI/CustomToaster';
 
 const schema = z.object({
     username: z.string().min(8, "Username must contain at least 8 character(s)"),
@@ -89,7 +90,7 @@ const Register = () => {
     return (
         <div id="register" className="bg-body-tertiary min-vh-100 d-flex flex-row align-items-center">
             <CContainer>
-                <ToastContainer autoClose={4000}  />
+                <CustomToaster />
                 <CRow className="justify-content-center">
                     <CCol md={9} lg={7} xl={6}>
                         <CCard className="mx-4">

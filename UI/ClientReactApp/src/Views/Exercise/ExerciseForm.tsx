@@ -10,6 +10,7 @@ import useFirstRender from "../../Hooks/useFirstRender";
 import { useNavigate, useParams } from "react-router";
 import { useEffect, useState } from "react";
 import ExerciseService from "../../Services/ExerciseService";
+import CustomToaster from "../../Components/UI/CustomToaster";
 
 const schema = z.object({
     exerciseId: z.number().optional().default(0),
@@ -107,7 +108,7 @@ export default function ExerciseForm() {
             <CCol xs={12}>
                 <CCard>
                     <CCardBody>
-                        <ToastContainer autoClose={4000} />
+                        <CustomToaster />
                         <CForm className="row g-3" onSubmit={handleSubmit(submitForm)}>
                             <CCol xs={12}>
                                 <CAlert color="warning" className="d-flex align-items-center">
@@ -157,7 +158,7 @@ export default function ExerciseForm() {
                                     type="submit"
                                     disabled={loading}
                                 >
-                                    {loading ? <CSpinner /> : "Create Submit"}
+                                    {loading ? <CSpinner /> : "Submit"}
                                 </CButton>
                             </CCol>
                         </CForm>

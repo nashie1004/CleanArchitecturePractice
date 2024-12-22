@@ -9,6 +9,7 @@ import { useForm } from 'react-hook-form';
 import useFirstRender from "../../Hooks/useFirstRender";
 import { useNavigate, useParams } from "react-router";
 import { useEffect, useState } from "react";
+import CustomToaster from "../../Components/UI/CustomToaster";
 
 const schema = z.object({
     exerciseCategoryId: z.number().optional().default(0),
@@ -80,7 +81,7 @@ function ExerciseCategoryForm() {
             <CCol xs={12}>
                 <CCard>
                     <CCardBody>
-                        <ToastContainer autoClose={4000} />
+                        <CustomToaster />
                         <CForm className="row g-3" onSubmit={handleSubmit(submitForm)}>
                             <CCol xs={12}>
                                 <CAlert color="warning" className="d-flex align-items-center">
