@@ -15,7 +15,8 @@ const schema = z.object({
     exerciseId: z.number().optional().default(0),
     name: z.string().min(1, "Name must not be empty"),
     description: z.string().min(1, "Description must not be empty"),
-    category: z.string().min(1, "Category must not be empty")
+    imageUrl: z.string().optional(),
+    exerciseCategoryId: z.string().min(1, "Category must not be empty")
 });
 
 type FormFields = z.infer<typeof schema>;
@@ -45,11 +46,9 @@ export default function ExerciseForm() {
     })
 
     async function submitForm(data: FormFields) {
+        console.log(data)
         const response = await exerciseService.submitForm({
-            name: data.name
-            , description: data.description
-            , exerciseCategoryId: Number(data.category)
-            , imageUrl: ""
+            exercise: data
         });
 
         if (!response.isOk) {
@@ -119,7 +118,6 @@ export default function ExerciseForm() {
                             <CCol md={6}>
                                 <CFormInput
                                     type="name"
-                                    id="name"
                                     label="Name"
                                     feedbackInvalid={errors.name ? errors.name.message : ""}
                                     invalid={errors.name ? true : false}
@@ -129,12 +127,11 @@ export default function ExerciseForm() {
                             </CCol>
                             <CCol md={6}>
                                 <CFormSelect
-                                    id="category"
                                     label="Category"
-                                    feedbackInvalid={errors.category ? errors.category.message : ""}
-                                    invalid={errors.category ? true : false}
-                                    valid={!errors.category && !firstRender ? true : false}
-                                    {...register("category")}
+                                    feedbackInvalid={errors.exerciseCategoryId ? errors.exerciseCategoryId.message : ""}
+                                    invalid={errors.exerciseCategoryId ? true : false}
+                                    valid={!errors.exerciseCategoryId && !firstRender ? true : false}
+                                    {...register("exerciseCategoryId")}
                                 >
                                     {formState.exerciseCategoryDropdown.rowData.map((item, idx) => {
                                         return <option key={idx} value={item.exerciseCategoryId}>{item.name}</option>

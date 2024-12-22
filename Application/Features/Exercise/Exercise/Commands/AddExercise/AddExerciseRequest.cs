@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Application.DTOs;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,6 @@ namespace Application.Features.Exercise.Exercise.Commands.AddExercise
 {
     public class AddExerciseRequest : IRequest<AddExerciseResponse>
     {
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public string ImageUrl { get; set; }
-        public long ExerciseCategoryId { get; set; }
+        public ExerciseDTO Exercise { get; set; }
     }
 }

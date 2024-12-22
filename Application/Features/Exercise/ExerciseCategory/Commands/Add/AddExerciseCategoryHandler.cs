@@ -50,11 +50,10 @@ namespace Application.Features.Exercise.ExerciseCategory.Commands.Add
 
                 // Add new record
                 rawExerciseCategory.GeneratedBy = GeneratedBy.User;
-
                 await _exerciseCategoryRepository.AddRecordAsync(rawExerciseCategory);
 
                 retVal.RowsAffected = await _exerciseCategoryRepository.SaveRecordAsync(ct);
-                retVal.SuccessMessage = "Successfully created. Go to category list to see newly added category.";
+                retVal.SuccessMessage = "Successfully created. Go to the exercise category list to see the newly added category.";
             }
             catch (Exception ex)
             {

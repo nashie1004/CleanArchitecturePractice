@@ -172,7 +172,7 @@ export default function WorkoutForm(){
                     className='d-flex align-items-center'
                     disabled={loading}
                     >
-                    {loading ? <CSpinner /> : <>
+                    {loading ? <CSpinner size="sm" /> : <>
                       <span style={{ paddingRight: ".5rem"}}>Submit</span>
                       <CIcon icon={cilInput} size="xl"/>
                     </> }
@@ -255,7 +255,7 @@ export default function WorkoutForm(){
                       setModalState(prev => ({ ...prev, show: true}));
                     }}
                     >
-                    {loading ? <CSpinner /> : <CIcon icon={cilPlus} size="xl"/>}
+                    {loading ? <CSpinner size="sm" /> : <CIcon icon={cilPlus} size="xl"/>}
                   </CButton>
                 </CCol>
                 <CCol xs={12}>
@@ -402,7 +402,7 @@ export default function WorkoutForm(){
                       disabled={loading}
                       type="submit"
                      >
-                        {loading ? <CSpinner /> : "Save"}
+                        {loading ? <CSpinner size="sm" /> : "Save"}
                     </CButton>
                   </CCol>
                 </CForm>
