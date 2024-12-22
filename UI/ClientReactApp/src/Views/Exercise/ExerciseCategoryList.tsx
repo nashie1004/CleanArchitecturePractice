@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AgGridReact } from "ag-grid-react";
 import useTheme from "../../Hooks/useTheme";
-import { CButton, CCol, CContainer, CFormInput, CFormSelect, CInputGroup, CInputGroupText, CProgress, CRow, CSpinner } from "@coreui/react";
+import { CButton, CCol, CContainer, CFormInput, CFormSelect, CInputGroup, CInputGroupText, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CProgress, CRow, CSpinner } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import { cilCaretLeft, cilCaretRight, cilPencil, cilPlus, cilSearch, cilTrash } from "@coreui/icons";
 import { toast } from "react-toastify";
@@ -9,6 +9,7 @@ import ExerciseCategoryService from "../../Services/ExerciseCategoryService";
 import { NavLink, useNavigate } from "react-router";
 import { toTwentyChars } from "../../Utils/formatters";
 import { ColDef } from "ag-grid-community"
+import CustomToaster from "../../Components/UI/CustomToaster";
 
 const exerciseCategoryService = new ExerciseCategoryService();
 
@@ -36,7 +37,7 @@ export default function ExerciseCategoryList() {
                 return <div style={{ width: "100%", height: "100%"}} className="d-flex justify-content-center align-items-center">
                     <CIcon 
                         icon={cilPencil} 
-                        className="text-dark" 
+                        className="text-success" 
                         style={{  cursor: "pointer", marginRight: "4px"  }} 
                         onClick={() => navigate(`/exercise/category/form/${p.data.exerciseCategoryId}`)}
                         size="xl" />
@@ -44,7 +45,7 @@ export default function ExerciseCategoryList() {
                       icon={cilTrash} 
                       className="text-danger" 
                       style={{  cursor: "pointer" }}
-                      onClick={() => setModalState({ show: true, exerciseCategoryId: p.data.exerciseId, isSubmitting: false })}
+                      onClick={() => setModalState({ show: true, exerciseCategoryId: p.data.exerciseCategoryId, isSubmitting: false })}
                       size="xl"  />
                   </div>
               } },
@@ -81,11 +82,20 @@ export default function ExerciseCategoryList() {
             floatingFilter: true,
         };
     }, []);
+    
+    async function deleteRecord(){
+        setModalState(prev => ({ ...prev, isSubmitting: true }))
+        const res = await exerciseCategoryService.deleteOne(modalState.exerciseCategoryId.toString());
+        toast(res.message, { type: res.isOk ? "success" : "error" })
+        setModalState({ exerciseCategoryId: 0, show: false, isSubmitting: false })
+        refresh();
+    }
 
-  const loading = false || modalState.isSubmitting || tableState.isLoading;
+    const loading = modalState.isSubmitting || tableState.isLoading;
 
     return (
         <div style={{ height: 500 }} className={theme === "dark" ? "ag-theme-quartz-dark" : ""}>
+            <CustomToaster />
             <CContainer className="mb-2">
                 <CRow xs={{ gutterX: 2, gutterY: 2 }}>
                     <CCol>
@@ -167,6 +177,26 @@ export default function ExerciseCategoryList() {
                 paginationPageSizeSelector={[15, 30, 45]}
                 onGridReady={refresh}
             />
+            
+                <CModal
+                  scrollable
+                  visible={modalState.show} 
+                  alignment="center"
+                  onClose={() => setModalState({ show: false, exerciseCategoryId: 0, isSubmitting: false })}
+                  aria-labelledby="modal"
+                >
+                  <CModalHeader>
+                    <CModalTitle id="modal">Delete Confirmation</CModalTitle>
+                  </CModalHeader>
+                  <CModalBody>
+                    <p>Are you sure you want to delete this record?</p>
+                  </CModalBody>
+                  <CModalFooter>
+                    <CButton disabled={loading} color="primary" onClick={deleteRecord}>
+                      {loading ? <CSpinner  size="sm" /> : <>Delete record</>}
+                    </CButton>
+                  </CModalFooter>
+                </CModal>
         </div>
     );
 };

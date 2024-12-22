@@ -83,7 +83,14 @@ export default function WorkoutForm(){
     ,formState: { errors: errorsHeader, isSubmitting: isSubmittingHeader }
     ,setValue: setValueHeader, watch: watchHeader, reset: resetHeader
   } = useForm<HeaderFormFields>({
-    defaultValues: { workoutDetails: [] },
+    defaultValues: { 
+      workoutHeaderId: 0,
+      title: "",
+      notes: "",
+      startDateTime: new Date(),
+      endDateTime: new Date(),
+      workoutDetails: [] 
+    },
     resolver: zodResolver(headerSchema)
   })
   

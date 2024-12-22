@@ -34,7 +34,9 @@ function ExerciseCategoryForm() {
         formState: { errors, isSubmitting }, reset
     } = useForm<FormFields>({
         defaultValues: {
-           
+           exerciseCategoryId: 0,
+           name: "",
+           description: ""
         },
         resolver: zodResolver(schema)
     })

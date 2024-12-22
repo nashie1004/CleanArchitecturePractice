@@ -41,7 +41,11 @@ export default function ExerciseForm() {
         formState: { errors, isSubmitting }
     } = useForm<FormFields>({
         defaultValues: {
-
+            exerciseId: 0,
+            name: "",
+            description: "",
+            imageUrl: "",
+            exerciseCategoryId: "0"
         },
         resolver: zodResolver(schema)
     })

@@ -4,9 +4,9 @@
 - [ ] Dashboard page
 - [ ] Profile page
 - [ ] Schedule page 
-- [ ] Editable workout form
-- [ ] Editable exercise form
-- [ ] Editable exercise category form
+- [ ] Editable workout form + breadcrumb
+- [ ] Editable exercise form + breadcrumb
+- [ ] Editable exercise category form + breadcrumb
 - [ ] All list global search 
 - [ ] All list delete
 - [ ] Report page

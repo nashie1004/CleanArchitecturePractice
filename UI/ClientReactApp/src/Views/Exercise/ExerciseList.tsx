@@ -1,11 +1,11 @@
-import  { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import  { LegacyRef, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AgGridReact } from "ag-grid-react";
 import useTheme from "../../Hooks/useTheme";
 import { CButton, CCol, CContainer, CFormInput, CFormSelect, CInputGroup, CInputGroupText, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CProgress, CRow, CSpinner } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import { cilCaretLeft, cilCaretRight, cilPencil, cilPlus, cilSearch, cilTrash } from "@coreui/icons";
 import { toast } from "react-toastify";
-import { ColDef } from "ag-grid-community"
+import { ColDef, GridApi, FilterChangedEvent } from "ag-grid-community"
 import ExerciseService from "../../Services/ExerciseService";
 import { NavLink, useNavigate } from "react-router";
 import { toTwentyChars } from "../../Utils/formatters";
@@ -15,7 +15,7 @@ const exerciseService = new ExerciseService();
 
 export default function ExerciseList(){
   const {theme} = useTheme();
-  const gridRef = useRef();
+  const gridRef = useRef<{ api: GridApi }>();
   const navigate = useNavigate();
   const [modalState, setModalState] = useState({
     show: false,
@@ -33,11 +33,11 @@ export default function ExerciseList(){
 
   const columnDefs = useMemo(() => {
     const columns: ColDef[] = [
-      { field: "", maxWidth: 100, cellRenderer: (p: any) => {
+      { field: "", maxWidth: 100, suppressHeaderFilterButton: false, cellRenderer: (p: any) => {
         return <div style={{ width: "100%", height: "100%"}} className="d-flex justify-content-center align-items-center">
             <CIcon 
               icon={cilPencil} 
-              className="text-dark" 
+              className="text-success" 
               style={{  cursor: "pointer", marginRight: "4px" }} 
               onClick={() => navigate(`/exercise/form/${p.data.exerciseId}`)}
               size="xl" />
@@ -59,6 +59,16 @@ export default function ExerciseList(){
     return columns;
   }, [])
 
+  function getSearchFilter(colName: string){
+    if (gridRef.current){
+      const gridApi = gridRef.current.api as GridApi;
+      const colModel = gridApi.getColumnFilterModel(colName)
+      console.log(gridApi.onFilterChanged())
+      return colModel;
+    }
+    return null;
+  }
+
   async function refresh(){
     setTableState(prev => ({ ...prev, isLoading: true}))
     const data = await exerciseService.getMany(tableState);
@@ -69,6 +79,8 @@ export default function ExerciseList(){
     }
     
     setTableState(prev => ({ ...prev, isLoading: false, rowData: data.data.items }));
+
+    console.log(getSearchFilter("name"))
   }
 
   async function deleteRecord(){
@@ -103,7 +115,7 @@ export default function ExerciseList(){
           <CCol>
             <CInputGroup>
               <CInputGroupText id="basic-addon1">
-                {loading ? <CSpinner size="sm" /> : <CIcon size="lg" icon={cilSearch} />}
+                {loading ? <CSpinner size="sm" /> : <CIcon icon={cilSearch} />}
               </CInputGroupText>
               <CFormInput 
                 disabled={loading}
@@ -195,7 +207,7 @@ x              color="secondary"
       </CModalBody>
       <CModalFooter>
         <CButton disabled={loading} color="primary" onClick={deleteRecord}>
-          {loading ? <CSpinner /> : <>Delete record</>}
+          {loading ? <CSpinner size="sm" /> : <>Delete record</>}
         </CButton>
       </CModalFooter>
     </CModal>
