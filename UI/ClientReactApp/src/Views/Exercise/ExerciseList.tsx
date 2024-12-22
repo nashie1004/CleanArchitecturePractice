@@ -59,17 +59,20 @@ export default function ExerciseList(){
     return columns;
   }, [])
 
-  function getSearchFilter(colName: string){
+  // https://www.ag-grid.com/react-data-grid/filter-api/
+  function getSearchFilter(){
     if (gridRef.current){
       const gridApi = gridRef.current.api as GridApi;
-      const colModel = gridApi.getColumnFilterModel(colName)
-      console.log(gridApi.onFilterChanged())
-      return colModel;
+      return gridApi.getFilterModel()
     }
     return null;
   }
 
   async function refresh(){
+    // TODO apply filter 
+    const searchFilter = getSearchFilter();
+    console.log(searchFilter)
+
     setTableState(prev => ({ ...prev, isLoading: true}))
     const data = await exerciseService.getMany(tableState);
     if (!data.isOk){
@@ -79,8 +82,6 @@ export default function ExerciseList(){
     }
     
     setTableState(prev => ({ ...prev, isLoading: false, rowData: data.data.items }));
-
-    console.log(getSearchFilter("name"))
   }
 
   async function deleteRecord(){
@@ -112,17 +113,9 @@ export default function ExerciseList(){
       <CustomToaster />
       <CContainer className="mb-2">
         <CRow xs={{ gutterX: 2, gutterY: 2 }}> 
-          <CCol>
-            <CInputGroup>
-              <CInputGroupText id="basic-addon1">
-                {loading ? <CSpinner size="sm" /> : <CIcon icon={cilSearch} />}
-              </CInputGroupText>
-              <CFormInput 
-                disabled={loading}
-                placeholder="Global search..." 
-                aria-label="Username" 
-                aria-describedby="username"/>
-            </CInputGroup>
+          <CCol />
+          <CCol xs="auto" className="d-flex align-items-center">
+            <CInputGroupText >Page: {tableState.pageNumber}</CInputGroupText>
           </CCol>
           <CCol xs="auto">
             <CFormSelect
@@ -139,9 +132,6 @@ export default function ExerciseList(){
                 }))
             }}
            />
-        </CCol>
-          <CCol xs="auto" className="d-flex align-items-center">
-            <CInputGroupText >Page: {tableState.pageNumber}</CInputGroupText>
           </CCol>
           <CCol xs="auto" className="">
             <CButton 
@@ -158,7 +148,7 @@ export default function ExerciseList(){
           </CCol>
           <CCol xs="auto">
             <CButton 
-x              color="secondary"
+              color="secondary"
               onClick={() => {
                 setTableState(prev => ({
                   ...prev,
@@ -190,6 +180,7 @@ x              color="secondary"
         paginationPageSize={tableState.pageSize}
         paginationPageSizeSelector={[15, 30, 45]}
         onGridReady={refresh}
+        onFilterModified={refresh}
         />
 
     <CModal

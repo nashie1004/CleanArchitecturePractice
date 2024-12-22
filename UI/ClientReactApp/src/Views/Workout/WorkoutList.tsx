@@ -89,13 +89,9 @@ export default function WorkoutList(){
     <div style={{ height: 500 }} className={theme === "dark" ? "ag-theme-quartz-dark" : "" }>
       <CContainer className="mb-2">
         <CRow xs={{ gutterX: 2, gutterY: 2 }}> 
-          <CCol>
-            <CInputGroup>
-              <CInputGroupText id="basic-addon1">
-                <CIcon size="lg" icon={cilSearch} />
-              </CInputGroupText>
-              <CFormInput placeholder="Global search..." aria-label="Username" aria-describedby="username"/>
-            </CInputGroup>
+          <CCol />
+          <CCol xs="auto" className="d-flex align-items-center">
+            <CInputGroupText >Page: {tableState.pageNumber}</CInputGroupText>
           </CCol>
           <CCol xs="auto">
             <CFormSelect
@@ -112,9 +108,6 @@ export default function WorkoutList(){
                 }))
             }}
            />
-        </CCol>
-          <CCol xs="auto" className="d-flex align-items-center">
-            <CInputGroupText >Page: {tableState.pageNumber}</CInputGroupText>
           </CCol>
           <CCol xs="auto" className="">
             <CButton 
@@ -141,6 +134,14 @@ export default function WorkoutList(){
              >
               <CIcon icon={cilCaretRight} />
             </CButton>
+          </CCol>
+          <CCol xs="auto">
+              <CButton color="secondary">
+                  <NavLink to="/workout/form" style={{ textDecoration: "none", color: "inherit"} }>
+                    <span className="">Add Item </span>
+                    <CIcon icon={cilPlus} />
+                  </NavLink>
+              </CButton>
           </CCol>
         </CRow>
         </CContainer>

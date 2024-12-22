@@ -98,17 +98,9 @@ export default function ExerciseCategoryList() {
             <CustomToaster />
             <CContainer className="mb-2">
                 <CRow xs={{ gutterX: 2, gutterY: 2 }}>
-                    <CCol>
-                        <CInputGroup>
-                            <CInputGroupText id="basic-addon1">
-                                {loading ? <CSpinner size="sm" /> : <CIcon  icon={cilSearch} />}
-                            </CInputGroupText>
-                            <CFormInput 
-                                disabled={loading}
-                                placeholder="Global search..." 
-                                aria-label="Username" 
-                                aria-describedby="username" />
-                        </CInputGroup>
+                    <CCol />
+                    <CCol xs="auto" className="d-flex align-items-center">
+                        <CInputGroupText>Page: {tableState.pageNumber}</CInputGroupText>
                     </CCol>
                     <CCol xs="auto">
                         <CFormSelect
@@ -125,9 +117,6 @@ export default function ExerciseCategoryList() {
                                 }))
                             }}
                         />
-                    </CCol>
-                    <CCol xs="auto" className="d-flex align-items-center">
-                        <CInputGroupText>Page: {tableState.pageNumber}</CInputGroupText>
                     </CCol>
                     <CCol xs="auto" className="">
                         <CButton
