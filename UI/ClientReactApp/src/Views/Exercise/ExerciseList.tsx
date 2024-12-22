@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import { ColDef } from "ag-grid-community"
 import ExerciseService from "../../Services/ExerciseService";
 import { NavLink } from "react-router";
+import { toTwentyChars } from "../../Utils/formatters";
 
 const exerciseService = new ExerciseService();
 
@@ -36,7 +37,8 @@ const columns: ColDef[] = [
   } },
   { field: "exerciseId" },
   { field: "name" },
-  { field: "description" },
+  { field: "description", valueFormatter: (p) => toTwentyChars(p.value) },
+  { field: "exerciseCategoryName"  },
   { field: "generatedByUser"  },
 ]
 
@@ -56,7 +58,7 @@ export default function ExerciseList(){
   async function getData(){
     setTableState(prev => ({ ...prev, isLoading: true}))
     const data = await exerciseService.getMany(tableState);
-    
+    console.log(data.data)
     if (!data.isOk){
       toast(data.message, { type: "error" })
       return;

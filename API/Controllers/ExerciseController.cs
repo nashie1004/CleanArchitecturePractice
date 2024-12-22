@@ -1,4 +1,5 @@
 ﻿using Application.Features.Exercise.Exercise.Commands.AddExercise;
+using Application.Features.Exercise.Exercise.Commands.DeleteExercise;
 using Application.Features.Exercise.Exercise.Queries.GetAllExercise;
 using Application.Features.Exercise.Exercise.Queries.GetOneExercise;
 using Application.Features.Exercise.Queries.GetManyExercise;
@@ -46,6 +47,13 @@ namespace API.Controllers
         [Route("getDropdown")]
         [HttpGet]
         public async Task<IActionResult> GetDropdown([FromQuery] GetAllExerciseRequest req)
+        {
+            return Ok(await mediator_.Send(req));
+        }
+        
+        [Route("deleteOne")]
+        [HttpDelete]
+        public async Task<IActionResult> DeleteOne([FromQuery] DeleteExerciseRequest req)
         {
             return Ok(await mediator_.Send(req));
         }

@@ -29,4 +29,9 @@ export default class ExerciseService extends BaseService {
         });
         return response;
     }
+
+    async deleteOne(exerciseId: string){
+        const response = await this.baseDelete(`/api/Exercise/deleteOne?exerciseId=${exerciseId}`);
+        return response;
+    }
 }

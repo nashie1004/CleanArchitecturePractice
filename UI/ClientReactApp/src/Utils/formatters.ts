@@ -1,6 +1,10 @@
 import moment from "moment";
 import { TableAction } from "./enums";
 
+export function toTwentyChars(val: string){
+  return `${val.substring(0, 20)}...`
+}
+
 export function toDateTimeFormat(val: string){
     let retVal = "";
 

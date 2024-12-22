@@ -1,5 +1,6 @@
 ﻿using Application.Features.Exercise.Exercise.Commands.AddExercise;
 using Application.Features.Exercise.ExerciseCategory.Commands.Add;
+using Application.Features.Exercise.ExerciseCategory.Commands.DeleteExerciseCategory;
 using Application.Features.Exercise.ExerciseCategory.Queries.GetDropdown;
 using Application.Features.Exercise.ExerciseCategory.Queries.GetMany;
 using Application.Features.Exercise.ExerciseCategory.Queries.GetOne;
@@ -46,6 +47,13 @@ namespace API.Controllers
         [Route("getDropdown")]
         [HttpGet]
         public async Task<IActionResult> GetDropdown([FromQuery] GetDropdownExerciseCategoryRequest req)
+        {
+            return Ok(await mediator_.Send(req));
+        }
+        
+        [Route("deleteOne")]
+        [HttpDelete]
+        public async Task<IActionResult> DeleteOne([FromQuery] DeleteExerciseCategoryRequest req)
         {
             return Ok(await mediator_.Send(req));
         }

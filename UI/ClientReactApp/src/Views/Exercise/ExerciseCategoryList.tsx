@@ -7,6 +7,7 @@ import { cilCaretLeft, cilCaretRight, cilPencil, cilPlus, cilSearch, cilTrash } 
 import { toast } from "react-toastify";
 import ExerciseCategoryService from "../../Services/ExerciseCategoryService";
 import { NavLink } from "react-router";
+import { toTwentyChars } from "../../Utils/formatters";
 
 const exerciseCategoryService = new ExerciseCategoryService();
 const columns = [
@@ -34,7 +35,7 @@ const columns = [
       } },
     { field: "exerciseCategoryId" },
     { field: "name" },
-    { field: "description" },
+    { field: "description" , valueFormatter: (p) => toTwentyChars(p.value) },
     { field: "generatedByUser" },
 ]
 

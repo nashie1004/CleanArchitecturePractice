@@ -1,4 +1,5 @@
 ﻿using Application.Contracts.Infra.Todo;
+using Application.Contracts.Infrastructure.Persistence.Repository;
 using Application.DTOs;
 using AutoMapper;
 using MediatR;
@@ -13,12 +14,16 @@ namespace Application.Features.Exercise.Queries.GetManyExercise
     public class GetManyExerciseHandler : IRequestHandler<GetManyExerciseRequest, GetManyExerciseResponse>
     {
         private readonly IExerciseRepository _repository;
+        private readonly IExerciseCategoryRepository _exerciseCategoryRepository;
         private readonly IMapper _mapper;
 
         public GetManyExerciseHandler(
             IMapper mapper,
-            IExerciseRepository exerciseRepository)
+            IExerciseRepository exerciseRepository,
+            IExerciseCategoryRepository exerciseCategoryRepository
+            )
         {
+            _exerciseCategoryRepository = exerciseCategoryRepository;
             _mapper = mapper;
             _repository = exerciseRepository;
         }
@@ -30,7 +35,13 @@ namespace Application.Features.Exercise.Queries.GetManyExercise
             try
             {
                 var rawItems = await _repository.GetAllRecordAsync(req.PageSize, req.PageNumber);
-                retVal.Items = _mapper.Map<List<ExerciseDTO>>(rawItems);
+                var exercises = _mapper.Map<List<ExerciseDTO>>(rawItems);
+
+                foreach(var exercise in exercises){
+                    exercise.ExerciseCategoryName = (await _exerciseCategoryRepository.GetRecordAsync(exercise.ExerciseCategoryId)).Name;
+                }
+
+                retVal.Items = exercises;
             } 
             catch (Exception ex)
             {

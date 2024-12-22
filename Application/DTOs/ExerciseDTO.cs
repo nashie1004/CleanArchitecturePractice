@@ -9,4 +9,5 @@ public class ExerciseDTO
     public string Description { get; set; }
     public bool GeneratedByUser { get; set; }
     public long ExerciseCategoryId { get; set; }
+    public string? ExerciseCategoryName { get; set; }
 }
