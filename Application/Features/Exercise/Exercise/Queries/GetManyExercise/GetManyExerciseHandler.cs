@@ -35,7 +35,7 @@ namespace Application.Features.Exercise.Queries.GetManyExercise
             try
             {
                 var rawItems = await _repository.GetAllRecordAsync(req.PageSize, req.PageNumber);
-                var exercises = _mapper.Map<List<ExerciseDTO>>(rawItems);
+                var exercises = _mapper.Map<List<ExerciseListDTO>>(rawItems);
 
                 foreach(var exercise in exercises){
                     exercise.ExerciseCategoryName = (await _exerciseCategoryRepository.GetRecordAsync(exercise.ExerciseCategoryId)).Name;

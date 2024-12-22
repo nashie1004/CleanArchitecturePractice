@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Application.Features.Exercise.Queries.GetManyExercise
 {
-    public class GetManyExerciseResponse : BaseResponseList<ExerciseDTO>
+    public class GetManyExerciseResponse : BaseResponseList<ExerciseListDTO>
     {
     }
 }

@@ -58,6 +58,7 @@ namespace Application.Features.Exercise.Exercise.Commands.AddExercise
             catch (Exception ex)
             {
                 retVal.ValidationErrors.Add(ex.Message);
+                retVal.ValidationErrors.Add(ex.InnerException?.Message ?? "");
             }
 
             return retVal;

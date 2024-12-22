@@ -47,7 +47,6 @@ export default function ExerciseForm() {
     })
 
     async function submitForm(data: FormFields) {
-        console.log(data)
         const response = await exerciseService.submitForm({
             exercise: data
         });

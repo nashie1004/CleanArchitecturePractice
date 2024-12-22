@@ -33,7 +33,7 @@ const columns = [
               size="xl"  />
           </div>
       } },
-    { field: "exerciseCategoryId" },
+    { field: "exerciseCategoryId", maxWidth: 180 },
     { field: "name" },
     { field: "description" , valueFormatter: (p) => toTwentyChars(p.value) },
     { field: "generatedByUser" },

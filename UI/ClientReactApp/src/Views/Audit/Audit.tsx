@@ -11,12 +11,12 @@ import { tableActionFormat, toDateTimeFormat } from "../../Utils/formatters";
 
 const auditService = new AuditService();
 const columns: ColDef[] = [
-  { field: "auditId" },
-  { field: "action", valueFormatter: (p) => tableActionFormat(p.value)},
+  { field: "auditId", maxWidth: 100 },
+  { field: "action", maxWidth: 110, valueFormatter: (p) => tableActionFormat(p.value)},
   { field: "createdDate", valueFormatter: (p) => toDateTimeFormat(p.value) },
   { field: "tableName" },
   { field: "newData" },
-  { field: "tablePrimaryKey" },
+  { field: "tablePrimaryKey", maxWidth: 100 },
   { field: "lastUpdatedDate", valueFormatter: (p) => toDateTimeFormat(p.value) },
   { field: "oldData" },
 ]
