@@ -49,13 +49,13 @@ export default class BaseService {
         }
     }
 
-    protected handleResponse(response: axios.AxiosResponse<RequestBaseResponse>, message: string = this.genericSuccessMsg): GenericReturnMessage {
+    protected handleResponse(response: axios.AxiosResponse<RequestBaseResponse>): GenericReturnMessage {
         if (response.data.isSuccess && response.data.validationErrors.length < 1) {
             return {
                 isOk: true,
                 status: response.status,
                 data: response.data,
-                message: message
+                message: response.data.successMessage
             }
         }
 

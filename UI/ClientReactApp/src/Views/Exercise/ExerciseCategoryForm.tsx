@@ -13,7 +13,8 @@ import { useEffect, useState } from "react";
 const schema = z.object({
     exerciseCategoryId: z.number().optional().default(0),
     name: z.string().min(1, "Name must not be empty"),
-    description: z.string().min(1, "Description must not be empty")
+    description: z.string().min(1, "Description must not be empty"),
+    generatedBy: z.string().optional()
 });
 
 type FormFields = z.infer<typeof schema>;
@@ -24,7 +25,7 @@ function ExerciseCategoryForm() {
     const firstRender = useFirstRender();
     const { exerciseCategoryId } = useParams()
     const [formState, setFormState] = useState({
-        exerciseCategory: { isLoading: false }
+        isLoading: false
     });
 
     const {
@@ -39,8 +40,7 @@ function ExerciseCategoryForm() {
 
     async function submitForm(data: FormFields) {
         const response = await exerciseCategoryService.submitForm({
-            name: data.name
-            , description: data.description
+            exerciseCategory: data
         });
 
         if (!response.isOk) {
@@ -48,31 +48,32 @@ function ExerciseCategoryForm() {
             return;
         }
 
-        toast("Successfully created. Go to category list to see newly added category.", { type: "success" })
+        toast(response.message, { type: "success" })
     }
 
     useEffect(() => {
         async function init(){
-            setFormState({ exerciseCategory: { isLoading: true } })
+            setFormState({ isLoading: true })
 
             if (exerciseCategoryId){
                 const res = await exerciseCategoryService.getOne(exerciseCategoryId);
                 
                 if (!res.isOk) {
                     toast(res.message, { type: "error" })
+                    setFormState({ isLoading: false })
                     return;
                 }
                 
                 reset(res.data.exerciseCategory)
             }
 
-            setFormState({ exerciseCategory: { isLoading: false } })
+            setFormState({ isLoading: false })
         }
 
         init();
     }, [])
 
-    const loading = isSubmitting || formState.exerciseCategory.isLoading;
+    const loading = isSubmitting || formState.isLoading;
 
     return (
         <CRow>

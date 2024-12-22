@@ -26,12 +26,8 @@ const exerciseService = new ExerciseService();
 export default function ExerciseForm() {
   const { exerciseId } = useParams()
     const firstRender = useFirstRender();
-    const [category, setCategory] = useState({
-        isLoading: false,
-        rowData: [{ exerciseCategoryId: 0, name: "" }]
-    })
     const [formState, setFormState] = useState({
-        exercise: { isLoading: false },
+        isLoading: false,
         exerciseCategoryDropdown: {
             isLoading: false,
             rowData: [{ exerciseCategoryId: 0, name: "" }]
@@ -68,6 +64,13 @@ export default function ExerciseForm() {
     useEffect(() => {
         
         async function init() {
+            setFormState({
+                isLoading: true,
+                exerciseCategoryDropdown: {
+                    isLoading: true,
+                    rowData: []
+                }
+            })
 
             if (exerciseId){
                 const res = await exerciseService.getOne(exerciseId);
@@ -80,23 +83,25 @@ export default function ExerciseForm() {
                 reset(res.data.exercise);
             }
 
-            setCategory(prev => ({...prev, isLoading: true}))
-
             const res = await exerciseCategoryService.getDropdown();
 
             if (!res.isOk) {
                 toast(res.message, { type: "error" })
-                setCategory(prev => ({...prev, isLoading: false }))
-                return;
             }
 
-            setCategory({ rowData: res.data.items, isLoading: false })
+            setFormState({
+                isLoading: false,
+                exerciseCategoryDropdown: {
+                    isLoading: false,
+                    rowData: res.data.items
+                }
+            })
         }
 
         init();
     }, [])
 
-    const loading = category.isLoading || isSubmitting;
+    const loading = isSubmitting || formState.isLoading || formState.exerciseCategoryDropdown.isLoading;
 
     return (
         <CRow>
@@ -131,7 +136,7 @@ export default function ExerciseForm() {
                                     valid={!errors.category && !firstRender ? true : false}
                                     {...register("category")}
                                 >
-                                    {category.rowData.map((item, idx) => {
+                                    {formState.exerciseCategoryDropdown.rowData.map((item, idx) => {
                                         return <option key={idx} value={item.exerciseCategoryId}>{item.name}</option>
                                     })}
                                 </CFormSelect>

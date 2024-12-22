@@ -1,4 +1,5 @@
 ﻿using Application.Common;
+using Application.DTOs;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,6 @@ namespace Application.Features.Exercise.ExerciseCategory.Commands.Add
 {
     public class AddExerciseCategoryRequest : BaseRequest, IRequest<AddExerciseCategoryResponse>
     {
-        public string Name { get; set; }
-        public string Description { get; set; }
+        public ExerciseCategoryDTO ExerciseCategory { get; set; }
     }
 }

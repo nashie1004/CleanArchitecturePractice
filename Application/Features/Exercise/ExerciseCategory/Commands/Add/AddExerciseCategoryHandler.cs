@@ -1,5 +1,7 @@
 ﻿using Application.Contracts.Infra.Todo;
 using Application.Contracts.Infrastructure.Persistence.Repository;
+using AutoMapper;
+using Domain.Entities;
 using Domain.Enums;
 using MediatR;
 using System;
@@ -13,9 +15,14 @@ namespace Application.Features.Exercise.ExerciseCategory.Commands.Add
     public class AddExerciseCategoryHandler : IRequestHandler<AddExerciseCategoryRequest, AddExerciseCategoryResponse>
     {
         private readonly IExerciseCategoryRepository _exerciseCategoryRepository;
+        private readonly IMapper _mapper;
 
-        public AddExerciseCategoryHandler(IExerciseCategoryRepository exerciseCategoryRepository)
+        public AddExerciseCategoryHandler(
+            IExerciseCategoryRepository exerciseCategoryRepository,
+            IMapper mapper
+            )
         {
+            _mapper = mapper;
             _exerciseCategoryRepository = exerciseCategoryRepository;
         }
 
@@ -25,14 +32,29 @@ namespace Application.Features.Exercise.ExerciseCategory.Commands.Add
 
             try
             {
-                await _exerciseCategoryRepository.AddRecordAsync(new Domain.Entities.ExerciseCategory()
-                {
-                    Name = req.Name,
-                    Description = req.Description,
-                    GeneratedBy = GeneratedBy.User,
-                });
+                var rawExerciseCategory = _mapper.Map<Domain.Entities.ExerciseCategory>(req.ExerciseCategory);
+                
+                var existing = await _exerciseCategoryRepository.GetRecordAsync(rawExerciseCategory.ExerciseCategoryId); 
+                
+                // Update existing
+                if (existing != null){
+
+                    existing.Name = rawExerciseCategory.Name;
+                    existing.Description = rawExerciseCategory.Description;
+
+                    retVal.RowsAffected = await _exerciseCategoryRepository.SaveRecordAsync(ct);
+                    retVal.SuccessMessage = "Successfully updated record";
+
+                    return retVal;
+                }
+
+                // Add new record
+                rawExerciseCategory.GeneratedBy = GeneratedBy.User;
+
+                await _exerciseCategoryRepository.AddRecordAsync(rawExerciseCategory);
 
                 retVal.RowsAffected = await _exerciseCategoryRepository.SaveRecordAsync(ct);
+                retVal.SuccessMessage = "Successfully created. Go to category list to see newly added category.";
             }
             catch (Exception ex)
             {
