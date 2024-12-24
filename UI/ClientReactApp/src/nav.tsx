@@ -32,13 +32,13 @@ const nav = [
     items: [
       {
         component: CNavItem,
-        name: 'Form',
-        to: '/workout/form',
+        name: 'List',
+        to: '/workout/list',
       },
       {
         component: CNavItem,
-        name: 'List',
-        to: '/workout/list',
+        name: 'Form',
+        to: '/workout/form',
       },
     ],
   },

@@ -4,20 +4,24 @@ import { CCol, CButton, CSpinner, CFormLabel, CFormInput, CFormTextarea } from '
 import { FieldErrors, UseFormRegister, UseFormReset } from 'react-hook-form';
 import { DetailFormFields, emptyDetail, HeaderFormFields, IModalState } from '../WorkoutForm';
 import Datetime from "react-datetime";
+import { toDateTimeFormat } from '../../../Utils/formatters';
 
 interface IWorkoutFormHeaderFields{
     loading: boolean;
     firstRender: boolean;
     registerHeader: UseFormRegister<HeaderFormFields>;
     errorsHeader: FieldErrors<HeaderFormFields>;
-    setModalState: React.Dispatch<React.SetStateAction<IModalState>>
-    resetDetail: UseFormReset<DetailFormFields>
+    setModalState: React.Dispatch<React.SetStateAction<IModalState>>;
+    resetDetail: UseFormReset<DetailFormFields>;
+    header: HeaderFormFields
 }
 
 export default function WorkoutFormHeaderFields({
     loading, firstRender, registerHeader
     , errorsHeader, setModalState, resetDetail
+    , header
 } : IWorkoutFormHeaderFields) {
+
   return (
     <>
         <CCol xs={12} className='d-flex justify-content-between align-items-center'>
@@ -46,6 +50,9 @@ export default function WorkoutFormHeaderFields({
                 <CCol md={3}>
                   <CFormLabel>Start Date Time</CFormLabel>
                   <Datetime 
+                    initialValue={toDateTimeFormat(header.startDateTime)}
+                    dateFormat="MM/DD/YYYY"
+                    timeFormat="hh:mm A"
                     inputProps={
                       errorsHeader.startDateTime ? { 
                       ...registerHeader("startDateTime") 
@@ -62,6 +69,9 @@ export default function WorkoutFormHeaderFields({
                 <CCol md={3}>
                   <CFormLabel>End Date Time</CFormLabel>
                   <Datetime 
+                    initialValue={toDateTimeFormat(header.endDateTime)}
+                    dateFormat="MM/DD/YYYY"
+                    timeFormat="hh:mm A"
                     inputProps={
                       errorsHeader.startDateTime ? { 
                       ...registerHeader("endDateTime") 

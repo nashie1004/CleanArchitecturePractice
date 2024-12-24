@@ -6,7 +6,7 @@ export function toTwentyChars(val: string){
   return val.length > 20 ? `${val.substring(0, 20)}...` : val;
 }
 
-export function toDateTimeFormat(val: string){
+export function toDateTimeFormat(val: string | Date){
   if (!moment(val).isValid()) return "";
 
   return moment(val).format("MM/DD/YYYY hh:mm A")
