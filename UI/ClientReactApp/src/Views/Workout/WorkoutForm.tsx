@@ -16,11 +16,11 @@ import ExerciseService from '../../Services/ExerciseService';
 const detailSchema = z.object({
   tempRowId: z.number().optional(),
   workoutDetailId: z.number().optional().default(0),
-  exerciseId: z.coerce.number().gt(0, "Please select an option"),
+  exerciseId: z.coerce.number().gt(-1, "Please select an option").default(-1),
   sets: z.coerce.number().gt(0),
   reps: z.coerce.number().gt(0),
   weight: z.coerce.number().gte(0),
-  weightMeasurementId: z.coerce.number().gt(0, "Please select an option"),
+  weightMeasurementId: z.coerce.number().gt(-1, "Please select an option").default(-1),
   remarks: z.string().optional(),
 });
 
@@ -42,8 +42,6 @@ const headerSchema = z.object({
   }
 });
 
-
-
 export type HeaderFormFields = z.infer<typeof headerSchema>;
 export type DetailFormFields = z.infer<typeof detailSchema>;
 export interface IModalState{ show: boolean } 
@@ -55,7 +53,7 @@ interface IExerciseDropdown{ isLoading: boolean, items: IItems[] }
 const exerciseService = new ExerciseService();
 const workoutService = new WorkoutService();
 
-export const emptyHeader: HeaderFormFields = {  workoutHeaderId: 0, title: "", notes: "", startDateTime: new Date(), endDateTime: new Date(), workoutDetails: [] }
+export const emptyHeader: HeaderFormFields = {  workoutHeaderId: 0, title: "", notes: "", startDateTime: new Date(0), endDateTime: new Date(0), workoutDetails: [] }
 export const emptyDetail: DetailFormFields = { tempRowId: 0, workoutDetailId: 0, exerciseId: 0, sets: 0, reps: 0, weight: 0, weightMeasurementId: 0, remarks: "", }
 const emptyFormState: IFormState = { workoutHeader: { isLoading: false }, exerciseDropdown: { isLoading: false, items: [{ exerciseId: 0, name: "" }] } }
 
@@ -144,9 +142,6 @@ export default function WorkoutForm(){
   || isSubmittingHeader 
   || formState.exerciseDropdown.isLoading 
   || formState.workoutHeader.isLoading;
-
-  // console.log(errorsHeader.workoutDetails)
-  // console.log(header.startDateTime, header.endDateTime)
 
   return (
     <CRow>

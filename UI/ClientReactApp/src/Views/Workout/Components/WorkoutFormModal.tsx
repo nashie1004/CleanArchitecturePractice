@@ -4,7 +4,6 @@ import React from 'react';
 import { FieldErrors, UseFormHandleSubmit, UseFormRegister } from 'react-hook-form';
 import { DetailFormFields, IFormState, IModalState } from '../WorkoutForm';
 
-
 interface IWorkoutFormModal{
     submitDetail: (data: any) => Promise<void>;
     modalState: IModalState;
@@ -22,6 +21,10 @@ export default function WorkoutFormModal({
     ,registerDetail, handleSubmitDetail, errorsDetails
     ,formState, firstRender, loading
 }: IWorkoutFormModal) {
+
+  const exerciseOptions = formState.exerciseDropdown.items.map(i => ({ label: i.name, value: i.exerciseId.toString(), selected: true }))
+
+
   return (
     <CModal
                 size="xl"
@@ -43,11 +46,8 @@ export default function WorkoutFormModal({
                       feedbackInvalid={errorsDetails.exerciseId ? errorsDetails.exerciseId.message : "" }
                       invalid={errorsDetails.exerciseId ? true : false}
                       valid={!errorsDetails.exerciseId && !firstRender ? true : false}
+                      options={exerciseOptions}
                     >
-                      <option value={0}>Select...</option>
-                      {formState.exerciseDropdown.items.map((item, idx) => {
-                        return <option key={idx} value={item.exerciseId}>{item.name}</option>
-                      })}
                     </CFormSelect>
                   </CCol>
                   <CCol md={4}>
@@ -56,17 +56,13 @@ export default function WorkoutFormModal({
                       feedbackInvalid={errorsDetails.weightMeasurementId ? errorsDetails.weightMeasurementId.message : "" }
                       invalid={errorsDetails.weightMeasurementId ? true : false}
                       valid={!errorsDetails.weightMeasurementId && !firstRender ? true : false} 
-                      label="Measurement">
-                      <option value={0}>Select...</option>
-                      {
-                        [
-                          { value: WeightMeasurement.None, label: "None" }
-                          ,{ value: WeightMeasurement.Kilogram, label: "Kilogram" }
-                          ,{ value: WeightMeasurement.Pounds, label: "Pounds" }
-                        ].map((item, idx) => {
-                          return <option key={idx} value={item.value}>{item.label}</option>
-                        })
-                      }
+                      label="Measurement"
+                      options={[
+                        { label: 'None',  value: WeightMeasurement.None.toString() },
+                        { label: 'Kilogram',  value: WeightMeasurement.Kilogram.toString() },
+                        { label: 'Pounds', value: WeightMeasurement.Pounds.toString(),  },
+                      ]}
+                      >
                     </CFormSelect>
                   </CCol>
                   <CCol md={4}>
