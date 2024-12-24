@@ -5,6 +5,7 @@ const api = axios.create({
     withCredentials: true,
 });
 
+/*
 api.interceptors.response.use(
     (next) => {
         return Promise.resolve(next);
@@ -23,5 +24,6 @@ api.interceptors.response.use(
         return Promise.reject(err);
     }
 )
+*/
 
 export default api;

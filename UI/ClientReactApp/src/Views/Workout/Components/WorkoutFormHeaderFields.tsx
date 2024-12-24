@@ -3,8 +3,6 @@ import CIcon from '@coreui/icons-react'
 import { CCol, CButton, CSpinner, CFormLabel, CFormInput, CFormTextarea } from '@coreui/react'
 import { FieldErrors, UseFormRegister, UseFormReset } from 'react-hook-form';
 import { DetailFormFields, emptyDetail, HeaderFormFields, IModalState } from '../WorkoutForm';
-import Datetime from "react-datetime";
-import { toDateTimeFormat } from '../../../Utils/formatters';
 
 interface IWorkoutFormHeaderFields{
     loading: boolean;
@@ -33,7 +31,7 @@ export default function WorkoutFormHeaderFields({
                     disabled={loading}
                     >
                     {loading ? <CSpinner size="sm" /> : <>
-                      <span style={{ paddingRight: ".5rem"}}>Submit</span>
+                      <span style={{ paddingRight: ".5rem"}}>{header.workoutHeaderId > 0 ? "Edit" : "Submit"}</span>
                       <CIcon icon={cilInput} size="xl"/>
                     </> }
                   </CButton>
@@ -49,18 +47,12 @@ export default function WorkoutFormHeaderFields({
                 </CCol>
                 <CCol md={3}>
                   <CFormLabel>Start Date Time</CFormLabel>
-                  <Datetime 
-                    initialValue={toDateTimeFormat(header.startDateTime)}
-                    dateFormat="MM/DD/YYYY"
-                    timeFormat="hh:mm A"
-                    inputProps={
-                      errorsHeader.startDateTime ? { 
-                      ...registerHeader("startDateTime") 
-                      , className: "is-invalid form-control" 
-                    } : {
-                      ...registerHeader("startDateTime") 
-                    }
-                  } 
+                  <CFormInput 
+                    {...registerHeader("startDateTime")}
+                    type='datetime-local'
+                    feedbackInvalid={errorsHeader.startDateTime ? errorsHeader.startDateTime.message : ""}
+                    invalid={errorsHeader.startDateTime ? true : false}
+                    valid={!errorsHeader.startDateTime && !firstRender ? true : false}
                     />
                     {errorsHeader.startDateTime ? <div 
                   style={{ display: 'block'}}
@@ -68,17 +60,12 @@ export default function WorkoutFormHeaderFields({
                 </CCol>
                 <CCol md={3}>
                   <CFormLabel>End Date Time</CFormLabel>
-                  <Datetime 
-                    initialValue={toDateTimeFormat(header.endDateTime)}
-                    dateFormat="MM/DD/YYYY"
-                    timeFormat="hh:mm A"
-                    inputProps={
-                      errorsHeader.startDateTime ? { 
-                      ...registerHeader("endDateTime") 
-                      , className: "is-invalid form-control" 
-                    } : {
-                      ...registerHeader("endDateTime") 
-                    }}
+                  <CFormInput 
+                    {...registerHeader("endDateTime")}
+                    type='datetime-local'
+                    feedbackInvalid={errorsHeader.endDateTime ? errorsHeader.endDateTime.message : ""}
+                    invalid={errorsHeader.endDateTime ? true : false}
+                    valid={!errorsHeader.endDateTime && !firstRender ? true : false}
                       />
                   {errorsHeader.endDateTime ? <div 
                   style={{ display: 'block'}}
