@@ -43,7 +43,7 @@ namespace Application.Features.Exercise.Exercise.Commands.AddExercise
                     existing.ExerciseCategoryId = rawExercise.ExerciseCategoryId;
 
                     retVal.RowsAffected = await _exerciseRepository.SaveRecordAsync(ct);
-                    retVal.SuccessMessage = "Successfully updated record";
+                    retVal.SuccessMessage = $"Successfully updated record. {retVal.RowsAffected} row(s) affected.";
                     
                     return retVal;
                 }
@@ -53,7 +53,7 @@ namespace Application.Features.Exercise.Exercise.Commands.AddExercise
                 await _exerciseRepository.AddRecordAsync(rawExercise);
 
                 retVal.RowsAffected = await _exerciseRepository.SaveRecordAsync(ct);
-                retVal.SuccessMessage = "Successfully created. Go to the exercise list to see the newly added category.";
+                retVal.SuccessMessage = $"Successfully created. {retVal.RowsAffected} row(s) affected. Go to the exercise list to see the newly added category.";
             }
             catch (Exception ex)
             {

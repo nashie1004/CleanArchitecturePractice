@@ -38,7 +38,7 @@ export default function ExerciseForm() {
 
     const {
         register, handleSubmit, reset,
-        formState: { errors, isSubmitting }
+        formState: { errors, isSubmitting }, watch
     } = useForm<FormFields>({
         defaultValues: {
             exerciseId: 0,
@@ -49,6 +49,8 @@ export default function ExerciseForm() {
         },
         resolver: zodResolver(schema)
     })
+
+    const exercise = watch();
 
     async function submitForm(data: FormFields) {
         const response = await exerciseService.submitForm({
@@ -161,7 +163,9 @@ export default function ExerciseForm() {
                                     type="submit"
                                     disabled={loading}
                                 >
-                                    {loading ? <CSpinner size="sm" /> : "Submit"}
+                                    {loading ? <CSpinner size="sm" /> : <>
+                                        {exercise.exerciseId > 0 ? "Edit" : "Submit"}
+                                    </>}
                                 </CButton>
                             </CCol>
                         </CForm>

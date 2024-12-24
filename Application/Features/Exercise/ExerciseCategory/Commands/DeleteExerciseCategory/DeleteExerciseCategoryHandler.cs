@@ -40,7 +40,7 @@ public class DeleteExerciseCategoryHandler : IRequestHandler<DeleteExerciseCateg
 
             await _exerciseCategoryRepository.DeleteRecordAsync(req.ExerciseCategoryId);
             retVal.RowsAffected = await _exerciseCategoryRepository.SaveRecordAsync(ct);
-            retVal.SuccessMessage = "Successfully removed record";
+            retVal.SuccessMessage = $"Successfully deleted record. ${retVal.RowsAffected} row(s) affected.";
         } 
         catch (Exception err){
             retVal.ValidationErrors.Add(err.Message);

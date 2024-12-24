@@ -24,7 +24,7 @@ const columns: ColDef[] = [
         >
           <CIcon 
             icon={cilPencil} 
-            className="text-dark" 
+            className="text-success" 
             style={{  cursor: "pointer" }} 
             size="xl" />
         </NavLink>

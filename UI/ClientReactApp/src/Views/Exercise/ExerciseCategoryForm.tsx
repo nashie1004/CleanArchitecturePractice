@@ -30,7 +30,7 @@ function ExerciseCategoryForm() {
     });
 
     const {
-        register, handleSubmit,
+        register, handleSubmit, watch,
         formState: { errors, isSubmitting }, reset
     } = useForm<FormFields>({
         defaultValues: {
@@ -40,6 +40,8 @@ function ExerciseCategoryForm() {
         },
         resolver: zodResolver(schema)
     })
+
+    const exerciseCategory = watch();
 
     async function submitForm(data: FormFields) {
         const response = await exerciseCategoryService.submitForm({
@@ -121,7 +123,9 @@ function ExerciseCategoryForm() {
                                     type="submit"
                                     disabled={loading}
                                 >
-                                    {loading ? <CSpinner size="sm" /> : "Submit"}
+                                    {loading ? <CSpinner size="sm" /> : <>
+                                        {exerciseCategory.exerciseCategoryId > 0 ? "Edit" : "Submit"}
+                                    </>}
                                 </CButton>
                             </CCol>
                         </CForm>

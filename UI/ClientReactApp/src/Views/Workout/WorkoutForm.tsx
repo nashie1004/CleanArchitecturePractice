@@ -54,7 +54,7 @@ const exerciseService = new ExerciseService();
 const workoutService = new WorkoutService();
 
 export const emptyHeader: HeaderFormFields = {  workoutHeaderId: 0, title: "", notes: "", startDateTime: new Date(0), endDateTime: new Date(0), workoutDetails: [] }
-export const emptyDetail: DetailFormFields = { tempRowId: 0, workoutDetailId: 0, exerciseId: 0, sets: 0, reps: 0, weight: 0, weightMeasurementId: 0, remarks: "", }
+export const emptyDetail = { tempRowId: 0, workoutDetailId: 0, exerciseId: 0, weightMeasurementId: 0, remarks: "", }
 const emptyFormState: IFormState = { workoutHeader: { isLoading: false }, exerciseDropdown: { isLoading: false, items: [{ exerciseId: 0, name: "" }] } }
 
 export default function WorkoutForm(){
@@ -121,6 +121,7 @@ export default function WorkoutForm(){
   const header = watchHeader();
 
   async function submitHeader(data: HeaderFormFields){
+
     const res = await workoutService.submitForm({ workoutHeader: data });
       
     if (!res.isOk) {
@@ -128,7 +129,7 @@ export default function WorkoutForm(){
       return;
     } 
 
-    toast("Successfully created workout record. Go to workout list to view newly added record.", {type: "success"})
+    toast(res.message, {type: "success"})
   }
 
   async function submitDetail(data: DetailFormFields){
