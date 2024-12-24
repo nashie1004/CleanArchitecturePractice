@@ -63,7 +63,7 @@ export default function ExerciseList(){
   function getSearchFilter(){
     if (gridRef.current){
       const gridApi = gridRef.current.api as GridApi;
-      return gridApi.getFilterModel()
+      if (gridApi) return gridApi.getFilterModel()
     }
     return null;
   }
@@ -71,7 +71,6 @@ export default function ExerciseList(){
   async function refresh(){
     // TODO apply filter 
     const searchFilter = getSearchFilter();
-    console.log(searchFilter)
 
     setTableState(prev => ({ ...prev, isLoading: true}))
     const data = await exerciseService.getMany(tableState);
